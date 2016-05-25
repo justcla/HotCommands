@@ -97,7 +97,7 @@
     <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidToggleComment" priority="0x7515">
       <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
     </CommandPlacement>
-    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidExpandSelection" priority="0x0000">
+    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidExpandSelection" priority="0x7520">
       <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
     </CommandPlacement>
   </CommandPlacements>
