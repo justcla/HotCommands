@@ -10,6 +10,7 @@ using System.Globalization;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
+using EnvDTE;
 
 namespace HotCommands
 {
@@ -65,7 +66,8 @@ namespace HotCommands
 
         private void MenuItem_BeforeQueryStatus(object sender, EventArgs e)
         {
-            ((OleMenuCommand)sender).Visible = IsContextActive(VSConstants.VsEditorFactoryGuid.TextEditor_guid);
+            //((OleMenuCommand)sender).Visible = IsContextActive(VSConstants.VsEditorFactoryGuid.TextEditor_guid);
+            ((OleMenuCommand)sender).Visible = IsCommentAvailable();
         }
 
         private bool IsContextActive(Guid contextGuid)
@@ -81,6 +83,15 @@ namespace HotCommands
             uint contextCookie;
             MonitorSelection.GetCmdUIContextCookie(contextGuid, out contextCookie);
             return contextCookie;
+        }
+
+        private Boolean IsCommentAvailable()
+        {
+            DTE dte = (DTE)ServiceProvider.GetService(typeof(DTE));
+            Commands cmds = dte.Commands;
+            // Fetch the Edit.Comment command and see if it's available.
+            Command cmdCommentSelection = cmds.Item("Edit.CommentSelection");
+            return (cmdCommentSelection.IsAvailable);
         }
 
         /// <summary>

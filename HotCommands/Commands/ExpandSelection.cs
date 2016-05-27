@@ -10,6 +10,8 @@ using System.Globalization;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
+using EnvDTE;
+using System.Diagnostics;
 
 namespace HotCommands
 {
@@ -60,11 +62,44 @@ namespace HotCommands
                 menuItem.BeforeQueryStatus += MenuItem_BeforeQueryStatus;
                 commandService.AddCommand(menuItem);
             }
+
+            UpdateKeyBindings();
+        }
+
+        private void UpdateKeyBindings() {
+
+            DTE dte = (DTE)ServiceProvider.GetService(typeof(DTE));
+            EnvDTE.Properties props = dte.Properties["Environment", "Keyboard"];
+
+            Property prop = props.Item("SchemeName");
+            Debug.WriteLine("SchemeName Name: " + prop.Name);
+            Debug.WriteLine("SchemeName Value: " + prop.Value);
+            //prop.Value = @"C:\Users\justcla\AppData\Roaming\Microsoft\VisualStudio\14.0Exp\MyBindings.vsk";
+            prop.Value = "MyBindings.vsk";
+            Debug.WriteLine("SchemeName Value: " + prop.Value);
+
+            Commands cmds = dte.Commands;
+
+            // Clear the bindings on SelectCurrentWord
+            //Command cmdSelectCurrentWord = cmds.Item("Edit.SelectCurrentWord");
+            //Object[] selectCurrentWordBindings = (Object[])cmdSelectCurrentWord.Bindings;
+            //foreach (Object binding in selectCurrentWordBindings)
+            //{
+            //    Debug.WriteLine(binding);
+            //}
+            //cmdSelectCurrentWord.Bindings = new Object[] { };
+
+            // Add a binding for ExpandSelection(TextEditor)
+            Command cmdExpandSelection = cmds.Item("1023dc3d-550c-46b8-a3ec-c6b03431642c", 0x1022); // Edit.ExpandSelection
+            Object[] newBindings = new Object[] { "Text Editor::Ctrl+W" };
+            cmdExpandSelection.Bindings = (object) newBindings;
+
         }
 
         private void MenuItem_BeforeQueryStatus(object sender, EventArgs e)
         {
-            ((OleMenuCommand)sender).Visible = IsContextActive(VSConstants.VsEditorFactoryGuid.TextEditor_guid);
+            //((OleMenuCommand)sender).Visible = IsContextActive(VSConstants.VsEditorFactoryGuid.TextEditor_guid);
+            ((OleMenuCommand)sender).Visible = IsCommentAvailable();
         }
 
         private bool IsContextActive(Guid contextGuid)
@@ -80,6 +115,15 @@ namespace HotCommands
             uint contextCookie;
             MonitorSelection.GetCmdUIContextCookie(contextGuid, out contextCookie);
             return contextCookie;
+        }
+
+        private Boolean IsCommentAvailable()
+        {
+            DTE dte = (DTE)ServiceProvider.GetService(typeof(DTE));
+            Commands cmds = dte.Commands;
+            // Fetch the Edit.Comment command and see if it's available.
+            Command cmdCommentSelection = cmds.Item("Edit.CommentSelection");
+            return (cmdCommentSelection.IsAvailable);
         }
 
         /// <summary>
