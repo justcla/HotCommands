@@ -62,6 +62,58 @@ namespace HotCommands
                 commandService.AddCommand(menuItem);
             }
 
+            UpdateKeyBindings(); // Not required. KeyBinding in VSCT file seems to be working nicely.
+        }
+
+        /// <summary>
+        /// Note: Calling this is redundant if the original KeyBinding works in the vsct file.
+        /// However, sometimes there is another command bound to the desired keybinding.
+        /// In those cases, explicitly defining the key binding here is usually more effective.
+        /// </summary>
+        private void UpdateKeyBindings()
+        {
+            DTE dte = (DTE)ServiceProvider.GetService(typeof(DTE));
+
+            EnvDTE.Properties props = dte.Properties["Environment", "Keyboard"];
+            Property prop = props.Item("SchemeName");
+            prop.Value = "MyBindings.vsk";
+
+            // Add a binding for ExpandSelection(TextEditor)
+            Commands cmds = dte.Commands;
+            Command cmdToggleComment = cmds.Item("Edit.ToggleComment");
+
+            const string keyboardBindingDefn = "Text Editor::Ctrl+/";
+
+            object[] newBindings = AppendKeyboardBinding(cmdToggleComment, keyboardBindingDefn);
+            //object[] newBindings = SingleKeyboardBindings(keyboardBindingDefn);
+
+            cmdToggleComment.Bindings = (object)newBindings;  // Note: This overrides any key bindings already assigned to this command
+        }
+
+        private static object[] SingleKeyboardBinding(string keyboardBindingDefn)
+        {
+            return new object[] { keyboardBindingDefn };
+        }
+
+        private static object[] AppendKeyboardBinding(Command command, string keyboardBindingDefn)
+        {
+            object[] oldBindings = (object[])command.Bindings;
+
+            // Check that keyboard binding is not already there
+            for (int i = 0; i < oldBindings.Length; i++)
+            {
+                if (keyboardBindingDefn.Equals(oldBindings[i]))
+                {
+                    // Exit early and return the existing bindings array if new keyboard binding is already there
+                    return oldBindings;
+                }
+            }
+
+            // Build new array with all the old bindings, plus the new one.
+            object[] newBindings = new object[oldBindings.Length + 1];
+            Array.Copy(oldBindings, newBindings, oldBindings.Length);
+            newBindings[newBindings.Length - 1] = keyboardBindingDefn;
+            return newBindings;
         }
 
         private void MenuItem_BeforeQueryStatus(object sender, EventArgs e)
@@ -120,7 +172,7 @@ namespace HotCommands
         /// <param name="package">Owner package, not null.</param>
         public static void Initialize(Package package)
         {
-            Instance = new ToggleComment(package);
+                Instance = new ToggleComment(package);
         }
 
         /// <summary>
