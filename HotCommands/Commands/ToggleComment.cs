@@ -5,6 +5,7 @@
 //------------------------------------------------------------------------------
 
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Globalization;
 using Microsoft.VisualStudio.Shell;
@@ -222,9 +223,17 @@ namespace HotCommands
             ITextCaret caret = textView.Caret;
             ITextViewLine line = caret.ContainingTextViewLine;
             SnapshotSpan snapshotSpan = new SnapshotSpan(textView.TextSnapshot, line.Extent.Span);
-            classifier.GetClassificationSpans(snapshotSpan);
+            IList<ClassificationSpan> classificationSpans = classifier.GetClassificationSpans(snapshotSpan);
+            foreach (var classification in classificationSpans)
+            {
+                var name = classification.ClassificationType.Classification.ToLower();
+                if (!name.Contains("comment"))
+                {
+                    return false;
+                }
+            }
 
-            return false;
+            return true;
         }
 
         private IWpfTextView GetActiveTextView()
