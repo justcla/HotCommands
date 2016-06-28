@@ -11,6 +11,13 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using EnvDTE;
+using Microsoft.VisualStudio.ComponentModelHost;
+using Microsoft.VisualStudio.Text.Classification;
+using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.TextManager.Interop;
+using Microsoft.VisualStudio.Editor;
+using Microsoft.VisualStudio.Text.Formatting;
+using Microsoft.VisualStudio.Text;
 
 namespace HotCommands
 {
@@ -35,6 +42,8 @@ namespace HotCommands
         private readonly Package package;
 
         private IVsMonitorSelection MonitorSelection;
+
+        private IClassifierAggregatorService _aggregatorFactory = null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ToggleComment"/> class.
@@ -61,6 +70,12 @@ namespace HotCommands
                 menuItem.BeforeQueryStatus += MenuItem_BeforeQueryStatus;
                 commandService.AddCommand(menuItem);
             }
+
+            // Populate Aggregator Object
+            // Get the MEF service
+            IComponentModel componentModel = this.ServiceProvider.GetService(typeof(SComponentModel)) as IComponentModel;
+            // Fetch the Aggregator from the MEF
+            _aggregatorFactory = componentModel.GetService< IClassifierAggregatorService>() as IClassifierAggregatorService;
 
             UpdateKeyBindings(); // Not required. KeyBinding in VSCT file seems to be working nicely.
         }
@@ -187,6 +202,9 @@ namespace HotCommands
             string message = string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()", this.GetType().FullName);
             string title = "ToggleComment";
 
+            // Decide if all lines in the spam are currently commented
+            bool allCommented = IsAllCommented();
+
             // Show a message box to prove we were here
             VsShellUtilities.ShowMessageBox(
                 this.ServiceProvider,
@@ -195,6 +213,29 @@ namespace HotCommands
                 OLEMSGICON.OLEMSGICON_INFO,
                 OLEMSGBUTTON.OLEMSGBUTTON_OK,
                 OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+        }
+
+        private Boolean IsAllCommented()
+        {
+            IWpfTextView textView = GetActiveTextView();
+            IClassifier classifier = _aggregatorFactory.GetClassifier(textView.TextBuffer);
+            ITextCaret caret = textView.Caret;
+            ITextViewLine line = caret.ContainingTextViewLine;
+            SnapshotSpan snapshotSpan = new SnapshotSpan(textView.TextSnapshot, line.Extent.Span);
+            classifier.GetClassificationSpans(snapshotSpan);
+
+            return false;
+        }
+
+        private IWpfTextView GetActiveTextView()
+        {
+            var componentModel = (IComponentModel)ServiceProvider.GetService(typeof(SComponentModel));
+            var textManager = (IVsTextManager)Package.GetGlobalService(typeof(SVsTextManager));
+            IVsTextView activeView = null;
+            ErrorHandler.ThrowOnFailure(textManager.GetActiveView(1, null, out activeView));
+            var editorAdapter = componentModel.GetService<IVsEditorAdaptersFactoryService>();
+            IWpfTextView wpfTextView = editorAdapter.GetWpfTextView(activeView);
+            return wpfTextView;
         }
     }
 }
