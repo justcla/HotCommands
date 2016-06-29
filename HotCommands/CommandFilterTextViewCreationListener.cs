@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Utilities;
 using System.ComponentModel.Composition;
 using Microsoft.VisualStudio.Text.Classification;
+using Microsoft.VisualStudio.Shell;
 
 namespace HotCommands
 {
@@ -19,11 +20,14 @@ namespace HotCommands
         [Import]
         private IClassifierAggregatorService _aggregatorFactory;
 
+        [Import]
+        private SVsServiceProvider _globalServiceProvider;
+
         public void VsTextViewCreated(IVsTextView textViewAdapter)
         {
             IWpfTextView textView = EditorAdaptersFactoryService.GetWpfTextView(textViewAdapter);
 
-            CommandFilter commandFilter = new CommandFilter(textView, _aggregatorFactory);
+            CommandFilter commandFilter = new CommandFilter(textView, _aggregatorFactory, _globalServiceProvider);
             IOleCommandTarget next;
             textViewAdapter.AddCommandFilter(commandFilter, out next);
 

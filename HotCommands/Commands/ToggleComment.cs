@@ -6,15 +6,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.VisualStudio.Text.Formatting;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Language.StandardClassification;
+using OleInterop = Microsoft.VisualStudio.OLE.Interop;
 
 namespace HotCommands
 {
@@ -71,37 +69,31 @@ namespace HotCommands
                 Instance = new ToggleComment(package);
         }
 
-        public int HandleCommand(IWpfTextView textView, IClassifier classifier)
+        public int HandleCommand(IWpfTextView textView, IClassifier classifier, OleInterop.IOleCommandTarget commandTarget)
         {
-            // Show a message box to prove we were here
-            string message = string.Format(CultureInfo.CurrentCulture, "Inside {0}.HandleCommand()", GetType().FullName);
-            string title = "ToggleComment";
-            VsShellUtilities.ShowMessageBox(
-                this.ServiceProvider,
-                message,
-                title,
-                OLEMSGICON.OLEMSGICON_INFO,
-                OLEMSGBUTTON.OLEMSGBUTTON_OK,
-                OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-
-            // Decide if all lines in the spam are currently commented
-            bool allCommented = IsAllCommented(textView, classifier);
+            // Execute Comment or Uncomment depending on current state of selected code
+            Guid cmdGroup = VSConstants.VSStd2K;
+            uint cmdID = IsAllCommented(textView, classifier) ? (uint) VSConstants.VSStd2KCmdID.UNCOMMENT_BLOCK : (uint) VSConstants.VSStd2KCmdID.COMMENT_BLOCK;
+            int hr = commandTarget.Exec(ref cmdGroup, cmdID, (uint)OleInterop.OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, IntPtr.Zero, IntPtr.Zero);
 
             return VSConstants.S_OK;
         }
 
         private Boolean IsAllCommented(IWpfTextView textView, IClassifier classifier)
         {
-            ITextCaret caret = textView.Caret;
-            ITextViewLine line = caret.ContainingTextViewLine;
-            SnapshotSpan snapshotSpan = new SnapshotSpan(textView.TextSnapshot, line.Extent.Span);
-            IList<ClassificationSpan> classificationSpans = classifier.GetClassificationSpans(snapshotSpan);
-            foreach (var classification in classificationSpans)
+            foreach (SnapshotSpan snapshotSpan in textView.Selection.SelectedSpans)
             {
-                var name = classification.ClassificationType.Classification.ToLower();
-                if (!name.Contains(PredefinedClassificationTypeNames.Comment))        // "comment"
+                SnapshotSpan spanToCheck = snapshotSpan.Length == 0 ?
+                    new SnapshotSpan(textView.TextSnapshot, textView.Caret.ContainingTextViewLine.Extent.Span) :
+                    snapshotSpan;
+                IList<ClassificationSpan> classificationSpans = classifier.GetClassificationSpans(spanToCheck);
+                foreach (var classification in classificationSpans)
                 {
-                    return false;
+                    var name = classification.ClassificationType.Classification.ToLower();
+                    if (!name.Contains(PredefinedClassificationTypeNames.Comment))
+                    {
+                        return false;
+                    }
                 }
             }
 

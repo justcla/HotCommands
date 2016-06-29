@@ -4,6 +4,8 @@ using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 using System;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Text.Classification;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 
 namespace HotCommands
 {
@@ -11,11 +13,13 @@ namespace HotCommands
     {
         private readonly IWpfTextView textView;
         private readonly IClassifier classifier;
+        private readonly SVsServiceProvider globalServiceProvider;
 
-        public CommandFilter(IWpfTextView textView, IClassifierAggregatorService aggregatorFactory)
+        public CommandFilter(IWpfTextView textView, IClassifierAggregatorService aggregatorFactory, SVsServiceProvider globalServiceProvider)
         {
             this.textView = textView;
             classifier = aggregatorFactory.GetClassifier(textView.TextBuffer);
+            this.globalServiceProvider = globalServiceProvider;
         }
 
         public IOleCommandTarget Next { get; internal set; }
@@ -29,7 +33,7 @@ namespace HotCommands
                 switch (nCmdID)
                 {
                     case Constants.ToggleCommentCmdId:
-                        return ToggleComment.Instance.HandleCommand(textView, classifier);
+                        return ToggleComment.Instance.HandleCommand(textView, classifier, GetShellCommandDispatcher());
                     case Constants.ExpandSelectionCmdId:
                         return ExpandSelection.Instance.HandleCommand(textView);
                 }
@@ -62,6 +66,14 @@ namespace HotCommands
                 return this.Next.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
             }
             return (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP;
+        }
+
+        /// <summary>
+        /// Get the SUIHostCommandDispatcher from the global service provider.
+        /// </summary>
+        private IOleCommandTarget GetShellCommandDispatcher()
+        {
+            return globalServiceProvider.GetService(typeof(SUIHostCommandDispatcher)) as IOleCommandTarget;
         }
     }
 }
