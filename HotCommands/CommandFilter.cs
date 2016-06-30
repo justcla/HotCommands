@@ -6,6 +6,7 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.Text.Operations;
 
 namespace HotCommands
 {
@@ -14,12 +15,15 @@ namespace HotCommands
         private readonly IWpfTextView textView;
         private readonly IClassifier classifier;
         private readonly SVsServiceProvider globalServiceProvider;
+        private IEditorOperations editorOperations;
 
-        public CommandFilter(IWpfTextView textView, IClassifierAggregatorService aggregatorFactory, SVsServiceProvider globalServiceProvider)
+        public CommandFilter(IWpfTextView textView, IClassifierAggregatorService aggregatorFactory, 
+            SVsServiceProvider globalServiceProvider, IEditorOperationsFactoryService editorOperationsFactory)
         {
             this.textView = textView;
             classifier = aggregatorFactory.GetClassifier(textView.TextBuffer);
             this.globalServiceProvider = globalServiceProvider;
+            editorOperations = editorOperationsFactory.GetEditorOperations(textView);
         }
 
         public IOleCommandTarget Next { get; internal set; }
@@ -33,16 +37,16 @@ namespace HotCommands
                 switch (nCmdID)
                 {
                     case Constants.ToggleCommentCmdId:
-                        return ToggleComment.Instance.HandleCommand(textView, classifier, GetShellCommandDispatcher());
+                        return ToggleComment.Instance.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations);
                     case Constants.ExpandSelectionCmdId:
                         return ExpandSelection.Instance.HandleCommand(textView);
                 }
             }
 
             // No commands called. Pass to next command handler.
-            if (this.Next != null)
+            if (Next != null)
             {
-                return this.Next.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
+                return Next.Exec(ref pguidCmdGroup, nCmdID, nCmdexecopt, pvaIn, pvaOut);
             }
             return (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP;
         }
@@ -61,9 +65,9 @@ namespace HotCommands
                 }
             }
 
-            if (this.Next != null)
+            if (Next != null)
             {
-                return this.Next.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
+                return Next.QueryStatus(ref pguidCmdGroup, cCmds, prgCmds, pCmdText);
             }
             return (int)OLEConstants.OLECMDERR_E_UNKNOWNGROUP;
         }

@@ -12,6 +12,7 @@ using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Language.StandardClassification;
+using Microsoft.VisualStudio.Text.Operations;
 using OleInterop = Microsoft.VisualStudio.OLE.Interop;
 
 namespace HotCommands
@@ -69,17 +70,34 @@ namespace HotCommands
                 Instance = new ToggleComment(package);
         }
 
-        public int HandleCommand(IWpfTextView textView, IClassifier classifier, OleInterop.IOleCommandTarget commandTarget)
+        public int HandleCommand(IWpfTextView textView, IClassifier classifier, OleInterop.IOleCommandTarget commandTarget, IEditorOperations editorOperations)
         {
-            // Execute Comment or Uncomment depending on current state of selected code
             Guid cmdGroup = VSConstants.VSStd2K;
+
+            // Is anything selected? (Or just a cursor)
+            bool cursorOnly = IsCursorOnly(textView);
+
+            // Execute Comment or Uncomment depending on current state of selected code
             uint cmdID = IsAllCommented(textView, classifier) ? (uint) VSConstants.VSStd2KCmdID.UNCOMMENT_BLOCK : (uint) VSConstants.VSStd2KCmdID.COMMENT_BLOCK;
             int hr = commandTarget.Exec(ref cmdGroup, cmdID, (uint)OleInterop.OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, IntPtr.Zero, IntPtr.Zero);
+
+            if (cursorOnly)
+            {
+                // Move caret down one line
+                editorOperations.MoveLineDown(extendSelection:false);
+            }
 
             return VSConstants.S_OK;
         }
 
-        private Boolean IsAllCommented(IWpfTextView textView, IClassifier classifier)
+        private bool IsCursorOnly(IWpfTextView textView)
+        {
+            if (textView.Selection.SelectedSpans.Count > 1) return false;
+            // Only one selection. Check if there is any selected content.
+            return textView.Selection.SelectedSpans[0].Length == 0;
+        }
+
+        private bool IsAllCommented(IWpfTextView textView, IClassifier classifier)
         {
             foreach (SnapshotSpan snapshotSpan in textView.Selection.SelectedSpans)
             {
