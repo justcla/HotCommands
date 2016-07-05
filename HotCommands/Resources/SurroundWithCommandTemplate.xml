@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Root>
+  <Construct display="{..}" begin="{" end="}" id="7956D06F-EFAC-4C4A-911E-0D26A5AC0CE9">
+    <Steps>
+      <Step add=":begin" />
+      <Step add="[CONTENT]" />
+      <Step add=":end" />
+    </Steps>
+  </Construct>
+  <Construct display="If" begin="if (condition) {" end="}" id="C571B1BF-EEBC-42CA-A4EA-68541390DC54">
+    <Steps>
+      <Step add=":begin" />
+      <Step add="[CONTENT]" />
+      <Step add=":end" />
+    </Steps>
+  </Construct>
+  <Construct display="If..Else" begin="if (condition) {" end="}" id="21C8DBAF-B938-41DF-B003-1F8274E70705">
+    <ExtendedConstructs>
+      <Item index="0" begin="else {" end="}" />
+    </ExtendedConstructs>
+    <Steps>
+      <Step add=":begin" />
+      <Step add="[CONTENT]" />
+      <Step add=":end" />
+      <Step add="::0" />
+    </Steps>
+  </Construct>
+  <Construct display="If..ElseIf..Else" begin="if (condition) {" end="}" id="9DF728D6-818D-495B-BDC8-61BEC2346CEA">
+    <ExtendedConstructs>
+      <Item index="0" begin="else if(condition) {" end="}" />
+      <Item index="1" begin="else {" end="}" />
+    </ExtendedConstructs>
+    <Steps>
+      <Step add=":begin" />
+      <Step add="[CONTENT]" />
+      <Step add=":end" />
+      <Step add="::0" />
+      <Step add="::1" />
+    </Steps>
+  </Construct>
+  <Construct display="For" begin="for (int i=0; i&lt;condition; i++) {" end="}" id="7849B603-C476-457F-B3EF-11BA188A7141">
+    <Steps>
+      <Step add=":begin" />
+      <Step add="[CONTENT]" />
+      <Step add=":end" />
+    </Steps>
+  </Construct>
+  <Construct display="While" begin="while (condition) {" end="}" id="3ADAD126-0C7D-4DD7-B320-4CA10D5CABE4">
+    <Steps>
+      <Step add=":begin" />
+      <Step add="[CONTENT]" />
+      <Step add=":end" />
+    </Steps>
+  </Construct>
+  <Construct display="Do..While" begin="do {" end="} while (condition);" id="7C6B761B-FC42-4F42-93AB-2263A9894986">
+    <Steps>
+      <Step add=":begin" />
+      <Step add="[CONTENT]" />
+      <Step add=":end" />
+    </Steps>
+  </Construct>
+  <Construct display="#region" begin="#region [NewRegion]" end="#endregion" id="DE0CD972-40E5-4F63-BB3A-FDDF48F56471">
+    <Steps>
+      <Step add=":begin" />
+      <Step add="[CONTENT]" />
+      <Step add=":end" />
+    </Steps>
+  </Construct>
+  <Construct display="#if..#endif" begin="#if [CONDITION]" end="#endif" id="11445A9D-FE39-421B-9F72-C85B6C36C454">
+    <Steps>
+      <Step add=":begin" />
+      <Step add="[CONTENT]" />
+      <Step add=":end" />
+    </Steps>
+  </Construct>
+</Root>
