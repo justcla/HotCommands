@@ -21,7 +21,6 @@ namespace HotCommands
             {
                 throw new ArgumentNullException("thePackage");
             }
-
             package = thePackage;
         }
 
@@ -51,6 +50,8 @@ namespace HotCommands
 
             Commands cmds = dte.Commands;
 
+            // TODO: cleanup this part. need to make this part driven through a config file or so.
+
             // Add a binding for ExpandSelection(TextEditor)
             {
                 Command cmdToggleComment = cmds.Item("Edit.ToggleComment");
@@ -64,6 +65,12 @@ namespace HotCommands
                 const string expandSelectionKeyBinding = "Text Editor::Ctrl+W";
                 object[] newBindings = SingleKeyboardBinding(expandSelectionKeyBinding);
                 cmdExpandSelection.Bindings = (object)newBindings;
+            }
+
+            {
+                Command cmdSurroundWithBracket = cmds.Item("Edit.SurroundWithBracket"); // Edit.SurroundWithBracket
+                const string surroundWithBracketKeyBinding = "Text Editor::Ctrl+B";
+                cmdSurroundWithBracket.Bindings = AppendKeyboardBinding(cmdSurroundWithBracket, surroundWithBracketKeyBinding);
             }
         }
 

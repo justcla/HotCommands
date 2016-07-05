@@ -40,6 +40,8 @@ namespace HotCommands
                         return ToggleComment.Instance.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations);
                     case Constants.ExpandSelectionCmdId:
                         return ExpandSelection.Instance.HandleCommand(textView);
+                    case Constants.SurroundWithBracketCmdId:
+                        return SurroundWithBracket.Instance.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations);
                 }
             }
 
@@ -59,6 +61,7 @@ namespace HotCommands
                 switch (prgCmds[0].cmdID)
                 {
                     case Constants.ToggleCommentCmdId:
+                    case Constants.SurroundWithBracketCmdId:
                     case Constants.ExpandSelectionCmdId:
                         prgCmds[0].cmdf |= (uint)OLECMDF.OLECMDF_ENABLED;
                         return VSConstants.S_OK;

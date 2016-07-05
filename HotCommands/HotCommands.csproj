@@ -55,6 +55,7 @@
     <Compile Include="CommandFilter.cs" />
     <Compile Include="CommandFilterTextViewCreationListener.cs" />
     <Compile Include="Commands\ExpandSelection.cs" />
+    <Compile Include="Commands\SurroundWithBracket.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="HotCommandsPackage.cs" />
     <Compile Include="KeyBindingUtil.cs" />
