@@ -64,6 +64,8 @@ namespace HotCommands
             base.Initialize();
             ToggleComment.Initialize(this);
             ExpandSelection.Initialize(this);
+            MoveMemberUp.Initialize(this);
+            MoveMemberDown.Initialize(this);
         }
 
         #endregion
