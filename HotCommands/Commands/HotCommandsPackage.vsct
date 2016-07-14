@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!--  This is the file that defines the actual layout and type of the commands.
+        It is divided in different sections (e.g. command definition, command
+        placement, ...), with each defining a specific set of properties.
+        See the comment before each section for more details about how to
+        use it. -->
+
+  <!--  The VSCT compiler (the tool that translates this file into the binary
+        format that VisualStudio will consume) has the ability to run a preprocessor
+        on the vsct file; this preprocessor is (usually) the C++ preprocessor, so
+        it is possible to define includes and macros with the same syntax used
+        in C++ files. Using this ability of the compiler here, we include some files
+        defining some of the constants that we will use inside the file. -->
+
+  <!--This is the file that defines the IDs for all the commands exposed by VisualStudio. -->
+  <Extern href="stdidcmd.h" />
+
+  <!--This header contains the command ids for the menus provided by the shell. -->
+  <Extern href="vsshlids.h" />
+
+  <!--The Commands section is where commands, menus, and menu groups are defined.
+      This section uses a Guid to identify the package that provides the command defined inside it. -->
+  <Commands package="guidHotCommandsPackage">
+    <!-- Inside this section we have different sub-sections: one for the menus, another
+    for the menu groups, one for the buttons (the actual commands), one for the combos
+    and the last one for the bitmaps used. Each element is identified by a command id that
+    is a unique pair of guid and numeric identifier; the guid part of the identifier is usually
+    called "command set" and is used to group different command inside a logically related
+    group; your package should define its own command set in order to avoid collisions
+    with command ids defined by other packages. -->
+
+    <!-- In this section you can define new menu groups. A menu group is a container for
+         other menus or buttons (commands); from a visual point of view you can see the
+         group as the part of a menu contained between two lines. The parent of a group
+         must be a menu. -->
+    <!--<Groups>-->
+      <!--<Group guid="guidHotCommandsPackageCmdSet" id="ToolsMenuGroup" priority="0x0600">-->
+        <!--<Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS" />-->
+      <!--</Group>-->
+      <!--<Group guid="guidHotCommandsPackageCmdSet" id="EditMenuGroup" priority="0x0600">-->
+        <!--<Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_EDIT" />-->
+      <!--</Group>-->
+      <!--<Group guid="guidHotCommandsPackageCmdSet" id="EditAdvancedMenuGroup" priority="0x0600">
+        <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_MENU" />
+      </Group>-->
+    <!--</Groups>-->
+
+    <!--Buttons section. -->
+    <!--This section defines the elements the user can interact with, like a menu command or a button
+        or combo box in a toolbar. -->
+    <!--<Buttons>
+      --><!--To define a menu group you have to specify its ID, the parent menu and its display priority.
+          The command is visible and enabled by default. If you need to change the visibility, status, etc, you can use
+          the CommandFlag node.
+          You can add more than one CommandFlag node e.g.:
+              <CommandFlag>DefaultInvisible</CommandFlag>
+              <CommandFlag>DynamicVisibility</CommandFlag>
+          If you do not want an image next to your command, remove the Icon node /> --><!--
+
+      --><!--<Button guid="guidHotCommandsPackageCmdSet" id="cmdidToggleComment" priority="0x0000" type="Button">
+        <Icon guid="guidImages1" id="bmpPicX" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Toggle &amp;Comment</ButtonText>
+          <MenuText>Toggle &amp;Comment</MenuText>
+          <ToolTipText>Comment or Uncomment the selected lines.</ToolTipText>
+          <CommandName>ToggleComment</CommandName>
+        </Strings>
+      </Button>
+
+      <Button guid="guidHotCommandsPackageCmdSet" id="cmdidExpandSelection" priority="0x0200" type="Button">
+        <Icon guid="guidImages1" id="bmpPicSearch" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Expand Selection</ButtonText>
+        </Strings>
+      </Button>--><!--
+      
+    </Buttons>-->
+
+    <!--The bitmaps section is used to define the bitmaps that are used for the commands.-->
+    <!--<Bitmaps>
+      --><!--  The bitmap id is defined in a way that is a little bit different from the others:
+            the declaration starts with a guid for the bitmap strip, then there is the resource id of the
+            bitmap strip containing the bitmaps and then there are the numeric ids of the elements used
+            inside a button definition. An important aspect of this declaration is that the element id
+            must be the actual index (1-based) of the bitmap inside the bitmap strip. --><!--
+      <Bitmap guid="guidImages1" href="Resources\ToggleComment.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
+    </Bitmaps>-->
+  </Commands>
+
+  <!--<CommandPlacements>
+    --><!--<CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidToggleComment" priority="0x7515">
+      <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidExpandSelection" priority="0x7520">
+      <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
+    </CommandPlacement>--><!--
+  </CommandPlacements>
+
+  <VisibilityConstraints>
+    --><!--<VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidToggleComment" context="GUID_TextEditorFactory"/>
+    <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidExpandSelection" context="GUID_TextEditorFactory"/>--><!--
+  </VisibilityConstraints>
+  
+  <KeyBindings>
+    --><!--<KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidToggleComment" editor="GUID_TextEditorFactory" mod1="Control" key1="VK_OEM_2"/>
+    <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidExpandSelection" editor="GUID_TextEditorFactory" mod1="Control" key1="W"/>--><!--
+  </KeyBindings>-->
+
+  <Symbols>
+    <!-- This is the package guid. -->
+    <GuidSymbol name="guidHotCommandsPackage" value="{dec6a640-ee9b-4753-821b-e24d75523940}" />
+
+    <!-- This is the guid used to group the menu commands together -->
+    <!--<GuidSymbol name="guidHotCommandsPackageCmdSet" value="{1023dc3d-550c-46b8-a3ec-c6b03431642c}">
+      <IDSymbol name="cmdidToggleComment" value="0x1021" />
+      <IDSymbol name="cmdidExpandSelection" value="0x1022" />
+    </GuidSymbol>-->
+
+    <!--<GuidSymbol name="guidImages1" value="{fcb5d1b2-db20-41ee-993f-9d92d1441d65}">
+      <IDSymbol name="bmpPic1" value="1" />
+      <IDSymbol name="bmpPic2" value="2" />
+      <IDSymbol name="bmpPicSearch" value="3" />
+      <IDSymbol name="bmpPicX" value="4" />
+      <IDSymbol name="bmpPicArrows" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>-->
+  
+  </Symbols>
+</CommandTable>
