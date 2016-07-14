@@ -96,7 +96,7 @@ namespace HotCommands.Adornment
             SyntaxNode rootNode = document.GetSyntaxRootAsync().Result;
 
             var commentTrivia = from t in rootNode.DescendantTrivia()
-                                where t.IsKind(SyntaxKind.SingleLineCommentTrivia) || t.IsKind(SyntaxKind.MultiLineCommentTrivia)
+                                where t.IsKind(SyntaxKind.SingleLineCommentTrivia) || t.IsKind(SyntaxKind.MultiLineCommentTrivia) || t.IsKind(SyntaxKind.XmlComment)
                                 select t;
             SyntaxTrivia[] comments = commentTrivia as SyntaxTrivia[] ?? commentTrivia.ToArray();
 
