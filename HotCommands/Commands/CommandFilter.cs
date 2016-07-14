@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.Text.Editor;
 using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 using System;
+using HotCommands.Commands;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Shell;
@@ -30,16 +31,12 @@ namespace HotCommands
 
         public int Exec(ref Guid pguidCmdGroup, uint nCmdID, uint nCmdexecopt, IntPtr pvaIn, IntPtr pvaOut)
         {
-            // Command handling
             if (pguidCmdGroup == Constants.HotCommandsGuid)
             {
-                // Dispatch to the correct command handler
                 switch (nCmdID)
                 {
-                    case Constants.ToggleCommentCmdId:
-                        return ToggleComment.Instance.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations);
-                    case Constants.ExpandSelectionCmdId:
-                        return ExpandSelection.Instance.HandleCommand(textView);
+                    case Constants.DuplicateSelectionCmdId:
+                        return DuplicateSelection.Instance.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations);
                 }
             }
 
@@ -58,8 +55,7 @@ namespace HotCommands
             {
                 switch (prgCmds[0].cmdID)
                 {
-                    case Constants.ToggleCommentCmdId:
-                    case Constants.ExpandSelectionCmdId:
+                    case Constants.DuplicateSelectionCmdId:
                         prgCmds[0].cmdf |= (uint)OLECMDF.OLECMDF_ENABLED;
                         return VSConstants.S_OK;
                 }
