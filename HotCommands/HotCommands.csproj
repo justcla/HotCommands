@@ -52,14 +52,13 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="CommandFilter.cs" />
-    <Compile Include="CommandFilterTextViewCreationListener.cs" />
-    <Compile Include="Commands\ExpandSelection.cs" />
-    <Compile Include="Constants.cs" />
-    <Compile Include="HotCommandsPackage.cs" />
-    <Compile Include="KeyBindingUtil.cs" />
+    <Compile Include="Commands\CommandFilter.cs" />
+    <Compile Include="Commands\DuplicateSelection\DuplicateSelection.cs" />
+    <Compile Include="Listeners\CommandFilterTextViewCreationListener.cs" />
+    <Compile Include="Commands\Constants.cs" />
+    <Compile Include="Commands\HotCommandsPackage.cs" />
+    <Compile Include="Commands\KeyBindingUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Commands\ToggleComment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -187,7 +186,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <VSCTCompile Include="HotCommandsPackage.vsct">
+    <VSCTCompile Include="Commands\HotCommandsPackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
       <SubType>Designer</SubType>
     </VSCTCompile>

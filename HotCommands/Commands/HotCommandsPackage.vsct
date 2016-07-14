@@ -1,0 +1,51 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!--This is the file that defines the IDs for all the commands exposed by VisualStudio. -->
+  <Extern href="stdidcmd.h" />
+
+  <!--This header contains the command ids for the menus provided by the shell. -->
+  <Extern href="vsshlids.h" />
+
+  <!--The Commands section is where commands, menus, and menu groups are defined.
+      This section uses a Guid to identify the package that provides the command defined inside it. -->
+  <Commands package="guidHotCommandsPackage">
+    <Buttons>
+      <Button guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelection" priority="0x0000" type="Button">
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Duplicate Selection</ButtonText>
+          <MenuText>Duplicate Selection</MenuText>
+          <ToolTipText>Duplicates the selected lines.</ToolTipText>
+          <CommandName>DuplicateSelection</CommandName>
+        </Strings>
+      </Button>
+    </Buttons>
+  </Commands>
+
+  <CommandPlacements>
+    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelection" priority="0x7515">
+      <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
+    </CommandPlacement>
+  </CommandPlacements>
+
+  <VisibilityConstraints>
+    <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelection" context="GUID_TextEditorFactory"/>
+  </VisibilityConstraints>
+  
+  <KeyBindings>
+    <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelection" editor="GUID_TextEditorFactory" mod1="Control" key1="D"/>
+  </KeyBindings>
+
+  <Symbols>
+    <!-- This is the package guid. -->
+    <GuidSymbol name="guidHotCommandsPackage" value="{dec6a640-ee9b-4753-821b-e24d75523940}" />
+
+    <!-- This is the guid used to group the menu commands together -->
+    <GuidSymbol name="guidHotCommandsPackageCmdSet" value="{1023dc3d-550c-46b8-a3ec-c6b03431642c}">
+      <IDSymbol name="cmdidDuplicateSelection" value="0x1019" />
+    </GuidSymbol>
+
+  </Symbols>
+</CommandTable>
