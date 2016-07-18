@@ -1,0 +1,35 @@
+<UserSettings>
+  <ApplicationIdentity version="14.0"/>
+  <ToolsOptions>
+    <ToolsOptionsCategory name="Environment" RegisteredName="Environment"/>
+  </ToolsOptions>
+  <Category name="Environment_Group" RegisteredName="Environment_Group">
+    <Category name="Environment_KeyBindings" Category="{F09035F1-80D2-4312-8EC4-4D354A4BCB4C}" Package="{DA9FB551-C724-11d0-AE1F-00A0C90FFFC3}" RegisteredName="Environment_KeyBindings" PackageName="Visual Studio Environment Package">
+      <Version>14.0.0.0</Version>
+      <KeyboardShortcuts>
+        <ShortcutsSchemeDef Name="IntelliJ-Settings">
+          <Shortcut Command="Edit.CompleteWord" Scope="TextEditor">Ctrl+Space</Shortcut>
+          <Shortcut Command="Edit.SmartCompleteWord" Scope="TextEditor">Ctrl+Shift+Space</Shortcut>
+          <Shortcut Command="Edit.CompleteStatement" Scope="TextEditor">Ctrl+Shift+Enter</Shortcut>
+          <Shortcut Command="Edit.ParameterInfo" Scope="TextEditor">Ctrl+P</Shortcut>
+          <Shortcut Command="Edit.QuickInfo" Scope="TextEditor">Ctrl+Q</Shortcut>
+          <Shortcut Command="Edit.ShowDocumentation" Scope="TextEditor">Shift+F1</Shortcut>
+          <Shortcut Command="Edit.ShowErrorInfo" Scope="TextEditor">Ctrl+F1</Shortcut>
+          <Shortcut Command="Edit.GenerateCode" Scope="TextEditor">Alt+Insert</Shortcut>
+          <Shortcut Command="Edit.OverrideMethods" Scope="TextEditor">Ctrl+O</Shortcut>
+          <Shortcut Command="Edit.ImplementMethods" Scope="TextEditor">Ctrl+I</Shortcut>
+          <Shortcut Command="Edit.SurroundWith" Scope="TextEditor">Ctrl+Alt+T</Shortcut>
+          <Shortcut Command="Edit.ToggleLineComment" Scope="TextEditor">Ctrl+/</Shortcut>
+          <Shortcut Command="Edit.ToggleBlockComment" Scope="TextEditor">Ctrl+Shift+/</Shortcut>
+          <Shortcut Command="Edit.ExplandSelection" Scope="TextEditor">Ctrl+W</Shortcut>
+          <Shortcut Command="Edit.ShrinkSelection" Scope="TextEditor">Ctrl+Shift+W</Shortcut>
+          <Shortcut Command="Edit.ShowContextInfo" Scope="TextEditor">Alt+Q</Shortcut>
+          <Shortcut Command="View.QuickActions" Scope="TextEditor">Alt+Enter</Shortcut>
+          <Shortcut Command="Edit.FormatCode" Scope="TextEditor">Ctr+Alt+L</Shortcut>
+          <Shortcut Command="Edit.OptimizeImport" Scope="TextEditor">Ctr+Alt+O</Shortcut>
+          <Shortcut Command="EditorContextMenus.CodeWindow.OrganizeUsings.RemoveAndSort" Scope="TextEditor">Ctr+Alt+O</Shortcut>
+        </ShortcutsSchemeDef>
+      </KeyboardShortcuts>
+    </Category>
+  </Category>
+</UserSettings>
