@@ -30,9 +30,37 @@
           <Shortcut Command="Edit.ShrinkSelection" Scope="Text Editor">Ctrl+Shift+W</Shortcut>
           <Shortcut Command="Edit.ShowContextInfo" Scope="Text Editor">Alt+Q</Shortcut>
           <Shortcut Command="View.QuickActions" Scope="Text Editor">Alt+Enter</Shortcut>
-          <Shortcut Command="Edit.FormatCode" Scope="Text Editor">Ctr+Alt+L</Shortcut>
-          <Shortcut Command="Edit.OptimizeImport" Scope="Text Editor">Ctr+Alt+O</Shortcut>
-          <Shortcut Command="EditorContextMenus.CodeWindow.OrganizeUsings.RemoveAndSort" Scope="Text Editor">Ctr+Alt+O</Shortcut>
+          <Shortcut Command="Edit.FormatCode" Scope="Text Editor">Ctrl+Alt+L</Shortcut>
+          <Shortcut Command="Edit.OptimizeImport" Scope="Text Editor">Ctrl+Alt+O</Shortcut>
+          <Shortcut Command="EditorContextMenus.CodeWindow.OrganizeUsings.RemoveAndSort" Scope="Text Editor">Ctrl+Alt+O</Shortcut>
+          <Shortcut Command="Edit.FormatIndents" Scope="Text Editor">Ctrl+Alt+I</Shortcut>
+          <!--<Shortcut Command="Edit.IncreaseLineIndent" Scope="Text Editor">Tab</Shortcut>-->
+          <!--<Shortcut Command="Edit.DecreaseLineIndent" Scope="Text Editor">Shift+Tab</Shortcut>-->
+          <Shortcut Command="Edit.Cut" Scope="Text Editor">Ctrl+X</Shortcut>
+          <Shortcut Command="Edit.Cut" Scope="Text Editor">Shift+Del</Shortcut>
+          <Shortcut Command="Edit.Copy" Scope="Text Editor">Ctrl+C</Shortcut>
+          <Shortcut Command="Edit.Copy" Scope="Text Editor">Ctrl+Ins</Shortcut>
+          <Shortcut Command="Edit.Paste" Scope="Text Editor">Ctrl+V</Shortcut>
+          <Shortcut Command="Edit.Paste" Scope="Text Editor">Shift+Ins</Shortcut>
+          <Shortcut Command="Edit.CycleClipboardRing" Scope="Text Editor">Ctrl+Shift+V</Shortcut>
+          <Shortcut Command="Edit.DuplicateCode" Scope="Text Editor">Ctrl+D</Shortcut>
+          <Shortcut Command="Edit.LineDelete" Scope="Text Editor">Ctrl+Y</Shortcut>
+          <Shortcut Command="Edit.SmartJoinLines" Scope="Text Editor">Ctrl+Shift+J</Shortcut>
+          <Shortcut Command="Edit.SmartBreakLine" Scope="Text Editor">Ctrl+Enter</Shortcut>
+          <Shortcut Command="Edit.LineOpenBelow" Scope="Text Editor">Shift+Enter</Shortcut>
+          <Shortcut Command="Edit.ToggleCase" Scope="Text Editor">Ctrl+Shift+U</Shortcut>
+          <Shortcut Command="Edit.SelectToStartBrace" Scope="Text Editor">Ctrl+Shift+[</Shortcut>
+          <Shortcut Command="Edit.SelectToEndBrace" Scope="Text Editor">Ctrl+Shift+]</Shortcut>
+          <Shortcut Command="Edit.WordDeleteToEnd" Scope="Text Editor">Ctrl+Del</Shortcut>
+          <Shortcut Command="Edit.WordDeleteToStart" Scope="Text Editor">Ctrl+Bkspce</Shortcut>
+          <Shortcut Command="Edit.ExpandCurrentRegion" Scope="Text Editor">Ctrl+Num +</Shortcut>
+          <Shortcut Command="Edit.ExpandCurrentRegion" Scope="Text Editor">Ctrl+Shift+=</Shortcut>
+          <Shortcut Command="Edit.CollapseCurrentRegion" Scope="Text Editor">Ctrl+Num -</Shortcut>
+          <Shortcut Command="Edit.CollapseCurrentRegion" Scope="Text Editor">Ctrl+-</Shortcut>
+          <Shortcut Command="Edit.ExpandAllOutlining" Scope="Text Editor">Ctrl+Shift+Num +</Shortcut>
+          <Shortcut Command="Edit.CollapseAllOutlining" Scope="Text Editor">Ctrl+Shift+Num -</Shortcut>
+          <Shortcut Command="Edit.CollapseAllOutlining" Scope="Text Editor">Ctrl+Shift+-</Shortcut>
+          <Shortcut Command="Window.CloseDocumentWindow" Scope="Text Editor">Ctrl+F4</Shortcut>
         </ShortcutsSchemeDef>
         <!-- Note: Whatever appears in the UserShortcuts will be applied to the current settings when imported -->
         <!-- These will be appended to any other user-applied shortcuts and the AppData\Roaming User.vsk will be updated -->
