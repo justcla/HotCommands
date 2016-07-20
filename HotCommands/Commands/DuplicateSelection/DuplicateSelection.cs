@@ -43,7 +43,7 @@ namespace HotCommands.Commands
             var selStart = editorOperations.TextView.Caret.ContainingTextViewLine;
             var selEnd = editorOperations.TextView.Selection.End;
             editorOperations.CopySelection();
-            // editorOperations.MoveToStartOfLine(false);
+            // editorOperations.MoveToStartOfLine(false); 
             editorOperations.MoveToNextCharacter(false);
             //var startPosition = textView.Caret.Position.VirtualBufferPosition;
 
