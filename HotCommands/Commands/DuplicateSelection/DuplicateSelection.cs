@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.VisualStudio;
@@ -13,7 +13,7 @@ using IServiceProvider = System.IServiceProvider;
 namespace HotCommands.Commands
 {
     internal sealed class DuplicateSelection
-    { 
+    {
         private readonly Package _package;
 
         public static DuplicateSelection Instance { get; private set; }
@@ -31,7 +31,7 @@ namespace HotCommands.Commands
                 throw new ArgumentNullException(nameof(package));
             _package = package;
         }
-
+        // Helped by source of Microsoft.VisualStudio.Text.Editor.DragDrop.DropHandlerBase.cs in assembly Microsoft.VisualStudio.Text.UI.Wpf, Version=14.0.0.0
         public int HandleCommand(IWpfTextView textView, IClassifier classifier, IOleCommandTarget commandTarget, IEditorOperations editorOperations)
         {
             Guid cmdGroup = VSConstants.VSStd2K;
