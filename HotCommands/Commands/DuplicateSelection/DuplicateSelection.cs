@@ -47,7 +47,7 @@ namespace HotCommands.Commands
             editorOperations.MoveToNextCharacter(false);
             //var startPosition = textView.Caret.Position.VirtualBufferPosition;
 
-            editorOperations.Paste();
+            editorOperations.Paste(); 
 
             editorOperations.SelectAndMoveCaret(textView.Caret.Position.VirtualBufferPosition, textView.Caret.Position.VirtualBufferPosition);
             editorOperations.MoveToPreviousCharacter(true);
