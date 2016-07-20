@@ -13,7 +13,7 @@ using IServiceProvider = System.IServiceProvider;
 namespace HotCommands.Commands
 {
     internal sealed class DuplicateSelection
-    {
+    { 
         private readonly Package _package;
 
         public static DuplicateSelection Instance { get; private set; }
