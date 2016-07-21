@@ -34,8 +34,8 @@ namespace HotCommands.Commands
         // Helped by source of Microsoft.VisualStudio.Text.Editor.DragDrop.DropHandlerBase.cs in assembly Microsoft.VisualStudio.Text.UI.Wpf, Version=14.0.0.0
         public int HandleCommand(IWpfTextView textView, IClassifier classifier, IOleCommandTarget commandTarget, IEditorOperations editorOperations)
         {
-            Guid cmdGroup = VSConstants.VSStd2K;
-            bool isSingleLine = false;
+            //Guid cmdGroup = VSConstants.VSStd2K;
+            var isSingleLine = false;
             var selectedText = editorOperations.SelectedText;
             if (selectedText.Length == 0)
             // if nothing is selected, we can consider the current line as a selection
@@ -53,35 +53,89 @@ namespace HotCommands.Commands
             }
             else
             {
-                ITextSelection selection = textView.Selection;
-                var virtualBufferPosition = editorOperations.TextView.Caret.Position.VirtualBufferPosition;
-                bool isReversed = selection.IsReversed;
-                string text = selectedText;
-                ITextSnapshot textSnapshot = textView.TextSnapshot;
-                ITrackingPoint trackingPoint = textSnapshot.CreateTrackingPoint(virtualBufferPosition.Position, PointTrackingMode.Negative);
-                List<ITrackingSpan> list = new List<ITrackingSpan>();
+                var selection = textView.Selection;
+                var isReversed = selection.IsReversed;
+                var text = selectedText;
+                var textSnapshot = textView.TextSnapshot;
+                var list = new List<ITrackingSpan>();
                 foreach (SnapshotSpan snapshotSpan in selection.SelectedSpans)
+                {
                     list.Add(textSnapshot.CreateTrackingSpan(snapshotSpan, SpanTrackingMode.EdgeExclusive));
+                }
                 if (!selection.IsEmpty)
+                {
                     selection.Clear();
-                int offset = 0;
-                if (virtualBufferPosition.IsInVirtualSpace)
-                {
-                    offset = editorOperations.GetWhitespaceForVirtualSpace(virtualBufferPosition).Length;
                 }
-                textView.Caret.MoveTo(virtualBufferPosition.TranslateTo(textView.TextSnapshot));
-                editorOperations.InsertText(text);
-                SnapshotPoint insertionPoint = trackingPoint.GetPoint(textView.TextSnapshot);
-                if (offset != 0)
+
+
+                if (list.Count < 2)
                 {
-                    insertionPoint = insertionPoint.Add(offset);
+                    var offset = 0;
+                    var virtualBufferPosition = editorOperations.TextView.Caret.Position.VirtualBufferPosition;
+                    var trackingPoint = textSnapshot.CreateTrackingPoint(virtualBufferPosition.Position, PointTrackingMode.Negative);
+                    if (virtualBufferPosition.IsInVirtualSpace)
+                    {
+                        offset = editorOperations.GetWhitespaceForVirtualSpace(virtualBufferPosition).Length;
+                    }
+                    textView.Caret.MoveTo(virtualBufferPosition.TranslateTo(textView.TextSnapshot));
+                    editorOperations.InsertText(text);
+                    var insertionPoint = trackingPoint.GetPoint(textView.TextSnapshot);
+                    if (offset != 0)
+                    {
+                        insertionPoint = insertionPoint.Add(offset);
+                    }
+                    var virtualSnapshotPoint1 = new VirtualSnapshotPoint(insertionPoint);
+                    var virtualSnapshotPoint2 = new VirtualSnapshotPoint(insertionPoint.Add(text.Length));
+                    if (isReversed)
+                    {
+                        editorOperations.SelectAndMoveCaret(virtualSnapshotPoint2, virtualSnapshotPoint1, TextSelectionMode.Stream);
+                    }
+                    else
+                    {
+                        editorOperations.SelectAndMoveCaret(virtualSnapshotPoint1, virtualSnapshotPoint2, TextSelectionMode.Stream);
+                    }
                 }
-                VirtualSnapshotPoint virtualSnapshotPoint1 = new VirtualSnapshotPoint(insertionPoint);
-                VirtualSnapshotPoint virtualSnapshotPoint2 = new VirtualSnapshotPoint(insertionPoint.Add(text.Length));
-                if (isReversed)
-                    editorOperations.SelectAndMoveCaret(virtualSnapshotPoint2, virtualSnapshotPoint1, TextSelectionMode.Stream);
                 else
-                    editorOperations.SelectAndMoveCaret(virtualSnapshotPoint1, virtualSnapshotPoint2, TextSelectionMode.Stream);
+                {
+                    var trackingPointOffsetList = new List<Tuple<ITrackingPoint, int, int>>();
+                    //Insert Text!
+                    if (isReversed) list.Reverse();
+                    foreach (var trackingSpan in list)
+                    {
+                        var span = trackingSpan.GetSpan(textSnapshot);
+                        text = trackingSpan.GetText(textSnapshot);
+                        var offset = 0;
+                        var insertionPoint = !isReversed ? trackingSpan.GetEndPoint(span.Snapshot) : trackingSpan.GetStartPoint(span.Snapshot);
+                        var virtualBufferPosition = new VirtualSnapshotPoint(insertionPoint);
+                        var trackingPoint = textSnapshot.CreateTrackingPoint(virtualBufferPosition.Position, PointTrackingMode.Negative);
+                        if (virtualBufferPosition.IsInVirtualSpace)
+                        {
+                            offset = editorOperations.GetWhitespaceForVirtualSpace(virtualBufferPosition).Length;
+                        }
+                        trackingPointOffsetList.Add(new Tuple<ITrackingPoint, int, int>(trackingPoint, offset, text.Length));
+                        textView.Caret.MoveTo(virtualBufferPosition.TranslateTo(textView.TextSnapshot));
+                        editorOperations.InsertText(text);
+                    }
+                    //Make Selections
+                    {
+                        var trackingPointOffset = trackingPointOffsetList.First();
+                        var insertionPoint = trackingPointOffset.Item1.GetPoint(textView.TextSnapshot);
+                        if (trackingPointOffset.Item2 != 0)
+                        {
+                            insertionPoint = insertionPoint.Add(trackingPointOffset.Item2);
+                        }
+                        var virtualSnapshotPoint1 = new VirtualSnapshotPoint(insertionPoint.Add(!isReversed ? 0 : trackingPointOffset.Item3));
+
+                        trackingPointOffset = trackingPointOffsetList.Last();
+                        insertionPoint = trackingPointOffset.Item1.GetPoint(textView.TextSnapshot);
+                        if (trackingPointOffset.Item2 != 0)
+                        {
+                            insertionPoint = insertionPoint.Add(trackingPointOffset.Item2);
+                        }
+                        var virtualSnapshotPoint2 = new VirtualSnapshotPoint(insertionPoint.Add(isReversed ? 0 : trackingPointOffset.Item3));
+                        editorOperations.SelectAndMoveCaret(virtualSnapshotPoint1, virtualSnapshotPoint2, TextSelectionMode.Box);
+                    }
+                }
             }
 
             return VSConstants.S_OK;
