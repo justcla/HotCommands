@@ -96,10 +96,30 @@
           <Shortcut Command="Debug.Resume" Scope="Global">F9</Shortcut>
           <Shortcut Command="Debug.ToggleBreakpoint" Scope="Global">Ctrl+F8</Shortcut>
           <Shortcut Command="Debug.Breakpoints" Scope="Global">Ctrl+Shift+F8</Shortcut>
+          <!-- Navigation -->
+          <Shortcut Command="Edit.NavigateTo" Scope="Global">Ctrl+N</Shortcut>  <!-- Go To Class/Type -->
+          <!--<Shortcut Command="Edit.NavigateTo" Scope="Global">Ctrl+Shift+N</Shortcut>-->  <!-- Go To File-->
+          <Shortcut Command="Edit.NavigateTo" Scope="Global">Ctrl+Shift+Alt+N</Shortcut>  <!-- Go to Symbol -->
+          <Remove Command="Window.NextTab" Scope="Text Editor">Ctrl+PgDn</Remove>   <!-- This is why the global setting is not working for Ctrl+PgDn -->
+          <Remove Command="Window.PreviousTab" Scope="Text Editor">Ctrl+PgUp</Remove> <!-- This is why the global setting is not working for Ctrl+PgUp -->
+          <Remove Command="Edit.CompleteWord" Scope="Text Editor">Alt+Right Arrow</Remove>
+          <Remove Command="Edit.CompleteWord" Scope="Workflow Designer">Alt+Right Arrow</Remove>
+          <Shortcut Command="Window.NextTab" Scope="Global">Alt+Right Arrow</Shortcut>
+          <Shortcut Command="Window.PreviousTab" Scope="Global">Alt+Left Arrow</Shortcut>
+          <Shortcut Command="Window.NextTab" Scope="Text Editor">Alt+Right Arrow</Shortcut>
+          <Shortcut Command="Window.PreviousTab" Scope="Text Editor">Alt+Left Arrow</Shortcut>
+          <Shortcut Command="Window.NextTab" Scope="Workflow Designer">Alt+Right Arrow</Shortcut>
+          <Shortcut Command="Window.PreviousTab" Scope="Workflow Designer">Alt+Left Arrow</Shortcut>
+          <Shortcut Command="GotoMostRecentlyActiveToolWindow" Scope="Global">F12</Shortcut>
+          <Shortcut Command="Window.ActivateDocumentWindow" Scope="Global">Esc</Shortcut>
         </ShortcutsSchemeDef>
         <!-- Note: Whatever appears in the UserShortcuts will be applied to the current settings when imported -->
         <!-- These will be appended to any other user-applied shortcuts and the AppData\Roaming User.vsk will be updated -->
         <UserShortcuts>
+          <!--<Remove Command="Window.NextTab" Scope="Text Editor">Ctrl+PgDn</Remove>   &lt;!&ndash; This is why the global setting is not working for Ctrl+PgDn &ndash;&gt;-->
+          <!--<Remove Command="Window.PreviousTab" Scope="Text Editor">Ctrl+PgUp</Remove> &lt;!&ndash; This is why the global setting is not working for Ctrl+PgUp &ndash;&gt;-->
+          <!--<Remove Command="Edit.CompleteWord" Scope="Text Editor">Alt+Right Arrow</Remove>-->
+          <!--<Remove Command="Edit.CompleteWord" Scope="Workflow Designer">Alt+Right Arrow</Remove>-->
           <!--<Shortcut Command="Edit.CompleteWord" Scope="Text Editor">Ctrl+Space</Shortcut>-->
           <!--<Shortcut Command="Edit.QuickInfo" Scope="Text Editor">Ctrl+Q</Shortcut>-->
           <!--<Shortcut Command="Edit.SurroundWith" Scope="Text Editor">Ctrl+Alt+T</Shortcut>-->
