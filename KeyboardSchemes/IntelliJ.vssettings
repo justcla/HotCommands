@@ -13,6 +13,7 @@
         <!-- Move the VSK file (with same 'Name') from the AppData\Roaming directory to the Common7\IDE directory -->
         <!-- to have the shortcuts available on the Tools->Options->Keyboard, Keyboard mapping scheme dropdown. -->
         <ShortcutsSchemeDef Name="IntelliJ">
+          <!-- Editing Key bindings -->
           <Shortcut Command="Edit.CompleteWord" Scope="Text Editor">Ctrl+Space</Shortcut>
           <Shortcut Command="Edit.SmartCompleteWord" Scope="Text Editor">Ctrl+Shift+Space</Shortcut>
           <Shortcut Command="Edit.CompleteStatement" Scope="Text Editor">Ctrl+Shift+Enter</Shortcut>
@@ -61,6 +62,41 @@
           <Shortcut Command="Edit.CollapseAllOutlining" Scope="Text Editor">Ctrl+Shift+Num -</Shortcut>
           <Shortcut Command="Edit.CollapseAllOutlining" Scope="Text Editor">Ctrl+Shift+-</Shortcut>
           <Shortcut Command="Window.CloseDocumentWindow" Scope="Text Editor">Ctrl+F4</Shortcut>
+          <!-- Search/Replace -->
+          <!--<Shortcut Command="SearchEverywhere" Scope="Global">Double Shift</Shortcut>-->
+          <Shortcut Command="Edit.Find" Scope="Global">Ctrl+F</Shortcut>
+          <Shortcut Command="Edit.FindNext" Scope="Global">F3</Shortcut>
+          <Shortcut Command="Edit.FindPrevious" Scope="Global">Shift+F3</Shortcut>
+          <Shortcut Command="Edit.Replace" Scope="Global">Ctrl+R</Shortcut>
+          <Shortcut Command="Edit.FindinFiles" Scope="Global">Ctrl+Shift+F</Shortcut>
+          <Shortcut Command="Edit.ReplaceinFiles" Scope="Global">Ctrl+Shift+R</Shortcut>
+          <Shortcut Command="Edit.SearchStructurally" Scope="Global">Ctrl+Shift+S</Shortcut>
+          <Shortcut Command="Edit.ReplacedStructurally" Scope="Global">Ctrl+Shift+M</Shortcut>
+          <!-- Usage Search -->
+          <Shortcut Command="Edit.FindAllReferences" Scope="Global">Alt+F7</Shortcut>
+          <Shortcut Command="Edit.FindUsagesInFile" Scope="Global">Ctrl+F7</Shortcut>
+          <Shortcut Command="Edit.HighlightUsagesInFile" Scope="Global">Ctrl+Shift+F7</Shortcut>
+          <Shortcut Command="Edit.ShowUsages" Scope="Global">Ctrl+Alt+F7</Shortcut>
+          <!-- Compile and Run-->
+          <Shortcut Command="Build.BuildSolution" Scope="Global">Ctrl+F9</Shortcut>  <!-- Build project -->
+          <!--<Shortcut Command="Build.BuildOnlyProject" Scope="Global">Ctrl+Shift+F9</Shortcut>-->  <!-- Compile slected file, package or module -->
+          <Shortcut Command="Build.Compile" Scope="Global">Ctrl+Shift+F9</Shortcut>  <!-- Compile slected file, package or module -->
+          <Shortcut Command="SelectConfigurationAndRun" Scope="Global">Alt+Shift+F10</Shortcut>
+          <Shortcut Command="SelectConfigurationAndDebug" Scope="Global">Alt+Shift+F9</Shortcut>
+          <!-- Debugging -->
+          <Shortcut Command="Debug.StartWithoutDebugging" Scope="Global">Shift+F10</Shortcut>
+          <Shortcut Command="Debug.Start" Scope="Global">Shift+F9</Shortcut>
+          <Shortcut Command="Debug.RunContextConfigFromEditor" Scope="Global">Ctrl+Shift+F10</Shortcut>
+          <!-- Debugging -->
+          <Shortcut Command="Debug.StepOver" Scope="Global">F8</Shortcut>
+          <Shortcut Command="Debug.StepInto" Scope="Global">F7</Shortcut>
+          <Shortcut Command="Debug.SmartStepInto" Scope="Global">Shift+F7</Shortcut>
+          <Shortcut Command="Debug.StepOut" Scope="Global">Shift+F8</Shortcut>
+          <Shortcut Command="Debug.RunToCursor" Scope="Global">Alt+F9</Shortcut>
+          <Shortcut Command="Debug.EvaluateStatement" Scope="Global">Alt+F8</Shortcut>
+          <Shortcut Command="Debug.Resume" Scope="Global">F9</Shortcut>
+          <Shortcut Command="Debug.ToggleBreakpoint" Scope="Global">Ctrl+F8</Shortcut>
+          <Shortcut Command="Debug.Breakpoints" Scope="Global">Ctrl+Shift+F8</Shortcut>
         </ShortcutsSchemeDef>
         <!-- Note: Whatever appears in the UserShortcuts will be applied to the current settings when imported -->
         <!-- These will be appended to any other user-applied shortcuts and the AppData\Roaming User.vsk will be updated -->
