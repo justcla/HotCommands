@@ -83,8 +83,7 @@
           <Shortcut Command="Build.Compile" Scope="Global">Ctrl+Shift+F9</Shortcut>  <!-- Compile slected file, package or module -->
           <Shortcut Command="SelectConfigurationAndRun" Scope="Global">Alt+Shift+F10</Shortcut>
           <Shortcut Command="SelectConfigurationAndDebug" Scope="Global">Alt+Shift+F9</Shortcut>
-          <!-- Debugging -->
-          <Shortcut Command="Debug.StartWithoutDebugging" Scope="Global">Shift+F10</Shortcut>
+          <Shortcut Command="Debug.StartWithoutDebugging" Scope="Global">Shift+F10</Shortcut> <!-- Run -->
           <Shortcut Command="Debug.Start" Scope="Global">Shift+F9</Shortcut>
           <Shortcut Command="Debug.RunContextConfigFromEditor" Scope="Global">Ctrl+Shift+F10</Shortcut>
           <!-- Debugging -->
