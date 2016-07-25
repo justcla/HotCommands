@@ -72,7 +72,7 @@ namespace HotCommands
             var prevMember = syntaxRoot.FindMemberDeclarationAt(currMember.FullSpan.Start - 1);
             
             //If current and previous declaration member belongs to same Parent, then Swap the members
-            if (currMember.Parent.Equals(prevMember.Parent))
+            if (currMember.Parent.Equals(prevMember?.Parent))
             {
                 textView.SwapMembers(currMember, prevMember);
             }
