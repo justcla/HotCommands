@@ -27,20 +27,58 @@ namespace InitializeFieldFromConstructor
             // only offer a refactoring if the selected node is a field declaration.
             var variableDeclarator = node as VariableDeclaratorSyntax;
             var fieldDeclaration = variableDeclarator?.Ancestors().OfType<FieldDeclarationSyntax>().SingleOrDefault();
-            if (fieldDeclaration == null)
+            var classDeclaration = fieldDeclaration?.Ancestors().OfType<ClassDeclarationSyntax>().FirstOrDefault();
+            if (classDeclaration == null)
             {
+                // either not a field declaration, or not part of a class (invalid syntax)
                 return;
             }
 
-            // create the code action
-            var action = CodeAction.Create("Initialize field from constructor", 
-                c => InitializeFromConstructor(context.Document, fieldDeclaration, variableDeclarator, c));
+            if (GetConstructors(variableDeclarator).Count() < 2)
+            {
+                // create the code action
+                var action = CodeAction.Create("Initialize field from constructor", 
+                    c => InitializeFromConstructor(context.Document, fieldDeclaration, variableDeclarator, false, c));
+                // register this code action.
+                context.RegisterRefactoring(action);
+            }
+            else
+            {
+                // create the code action
+                var action = CodeAction.Create("Initialize field from existing constructors",
+                    c => InitializeFromConstructor(context.Document, fieldDeclaration, variableDeclarator, false, c));
+                // register this code action.
+                context.RegisterRefactoring(action);
 
-            // register this code action.
-            context.RegisterRefactoring(action);
+                // create the code action
+                action = CodeAction.Create("Initialize field from new constructor",
+                    c => InitializeFromConstructor(context.Document, fieldDeclaration, variableDeclarator, true, c));
+                // register this code action.
+                context.RegisterRefactoring(action);
+            }
         }
 
-        private async Task<Document> InitializeFromConstructor(Document document, FieldDeclarationSyntax fieldDeclaration, VariableDeclaratorSyntax fieldVariable, CancellationToken cancellationToken)
+        private static IEnumerable<ConstructorDeclarationSyntax> GetConstructors(VariableDeclaratorSyntax fieldVariable)
+        {
+            var classDeclaration = fieldVariable.Ancestors().OfType<ClassDeclarationSyntax>().SingleOrDefault();
+
+            if (classDeclaration == null)
+            {
+                return new List<ConstructorDeclarationSyntax>();
+            }
+
+            var constructors = classDeclaration.DescendantNodes().OfType<ConstructorDeclarationSyntax>();
+
+            var relevantConstructors = constructors.Where(x =>
+                x.Body
+                .DescendantNodes()
+                .OfType<IdentifierNameSyntax>()
+                .All(identifier => identifier.Identifier.Text != fieldVariable.Identifier.Text));
+
+            return relevantConstructors;
+        }
+
+        private static async Task<Document> InitializeFromConstructor(Document document, FieldDeclarationSyntax fieldDeclaration, VariableDeclaratorSyntax fieldVariable, bool alwaysCreateNew, CancellationToken cancellationToken)
         {
             var classDeclaration = fieldDeclaration.Ancestors().OfType<ClassDeclarationSyntax>().Single();
 
@@ -64,19 +102,11 @@ namespace InitializeFieldFromConstructor
             var root = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
 
             // get existing constructor if any
-            var existingConstructor = classDeclaration.DescendantNodes().OfType<ConstructorDeclarationSyntax>().FirstOrDefault();
+            var existingConstructors = GetConstructors(fieldVariable);
 
             // update the class by either updating the constructor, or adding one
-            SyntaxNode updatedClassDecl;
-            if (existingConstructor != null)
-            {
-                var updatedConstructor = existingConstructor
-                    .AddParameterListParameters(parameter)
-                    .AddBodyStatements(assignment);
-
-                updatedClassDecl = classDeclaration.ReplaceNode(existingConstructor, updatedConstructor);
-            }
-            else
+            SyntaxNode updatedClassDecl = classDeclaration;
+            if (!existingConstructors.Any() || alwaysCreateNew)
             {
                 var constructor = ConstructorDeclaration(classDeclaration.Identifier.Text)
                     .WithModifiers(TokenList(Token(SyntaxKind.PublicKeyword)))
@@ -86,7 +116,17 @@ namespace InitializeFieldFromConstructor
                     .WithBody(Block(assignment))
                     .WithLeadingTrivia(fieldVariable.GetLeadingTrivia().Insert(0, CarriageReturnLineFeed));
 
-                updatedClassDecl = classDeclaration.InsertNodesAfter(fieldDeclaration, new [] { constructor });
+                var insertionPoint = (SyntaxNode)existingConstructors.LastOrDefault() ?? fieldDeclaration;
+
+                updatedClassDecl = classDeclaration.InsertNodesAfter(insertionPoint, new[] { constructor });
+
+            }
+            else
+            {
+                updatedClassDecl = classDeclaration.ReplaceNodes(existingConstructors, 
+                    (constructor, updatedConstructor) => constructor
+                        .AddParameterListParameters(parameter)
+                        .AddBodyStatements(assignment));
             }
 
             // replace the root node with the updated class
