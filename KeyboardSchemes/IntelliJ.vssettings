@@ -31,7 +31,9 @@
           <Shortcut Command="Edit.ShrinkSelection" Scope="Text Editor">Ctrl+Shift+W</Shortcut>
           <Shortcut Command="Edit.ShowContextInfo" Scope="Text Editor">Alt+Q</Shortcut>
           <Shortcut Command="View.QuickActions" Scope="Text Editor">Alt+Enter</Shortcut>
-          <Shortcut Command="Edit.FormatCode" Scope="Text Editor">Ctrl+Alt+L</Shortcut>
+          <!--<Shortcut Command="Edit.FormatCode" Scope="Text Editor">Ctrl+Alt+L</Shortcut>-->
+          <Shortcut Command="Edit.FormatDocument" Scope="Text Editor">Ctrl+Alt+L</Shortcut>
+          <Shortcut Command="Edit.FormatSelection" Scope="Text Editor">Ctrl+Shift+Alt+L</Shortcut>
           <Shortcut Command="Edit.OptimizeImport" Scope="Text Editor">Ctrl+Alt+O</Shortcut>
           <Shortcut Command="EditorContextMenus.CodeWindow.OrganizeUsings.RemoveAndSort" Scope="Text Editor">Ctrl+Alt+O</Shortcut>
           <Shortcut Command="Edit.FormatIndents" Scope="Text Editor">Ctrl+Alt+I</Shortcut>
@@ -100,18 +102,32 @@
           <Shortcut Command="Edit.NavigateTo" Scope="Global">Ctrl+N</Shortcut>  <!-- Go To Class/Type -->
           <!--<Shortcut Command="Edit.NavigateTo" Scope="Global">Ctrl+Shift+N</Shortcut>-->  <!-- Go To File-->
           <Shortcut Command="Edit.NavigateTo" Scope="Global">Ctrl+Shift+Alt+N</Shortcut>  <!-- Go to Symbol -->
-          <Remove Command="Window.NextTab" Scope="Text Editor">Ctrl+PgDn</Remove>   <!-- This is why the global setting is not working for Ctrl+PgDn -->
-          <Remove Command="Window.PreviousTab" Scope="Text Editor">Ctrl+PgUp</Remove> <!-- This is why the global setting is not working for Ctrl+PgUp -->
-          <Remove Command="Edit.CompleteWord" Scope="Text Editor">Alt+Right Arrow</Remove>
-          <Remove Command="Edit.CompleteWord" Scope="Workflow Designer">Alt+Right Arrow</Remove>
           <Shortcut Command="Window.NextTab" Scope="Global">Alt+Right Arrow</Shortcut>
-          <Shortcut Command="Window.PreviousTab" Scope="Global">Alt+Left Arrow</Shortcut>
           <Shortcut Command="Window.NextTab" Scope="Text Editor">Alt+Right Arrow</Shortcut>
-          <Shortcut Command="Window.PreviousTab" Scope="Text Editor">Alt+Left Arrow</Shortcut>
           <Shortcut Command="Window.NextTab" Scope="Workflow Designer">Alt+Right Arrow</Shortcut>
+          <Shortcut Command="Window.PreviousTab" Scope="Global">Alt+Left Arrow</Shortcut>
+          <Shortcut Command="Window.PreviousTab" Scope="Text Editor">Alt+Left Arrow</Shortcut>
           <Shortcut Command="Window.PreviousTab" Scope="Workflow Designer">Alt+Left Arrow</Shortcut>
           <Shortcut Command="GotoMostRecentlyActiveToolWindow" Scope="Global">F12</Shortcut>
           <Shortcut Command="Window.ActivateDocumentWindow" Scope="Global">Esc</Shortcut>
+          <Shortcut Command="Window.HideLastActiveWindow" Scope="Global">Shift+Esc</Shortcut>
+          <Shortcut Command="Window.CloseMostRecentToolWindow" Scope="Global">Ctrl+Shift+F4</Shortcut>
+          <Shortcut Command="Edit.GoTo" Scope="Global">Ctrl+G</Shortcut>  <!-- Go To Line -->
+          <Shortcut Command="RecentFilesPopup" Scope="Global">Ctrl+E</Shortcut>
+          <Shortcut Command="View.NavigateBackward" Scope="Global">Ctrl+Alt+Left Arrow</Shortcut>
+          <Shortcut Command="View.NavigateBackward" Scope="HTML Editor Design View">Ctrl+Alt+Left Arrow</Shortcut>
+          <Shortcut Command="View.NavigateForward" Scope="Global">Ctrl+Alt+Right Arrow</Shortcut>
+          <Shortcut Command="View.NavigateForward" Scope="HTML Editor Design View">Ctrl+Alt+Right Arrow</Shortcut>
+          <Shortcut Command="Edit.GoToLastEditLocation" Scope="Global">Ctrl+Shift+Bkspce</Shortcut>
+          <Shortcut Command="View.SelectCurrentFileOrSymbolInAnyView" Scope="Global">Alt+F1</Shortcut>  <!-- Select current file or symbol in any view -->
+          <Shortcut Command="Edit.GoToDefinition" Scope="Text Editor">Ctrl+B</Shortcut>   <!-- Go to Declaration -->
+          <Shortcut Command="Edit.GoToImplementation" Scope="Text Editor">Ctrl+Alt+B</Shortcut>
+          <Shortcut Command="Edit.OpenQuickDefLookup" Scope="Text Editor">Ctrl+Shift+I</Shortcut>
+          <Shortcut Command="Edit.GoToTypeDeclaration" Scope="Text Editor">Ctrl+Shift+B</Shortcut>
+          <!--<Shortcut Command="Edit.GoToDeclaration" Scope="Text Editor">Ctrl+U</Shortcut>-->    <!-- Go To super-method/super-class -->
+          <!-- Extras -->
+          <Shortcut Command="Window.NextTab" Scope="Text Editor">Ctrl+PgDn</Shortcut>   <!-- Restore Global control for Ctrl+PgDn -->
+          <Shortcut Command="Window.PreviousTab" Scope="Text Editor">Ctrl+PgUp</Shortcut> <!-- Restore Global control for Ctrl+PgUp -->
         </ShortcutsSchemeDef>
         <!-- Note: Whatever appears in the UserShortcuts will be applied to the current settings when imported -->
         <!-- These will be appended to any other user-applied shortcuts and the AppData\Roaming User.vsk will be updated -->
