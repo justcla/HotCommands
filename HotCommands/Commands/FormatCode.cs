@@ -27,7 +27,8 @@ namespace HotCommands
             Guid cmdGroup = VSConstants.VSStd2K;
 
             // Execute FormatSelection or FormatDocument depending on current state of selected code
-            commandTarget.Exec(ref cmdGroup, IsCursorOnly(textView) ? (uint)VSConstants.VSStd2KCmdID.FORMATDOCUMENT : (uint)VSConstants.VSStd2KCmdID.FORMATSELECTION, (uint)OleInterop.OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, IntPtr.Zero, IntPtr.Zero);
+            uint cmdID = IsCursorOnly(textView) ? (uint)VSConstants.VSStd2KCmdID.FORMATDOCUMENT : (uint)VSConstants.VSStd2KCmdID.FORMATSELECTION;
+            commandTarget.Exec(ref cmdGroup, cmdID, (uint)OleInterop.OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, IntPtr.Zero, IntPtr.Zero);
 
             return VSConstants.S_OK;
         }
