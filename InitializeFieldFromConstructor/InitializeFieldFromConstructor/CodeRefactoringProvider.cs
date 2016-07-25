@@ -37,7 +37,7 @@ namespace InitializeFieldFromConstructor
             if (GetConstructors(variableDeclarator).Count() < 2)
             {
                 // create the code action
-                var action = CodeAction.Create("Initialize field from constructor", 
+                var action = CodeAction.Create("Initialize field from constructor",
                     c => InitializeFromConstructor(context.Document, fieldDeclaration, variableDeclarator, false, c));
                 // register this code action.
                 context.RegisterRefactoring(action);
@@ -45,7 +45,7 @@ namespace InitializeFieldFromConstructor
             else
             {
                 // create the code action
-                var action = CodeAction.Create("Initialize field from existing constructors",
+                var action = CodeAction.Create("Initialize field from all constructors",
                     c => InitializeFromConstructor(context.Document, fieldDeclaration, variableDeclarator, false, c));
                 // register this code action.
                 context.RegisterRefactoring(action);
@@ -94,8 +94,8 @@ namespace InitializeFieldFromConstructor
 
             // create the new assignment to add to the constructor body
             var assignment = ExpressionStatement(
-                AssignmentExpression(SyntaxKind.SimpleAssignmentExpression, 
-                    MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, ThisExpression(), IdentifierName(identifierToken)), 
+                AssignmentExpression(SyntaxKind.SimpleAssignmentExpression,
+                    MemberAccessExpression(SyntaxKind.SimpleMemberAccessExpression, ThisExpression(), IdentifierName(identifierToken)),
                     IdentifierName(parameterName)));
 
             // get the syntax root
@@ -123,16 +123,29 @@ namespace InitializeFieldFromConstructor
             }
             else
             {
-                updatedClassDecl = classDeclaration.ReplaceNodes(existingConstructors, 
-                    (constructor, updatedConstructor) => constructor
-                        .AddParameterListParameters(parameter)
-                        .AddBodyStatements(assignment));
+                updatedClassDecl = classDeclaration.ReplaceNodes(existingConstructors,
+                    (constructor, updatedConstructor) => UpdateConstructor(constructor, parameter, assignment));
+
             }
 
             // replace the root node with the updated class
             var newRoot = root.ReplaceNode(classDeclaration, updatedClassDecl);
 
             return document.WithSyntaxRoot(newRoot);
+        }
+
+        private static ConstructorDeclarationSyntax UpdateConstructor(ConstructorDeclarationSyntax constructor, ParameterSyntax parameter, ExpressionStatementSyntax assignment)
+        {
+            var constructorWithParams = constructor.AddParameterListParameters(parameter);
+
+            var body = constructorWithParams.Body ?? Block();
+
+            var newBody = body.Statements.Insert(0, assignment);
+
+            return constructorWithParams
+                .WithBody(body.WithStatements(newBody))
+                .WithLeadingTrivia(constructor.GetLeadingTrivia())
+                .WithTrailingTrivia(constructor.GetTrailingTrivia());
         }
 
         /*
