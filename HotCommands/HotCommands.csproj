@@ -55,6 +55,8 @@
   <ItemGroup>
     <Compile Include="CommandFilter.cs" />
     <Compile Include="CommandFilterTextViewCreationListener.cs" />
+    <Compile Include="Commands\Command.cs" />
+    <Compile Include="Commands\FormatCode.cs" />
     <Compile Include="Commands\EditorExtensions.cs" />
     <Compile Include="Commands\ExpandSelection.cs" />
     <Compile Include="Commands\MoveCursorToPreviousMember.cs" />
