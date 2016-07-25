@@ -20,57 +20,9 @@ namespace HotCommands
     /// <summary>
     /// Command handler for FormatCode
     /// </summary>
-    internal sealed class FormatCode
+    internal sealed class FormatCode : Command<FormatCode>
     {
-        /// <summary>
-        /// VS Package that provides this command, not null.
-        /// </summary>
-        private readonly Package package;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FormatCode"/> class.
-        /// </summary>
-        /// <param name="package">Owner package, not null.</param>
-        private FormatCode(Package package)
-        {
-            if (package == null)
-            {
-                throw new ArgumentNullException("package");
-            }
-
-            this.package = package;
-        }
-
-        /// <summary>
-        /// Gets the instance of the command.
-        /// </summary>
-        public static FormatCode Instance
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// Gets the service provider from the owner package.
-        /// </summary>
-        private IServiceProvider ServiceProvider
-        {
-            get
-            {
-                return this.package;
-            }
-        }
-
-        /// <summary>
-        /// Initializes the singleton instance of the command.
-        /// </summary>
-        /// <param name="package">Owner package, not null.</param>
-        public static void Initialize(Package package)
-        {
-                Instance = new FormatCode(package);
-        }
-
-        public int HandleCommand(IWpfTextView textView, IClassifier classifier, OleInterop.IOleCommandTarget commandTarget, IEditorOperations editorOperations)
+        public int HandleCommand(IWpfTextView textView, OleInterop.IOleCommandTarget commandTarget)
         {
             Guid cmdGroup = VSConstants.VSStd2K;
 
@@ -86,27 +38,5 @@ namespace HotCommands
             // Only one selection. Check if there is any selected content.
             return textView.Selection.SelectedSpans[0].Length == 0;
         }
-
-        private bool IsAllCommented(IWpfTextView textView, IClassifier classifier)
-        {
-            foreach (SnapshotSpan snapshotSpan in textView.Selection.SelectedSpans)
-            {
-                SnapshotSpan spanToCheck = snapshotSpan.Length == 0 ?
-                    new SnapshotSpan(textView.TextSnapshot, textView.Caret.ContainingTextViewLine.Extent.Span) :
-                    snapshotSpan;
-                IList<ClassificationSpan> classificationSpans = classifier.GetClassificationSpans(spanToCheck);
-                foreach (var classification in classificationSpans)
-                {
-                    var name = classification.ClassificationType.Classification.ToLower();
-                    if (!name.Contains(PredefinedClassificationTypeNames.Comment))
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            return true;
-        }
-
     }
 }

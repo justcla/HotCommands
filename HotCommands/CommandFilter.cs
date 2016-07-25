@@ -41,7 +41,7 @@ namespace HotCommands
                     case Constants.ExpandSelectionCmdId:
                         return ExpandSelection.Instance.HandleCommand(textView);
                     case Constants.FormatCodeCmdId:
-                        return FormatCode.Instance.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations);
+                        return FormatCode.Instance.HandleCommand(textView, GetShellCommandDispatcher());
                 }
             }
 
