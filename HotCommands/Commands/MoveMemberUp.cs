@@ -2,10 +2,7 @@
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Text.Editor;
-using System.Linq;
-using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.CodeAnalysis.Text;
 
 namespace HotCommands
 {
@@ -64,35 +61,23 @@ namespace HotCommands
 
         public int HandleCommand(IWpfTextView textView)
         {
-            var memberslist = new[] { "MethodDeclaration", "PropertyDeclaration", "FieldDeclaration" };
-            MemberDeclarationSyntax prevMember = null;
-            MemberDeclarationSyntax member = null;
-            var cursorPosition = textView.Caret.ContainingTextViewLine.Extent.Span.Start;
-            var members = CSharpSyntaxTree.ParseText(textView.TextSnapshot.GetText()).GetRoot().DescendantNodes().OfType<MemberDeclarationSyntax>();
+            //Get the Syntax Root 
+            var syntaxRoot = textView.TextSnapshot.GetOpenDocumentInCurrentContextWithChanges().GetSyntaxRootAsync().Result;
 
-            for (int i = 0; i < members.Count(); i++)
+            //Find the Current Declaration Member from caret Position
+            var currMember = syntaxRoot.FindMemberDeclarationAt(textView.Caret.Position.BufferPosition.Position);
+            if (currMember == null || currMember.Parent == null) return VSConstants.S_OK;
+
+            //Find the Previous Declaration Member from caret Position
+            var prevMember = syntaxRoot.FindMemberDeclarationAt(currMember.FullSpan.Start - 1);
+            
+            //If current and previous declaration member belongs to same Parent, then Swap the members
+            if (currMember.Parent.Equals(prevMember.Parent))
             {
-                member = members.ElementAt(i);
-                if (cursorPosition >= member.FullSpan.Start && cursorPosition <= member.FullSpan.End && IsValidMember(member))
-                {
-                    prevMember = IsValidMember(members.ElementAtOrDefault(i - 1)) ? members.ElementAtOrDefault(i - 1) : null;
-                    break;
-                }
+                textView.SwapMembers(currMember, prevMember);
             }
 
-            if (prevMember == null || member == null) return 0;
-            var edit = textView.TextSnapshot.TextBuffer.CreateEdit();
-            edit.Delete(prevMember.FullSpan.Start, prevMember.FullSpan.Length);
-            edit.Insert(member.FullSpan.End, prevMember.GetText().ToString());
-            edit.Apply();
-
             return VSConstants.S_OK;
-        }
-
-        private bool IsValidMember(MemberDeclarationSyntax member)
-        {
-            if (member == null) return false;
-            return member.IsKind(SyntaxKind.MethodDeclaration) || member.IsKind(SyntaxKind.PropertyDeclaration) || member.IsKind(SyntaxKind.FieldDeclaration);
-        }
+        }        
     }
 }
