@@ -80,6 +80,15 @@
         </Strings>
       </Button>
 
+      <Button guid="guidHotCommandsPackageCmdSet" id="cmdidShrinkSelection" priority="0x0200" type="Button">
+        <Icon guid="guidImages1" id="bmpPicSearch" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Shrink Selection</ButtonText>
+        </Strings>
+      </Button>
+
       <Button guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberUp" priority="0x0200" type="Button">
         <Icon guid="guidImages1" id="bmpPicSearch" />
         <CommandFlag>DynamicVisibility</CommandFlag>
@@ -120,6 +129,9 @@
     <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidExpandSelection" priority="0x7520">
       <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
     </CommandPlacement>
+    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidShrinkSelection" priority="0x7525">
+      <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
+    </CommandPlacement>
     <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberUp" priority="0x7530">
       <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
     </CommandPlacement>
@@ -131,6 +143,7 @@
   <VisibilityConstraints>
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidToggleComment" context="GUID_TextEditorFactory"/>
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidExpandSelection" context="GUID_TextEditorFactory"/>
+    <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidShrinkSelection" context="GUID_TextEditorFactory"/>
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberUp" context="GUID_TextEditorFactory"/>
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberDown" context="GUID_TextEditorFactory"/>
   </VisibilityConstraints>
@@ -138,6 +151,7 @@
   <KeyBindings>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidToggleComment" editor="GUID_TextEditorFactory" mod1="Control" key1="VK_OEM_2"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidExpandSelection" editor="GUID_TextEditorFactory" mod1="Control" key1="W"/>
+    <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidShrinkSelection" editor="GUID_TextEditorFactory" mod1="Control Shift" key1="W"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberUp" editor="GUID_TextEditorFactory" mod1="Control" key1="VK_NUMPAD8" />
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberDown" editor="GUID_TextEditorFactory" mod1="Control" key1="VK_NUMPAD2"/>
   </KeyBindings>
@@ -150,6 +164,7 @@
     <GuidSymbol name="guidHotCommandsPackageCmdSet" value="{1023dc3d-550c-46b8-a3ec-c6b03431642c}">
       <IDSymbol name="cmdidToggleComment" value="0x1021" />
       <IDSymbol name="cmdidExpandSelection" value="0x1022" />
+      <IDSymbol name="cmdidShrinkSelection" value="0x1023" />
       <IDSymbol name="cmdidMoveMemberUp" value="0x1031" />
       <IDSymbol name="cmdidMoveMemberDown" value="0x1032" />
     </GuidSymbol>

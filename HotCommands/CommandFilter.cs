@@ -39,7 +39,9 @@ namespace HotCommands
                     case Constants.ToggleCommentCmdId:
                         return ToggleComment.Instance.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations);
                     case Constants.ExpandSelectionCmdId:
-                        return ExpandSelection.Instance.HandleCommand(textView);
+                        return ExpandSelection.Instance.HandleCommand(textView, true);
+                    case Constants.ShrinkSelectionCmdId:
+                        return ExpandSelection.Instance.HandleCommand(textView, false);
                     case Constants.MoveMemberUpCmdId:
                         return MoveMemberUp.Instance.HandleCommand(textView);
                     case Constants.MoveMemberDownCmdId:

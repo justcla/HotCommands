@@ -20,6 +20,7 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Utilities;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace HotCommands
 {
@@ -76,64 +77,113 @@ namespace HotCommands
         {
             Instance = new ExpandSelection(package);
         }
-        public int HandleCommand(IWpfTextView textView)
+        public int HandleCommand(IWpfTextView textView, bool expand)
         {
-            return HandleCommandExpandTask(textView).Result;
+            if (expand)
+            {
+                return HandleCommandExpandTask(textView).Result;
+            } 
+            else
+            {
+                return HandleCommandShrinkTask(textView).Result;
+            }
+        }
+
+        private async Task<int> HandleCommandShrinkTask(IWpfTextView textView)
+        {
+            var syntaxRoot = await textView.TextSnapshot.GetOpenDocumentInCurrentContextWithChanges().GetSyntaxRootAsync();
+
+            var caretPos = textView.Caret.Position.BufferPosition;
+
+            var startPosition = textView.Selection.Start.Position;
+            var endPosition = textView.Selection.End.Position;
+            var length = endPosition.Position - startPosition.Position;
+            var selectionSpan = new TextSpan(startPosition.Position, length);
+
+            List<TextSpan> spans = new List<TextSpan>();
+            var trivia = syntaxRoot.FindTrivia(caretPos);
+            var token = syntaxRoot.FindToken(caretPos);
+            var node = syntaxRoot.FindNode(new TextSpan(caretPos.Position, 0));
+            TextSpan currSelect = GetSyntaxSpan(trivia, token, node, new TextSpan(caretPos, 0));
+            while(!IsOverlap(currSelect, startPosition.Position, endPosition.Position))
+            {
+                spans.Add(currSelect);
+                trivia = syntaxRoot.FindTrivia(currSelect.Start);
+                token = syntaxRoot.FindToken(currSelect.Start);
+                node = syntaxRoot.FindNode(currSelect);
+                currSelect = GetSyntaxSpan(trivia, token, node, currSelect);
+            }
+
+            if (spans.Count > 0)
+            {
+                TextSpan finalSpan =  spans.Skip(Math.Max(0, spans.Count - 2)).First();
+                SetSelection(textView, finalSpan);
+            }
+
+            return VSConstants.S_OK;
         }
 
         private async Task<int> HandleCommandExpandTask(IWpfTextView textView)
         {
-            //Get the Syntax Root 
             var syntaxRoot = await textView.TextSnapshot.GetOpenDocumentInCurrentContextWithChanges().GetSyntaxRootAsync();
             var startPosition = textView.Selection.Start.Position;
             var endPosition = textView.Selection.End.Position;
-            var length = endPosition - startPosition;
+            var length = endPosition.Position - startPosition.Position;
             var selectionSpan = new TextSpan(startPosition.Position, length);
-            TextSpan finalSpan;
 
             var trivia = syntaxRoot.FindTrivia(startPosition.Position);
             var token = syntaxRoot.FindToken(startPosition.Position);
             var node = syntaxRoot.FindNode(selectionSpan);
 
-            if (trivia.RawKind == 8542 || trivia.RawKind == 8541) // in trivia
+            TextSpan finalSpan = GetSyntaxSpan(trivia, token, node, selectionSpan);
+
+            SetSelection(textView, finalSpan);
+            return VSConstants.S_OK;
+        }
+
+        private static TextSpan GetSyntaxSpan(SyntaxTrivia trivia, SyntaxToken token, SyntaxNode node, TextSpan selection)
+        {
+            TextSpan finalSpan;
+            int start = selection.Start;
+            int end = selection.End;
+            if (trivia.RawKind != 0) // in trivia
             {
-                if (IsOverlap(trivia.Span, startPosition.Position, endPosition.Position))
+                if (IsOverlap(trivia.Span, start, end) && (trivia.RawKind == 8542 || trivia.RawKind == 8541)) // in comment so grab comment
                 {
                     finalSpan = trivia.Span;
                 }
-                else
+                else // not a comment or already selecting comment so get selection of next open/close bracket
                 {
-                    var bracketSpan = GetInnerBracketSpan(trivia.Token.Parent);
-                    if (IsOverlap(bracketSpan, startPosition.Position, endPosition.Position))
+                    TextSpan innerBracketSpan = GetInnerBracketSpan(node);
+                    while (innerBracketSpan.Equals(new TextSpan(0, 0)))
                     {
-                        finalSpan = bracketSpan;
+                        node = node.Parent;
+                        innerBracketSpan = GetInnerBracketSpan(node);
                     }
-                    else
-                    {
-                        finalSpan = trivia.Token.Parent.Span;
-                    }
+                    // check that we are not selecting same area as current selection
+                    finalSpan = (innerBracketSpan.Equals(selection)) ? node.Span : innerBracketSpan;
                 }
             }
-            else if (IsOverlap(token.Span, startPosition.Position, endPosition.Position) && trivia.RawKind == 0) // in token. If we found a valid trivia, we dont want to parse the token next to cursor
+            else if (IsOverlap(token.Span, start, end)) // in token.
             {
                 finalSpan = token.Span;
             }
             else // in node
             {
-                node = (IsOverlap(node, startPosition.Position, endPosition.Position)) ? node : node.Parent;
-                var innerBracketSpan = GetInnerBracketSpan(node);
-                if (IsOverlap(innerBracketSpan, startPosition.Position, endPosition.Position))
+                node = (IsOverlap(node, start, end)) ? node : node.Parent;
+                TextSpan innerBracketSpan = GetInnerBracketSpan(node);
+                if (IsOverlap(innerBracketSpan, start, end))
                 {
                     finalSpan = innerBracketSpan;
-                } else
+                }
+                else
                 {
                     finalSpan = node.Span;
                 }
             }
-
-            SetSelection(textView, finalSpan);
-            return VSConstants.S_OK;
+            return finalSpan;
         }
+
 
         private static TextSpan GetInnerBracketSpan(SyntaxNode node)
         {
