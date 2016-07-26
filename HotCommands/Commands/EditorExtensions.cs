@@ -26,10 +26,10 @@ namespace HotCommands
 
         internal static MemberDeclarationSyntax FindMemberDeclarationAt(this SyntaxNode root, int position)
         {
-            if(position > root.FullSpan.End || position< root.FullSpan.Start) return null;
+            var trivia = root.FindTrivia(position);
             var token = root.FindToken(position, false);
             var member = token.Parent.AncestorsAndSelf().OfType<MemberDeclarationSyntax>().FirstOrDefault();
             return member;
-        }
+        }       
     }
 }
