@@ -12,11 +12,15 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.CodeAnalysis.Text;
 using System.Linq;
+using Roslyn.Utilities;
 using System.Collections;
 using System.Windows;
 using System.ComponentModel.Composition;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Utilities;
+using System.Collections.Generic;
+using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.Text.Outlining;
 
 namespace HotCommands
 {
@@ -80,7 +84,11 @@ namespace HotCommands
             var syntaxRoot = textView.TextSnapshot.GetOpenDocumentInCurrentContextWithChanges().GetSyntaxRootAsync().Result;
             var caretLocation = new TextSpan(textView.Caret.Position.BufferPosition.Position, 0);
             var node = syntaxRoot.FindNode(caretLocation);
+            var snapSpan = new SnapshotSpan(new SnapshotPoint(textView.TextSnapshot, node.Parent.Span.Start), new SnapshotPoint(textView.TextSnapshot, node.Parent.Span.Start + node.Parent.Span.Length));
+            textView.Selection.Select(snapSpan, false);
+            textView.Caret.MoveTo(snapSpan.Start);
 
+            /*
             //Find the Current Declaration Member from caret Position
             var currMember = syntaxRoot.FindMemberDeclarationAt(textView.Caret.Position.BufferPosition.Position);
             
@@ -96,8 +104,24 @@ namespace HotCommands
                 textView.SwapMembers(currMember, nextMember);
             }
 
-
+            */
             return VSConstants.S_OK;
         }
+        /*
+        public void SetSelection(
+            this ITextView textView, VirtualSnapshotPoint anchorPoint, VirtualSnapshotPoint activePoint)
+        {
+            var isReversed = activePoint < anchorPoint;
+            var start = isReversed ? activePoint : anchorPoint;
+            var end = isReversed ? anchorPoint : activePoint;
+            SetSelection(textView, new SnapshotSpan(start.Position, end.Position), isReversed);
+        }
+
+        public void SetSelection(
+            this ITextView textView, SnapshotSpan span, bool isReversed = false)
+        {
+            //var spanInView = textView.GetSpanInView(span).Single();
+
+        }*/
     }
 }
