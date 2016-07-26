@@ -57,10 +57,11 @@
           <Shortcut Command="Edit.WordDeleteToEnd" Scope="Text Editor">Ctrl+Del</Shortcut>
           <Shortcut Command="Edit.WordDeleteToStart" Scope="Text Editor">Ctrl+Bkspce</Shortcut>
           <Shortcut Command="Edit.ExpandCurrentRegion" Scope="Text Editor">Ctrl+Num +</Shortcut>
-          <Shortcut Command="Edit.ExpandCurrentRegion" Scope="Text Editor">Ctrl+Shift+=</Shortcut>
+          <Shortcut Command="Edit.ExpandCurrentRegion" Scope="Text Editor">Ctrl+=</Shortcut>
           <Shortcut Command="Edit.CollapseCurrentRegion" Scope="Text Editor">Ctrl+Num -</Shortcut>
           <Shortcut Command="Edit.CollapseCurrentRegion" Scope="Text Editor">Ctrl+-</Shortcut>
           <Shortcut Command="Edit.ExpandAllOutlining" Scope="Text Editor">Ctrl+Shift+Num +</Shortcut>
+          <Shortcut Command="Edit.ExpandAllOutlining" Scope="Text Editor">Ctrl+Shift+=</Shortcut>
           <Shortcut Command="Edit.CollapseAllOutlining" Scope="Text Editor">Ctrl+Shift+Num -</Shortcut>
           <Shortcut Command="Edit.CollapseAllOutlining" Scope="Text Editor">Ctrl+Shift+-</Shortcut>
           <Shortcut Command="Window.CloseDocumentWindow" Scope="Text Editor">Ctrl+F4</Shortcut>
@@ -73,7 +74,7 @@
           <Shortcut Command="Edit.FindinFiles" Scope="Global">Ctrl+Shift+F</Shortcut>
           <Shortcut Command="Edit.ReplaceinFiles" Scope="Global">Ctrl+Shift+R</Shortcut>
           <Shortcut Command="Edit.SearchStructurally" Scope="Global">Ctrl+Shift+S</Shortcut>
-          <Shortcut Command="Edit.ReplacedStructurally" Scope="Global">Ctrl+Shift+M</Shortcut>
+          <Shortcut Command="Edit.ReplaceStructurally" Scope="Global">Ctrl+Shift+M</Shortcut>
           <!-- Usage Search -->
           <Shortcut Command="Edit.FindAllReferences" Scope="Global">Alt+F7</Shortcut>
           <Shortcut Command="Edit.FindUsagesInFile" Scope="Global">Ctrl+F7</Shortcut>
@@ -81,8 +82,8 @@
           <Shortcut Command="Edit.ShowUsages" Scope="Global">Ctrl+Alt+F7</Shortcut>
           <!-- Compile and Run-->
           <Shortcut Command="Build.BuildSolution" Scope="Global">Ctrl+F9</Shortcut>  <!-- Build project -->
-          <!--<Shortcut Command="Build.BuildOnlyProject" Scope="Global">Ctrl+Shift+F9</Shortcut>-->  <!-- Compile slected file, package or module -->
-          <Shortcut Command="Build.Compile" Scope="Global">Ctrl+Shift+F9</Shortcut>  <!-- Compile slected file, package or module -->
+          <!--<Shortcut Command="Build.BuildOnlyProject" Scope="Global">Ctrl+Shift+F9</Shortcut>-->  <!-- Compile selected file, package or module -->
+          <Shortcut Command="Build.Compile" Scope="Global">Ctrl+Shift+F9</Shortcut>  <!-- Compile selected file, package or module -->
           <Shortcut Command="SelectConfigurationAndRun" Scope="Global">Alt+Shift+F10</Shortcut>
           <Shortcut Command="SelectConfigurationAndDebug" Scope="Global">Alt+Shift+F9</Shortcut>
           <Shortcut Command="Debug.StartWithoutDebugging" Scope="Global">Shift+F10</Shortcut> <!-- Run -->
@@ -124,7 +125,17 @@
           <Shortcut Command="Edit.GoToImplementation" Scope="Text Editor">Ctrl+Alt+B</Shortcut>
           <Shortcut Command="Edit.OpenQuickDefLookup" Scope="Text Editor">Ctrl+Shift+I</Shortcut>
           <Shortcut Command="Edit.GoToTypeDeclaration" Scope="Text Editor">Ctrl+Shift+B</Shortcut>
-          <!--<Shortcut Command="Edit.GoToDeclaration" Scope="Text Editor">Ctrl+U</Shortcut>-->    <!-- Go To super-method/super-class -->
+          <Shortcut Command="Edit.GoToSuperMethod" Scope="Text Editor">Ctrl+U</Shortcut>    <!-- Go To super-method/super-class -->
+          <Shortcut Command="Edit.GoToPreviousMember" Scope="Text Editor">Alt+Up Arrow</Shortcut>
+          <Shortcut Command="Edit.GoToNextMember" Scope="Text Editor">Alt+Down Arrow</Shortcut>
+          <Shortcut Command="Edit.MoveToCodeBlockStart" Scope="Text Editor">Ctrl+[</Shortcut>
+          <Shortcut Command="Edit.MoveToCodeBlockEnd" Scope="Text Editor">Ctrl+]</Shortcut>
+          <Shortcut Command="FileStructurePopup" Scope="Global">Ctrl+F12</Shortcut>
+          <Shortcut Command="Show.TypeHierarchy" Scope="Global">Ctrl+H</Shortcut>
+          <Shortcut Command="Show.MethodHierarchy" Scope="Global">Ctrl+Shift+H</Shortcut>
+          <Shortcut Command="Show.CallHierarchy" Scope="Global">Ctrl+Alt+H</Shortcut>
+          <Shortcut Command="View.NextError" Scope="Text Editor">F2</Shortcut>
+          <Shortcut Command="View.PreviousError" Scope="Text Editor">Shift+F2</Shortcut>
           <!-- Extras -->
           <Shortcut Command="Window.NextTab" Scope="Text Editor">Ctrl+PgDn</Shortcut>   <!-- Restore Global control for Ctrl+PgDn -->
           <Shortcut Command="Window.PreviousTab" Scope="Text Editor">Ctrl+PgUp</Shortcut> <!-- Restore Global control for Ctrl+PgUp -->
