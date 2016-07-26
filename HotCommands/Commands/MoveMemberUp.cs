@@ -1,8 +1,6 @@
 ﻿using System;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Text.Editor;
-using Microsoft.CodeAnalysis.Text;
 
 namespace HotCommands
 {
@@ -61,23 +59,7 @@ namespace HotCommands
 
         public int HandleCommand(IWpfTextView textView)
         {
-            //Get the Syntax Root 
-            var syntaxRoot = textView.TextSnapshot.GetOpenDocumentInCurrentContextWithChanges().GetSyntaxRootAsync().Result;
-
-            //Find the Current Declaration Member from caret Position
-            var currMember = syntaxRoot.FindMemberDeclarationAt(textView.Caret.Position.BufferPosition.Position);
-            if (currMember == null || currMember.Parent == null) return VSConstants.S_OK;
-
-            //Find the Previous Declaration Member from caret Position
-            var prevMember = syntaxRoot.FindMemberDeclarationAt(currMember.FullSpan.Start - 1);
-            
-            //If current and previous declaration member belongs to same Parent, then Swap the members
-            if (currMember.Parent.Equals(prevMember?.Parent))
-            {
-                textView.SwapMembers(currMember, prevMember);
-            }
-
-            return VSConstants.S_OK;
-        }        
+            return textView.MoveCurrentMemberUp();
+        }
     }
 }

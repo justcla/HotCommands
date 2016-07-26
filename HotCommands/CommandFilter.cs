@@ -21,9 +21,9 @@ namespace HotCommands
             SVsServiceProvider globalServiceProvider, IEditorOperationsFactoryService editorOperationsFactory)
         {
             this.textView = textView;
-            classifier = aggregatorFactory.GetClassifier(textView.TextBuffer);
+            this.classifier = aggregatorFactory.GetClassifier(textView.TextBuffer);
             this.globalServiceProvider = globalServiceProvider;
-            editorOperations = editorOperationsFactory.GetEditorOperations(textView);
+            this.editorOperations = editorOperationsFactory.GetEditorOperations(textView);
         }
 
         public IOleCommandTarget Next { get; internal set; }
