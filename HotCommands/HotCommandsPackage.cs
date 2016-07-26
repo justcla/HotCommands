@@ -7,6 +7,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+using HotCommands.Commands;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio;
 
@@ -66,6 +67,8 @@ namespace HotCommands
             ExpandSelection.Initialize(this);
             MoveMemberUp.Initialize(this);
             MoveMemberDown.Initialize(this);
+            FormatCode.Initialize(this);
+            DuplicateSelection.Initialize(this);
         }
 
         #endregion

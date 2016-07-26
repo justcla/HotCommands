@@ -49,7 +49,7 @@ namespace HotCommands
             Property prop = props.Item("SchemeName");
             prop.Value = "MyBindings.vsk";
 
-            Commands cmds = dte.Commands;
+            EnvDTE.Commands cmds = dte.Commands;
 
             // Add a binding for ExpandSelection(TextEditor)
             {
@@ -80,6 +80,15 @@ namespace HotCommands
                 cmdMoveMemberDown.Bindings = (object)AppendKeyboardBinding(cmdMoveMemberDown, moveMemberDownKeyBinding);
             }
 
+            {
+                Command cmdToggleComment = cmds.Item("Edit.DuplicateSelection");
+                const string toggleCommentKeyBinding = "Text Editor::Ctrl+D";
+                cmdToggleComment.Bindings = AppendKeyboardBinding(cmdToggleComment, toggleCommentKeyBinding);
+
+                cmdToggleComment = cmds.Item("Edit.DuplicateAndSelectOriginal");
+                const string toggleCommentKeyReverseBinding = "Text Editor::Ctrl+Shift+D";
+                cmdToggleComment.Bindings = AppendKeyboardBinding(cmdToggleComment, toggleCommentKeyReverseBinding);
+            }
         }
 
         private static object[] SingleKeyboardBinding(string keyboardBindingDefn)

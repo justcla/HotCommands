@@ -27,7 +27,7 @@ namespace HotCommands
     /// <summary>
     /// Command handler
     /// </summary>
-    internal sealed class ExpandSelection
+    internal sealed class ExpandSelection : Command<ExpandSelection>
     {
         /// <summary>
         /// VS Package that provides this command, not null.

@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.Text.Editor;
 using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 using System;
+using HotCommands.Commands;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Shell;
@@ -17,7 +18,7 @@ namespace HotCommands
         private readonly SVsServiceProvider globalServiceProvider;
         private IEditorOperations editorOperations;
 
-        public CommandFilter(IWpfTextView textView, IClassifierAggregatorService aggregatorFactory, 
+        public CommandFilter(IWpfTextView textView, IClassifierAggregatorService aggregatorFactory,
             SVsServiceProvider globalServiceProvider, IEditorOperationsFactoryService editorOperationsFactory)
         {
             this.textView = textView;
@@ -46,6 +47,12 @@ namespace HotCommands
                         return MoveMemberUp.Instance.HandleCommand(textView);
                     case Constants.MoveMemberDownCmdId:
                         return MoveMemberDown.Instance.HandleCommand(textView);
+                    case Constants.FormatCodeCmdId:
+                        return FormatCode.Instance.HandleCommand(textView, GetShellCommandDispatcher());
+                    case Constants.DuplicateSelectionCmdId:
+                        return DuplicateSelection.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations);
+                    case Constants.DuplicateSelectionReverseCmdId:
+                        return DuplicateSelection.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations, true);
                 }
             }
 
@@ -66,8 +73,13 @@ namespace HotCommands
                 {
                     case Constants.ToggleCommentCmdId:
                     case Constants.ExpandSelectionCmdId:
+<<<<<<< HEAD
                     case Constants.MoveMemberUpCmdId:
                     case Constants.MoveMemberDownCmdId:
+=======
+                    case Constants.DuplicateSelectionCmdId:
+                    case Constants.DuplicateSelectionReverseCmdId:
+>>>>>>> 156a26db0bf9e5c2191570233d84147883d0df96
                         prgCmds[0].cmdf |= (uint)OLECMDF.OLECMDF_ENABLED;
                         return VSConstants.S_OK;
                 }
