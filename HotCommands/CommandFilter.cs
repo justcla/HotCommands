@@ -43,10 +43,6 @@ namespace HotCommands
                         return ExpandSelection.Instance.HandleCommand(textView, true);
                     case Constants.ShrinkSelectionCmdId:
                         return ExpandSelection.Instance.HandleCommand(textView, false);
-                    case Constants.MoveMemberUpCmdId:
-                        return MoveMemberUp.Instance.HandleCommand(textView);
-                    case Constants.MoveMemberDownCmdId:
-                        return MoveMemberDown.Instance.HandleCommand(textView);
                     case Constants.FormatCodeCmdId:
                         return FormatCode.Instance.HandleCommand(textView, GetShellCommandDispatcher());
                     case Constants.DuplicateSelectionCmdId:
@@ -73,8 +69,6 @@ namespace HotCommands
                 {
                     case Constants.ToggleCommentCmdId:
                     case Constants.ExpandSelectionCmdId:
-                    case Constants.MoveMemberUpCmdId:
-                    case Constants.MoveMemberDownCmdId:
                     case Constants.FormatCodeCmdId:
                     case Constants.DuplicateSelectionCmdId:
                     case Constants.DuplicateSelectionReverseCmdId:

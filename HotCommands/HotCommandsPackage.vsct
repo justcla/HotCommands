@@ -119,26 +119,6 @@
         </Strings>
       </Button>
 
-      <Button guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberUp" priority="0x0200" type="Button">
-        <Icon guid="guidImages1" id="bmpPicSearch" />
-        <CommandFlag>DynamicVisibility</CommandFlag>
-        <CommandFlag>DefaultInvisible</CommandFlag>
-        <Strings>
-          <ButtonText>Move up</ButtonText>
-        </Strings>
-      </Button>
-
-      <Button guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberDown" priority="0x0200" type="Button">
-        <Icon guid="guidImages1" id="bmpPicSearch" />
-        <CommandFlag>DynamicVisibility</CommandFlag>
-        <CommandFlag>DefaultInvisible</CommandFlag>
-        <Strings>
-          <ButtonText>Move down</ButtonText>
-        </Strings>
-      </Button>
-
-
-
     </Buttons>
 
     <!--The bitmaps section is used to define the bitmaps that are used for the commands.-->
@@ -162,12 +142,6 @@
     <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidShrinkSelection" priority="0x7525">
       <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
     </CommandPlacement>
-    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberUp" priority="0x7530">
-      <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
-    </CommandPlacement>
-    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberDown" priority="0x7535">
-      <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
-    </CommandPlacement>
     <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidFormatCode" priority="0x2795">
       <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
     </CommandPlacement>
@@ -183,8 +157,6 @@
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidToggleComment" context="GUID_TextEditorFactory"/>
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidExpandSelection" context="GUID_TextEditorFactory"/>
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidShrinkSelection" context="GUID_TextEditorFactory"/>
-    <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberUp" context="GUID_TextEditorFactory"/>
-    <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberDown" context="GUID_TextEditorFactory"/>
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidFormatCode" context="GUID_TextEditorFactory"/>
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelection" context="GUID_TextEditorFactory"/>
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelectionReverse" context="GUID_TextEditorFactory"/>
@@ -194,8 +166,6 @@
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidToggleComment" editor="GUID_TextEditorFactory" mod1="Control" key1="VK_OEM_2"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidExpandSelection" editor="GUID_TextEditorFactory" mod1="Control" key1="W"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidShrinkSelection" editor="GUID_TextEditorFactory" mod1="Control Shift" key1="W"/>
-    <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberUp" editor="GUID_TextEditorFactory" mod1="Control" key1="VK_NUMPAD8" />
-    <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberDown" editor="GUID_TextEditorFactory" mod1="Control" key1="VK_NUMPAD2"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidFormatCode" editor="GUID_TextEditorFactory" mod1="Control Alt" key1="F"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelection" editor="GUID_TextEditorFactory" mod1="Control" key1="D"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelectionReverse" editor="GUID_TextEditorFactory" mod1="Control Shift" key1="D"/>
@@ -213,8 +183,6 @@
       <IDSymbol name="cmdidExpandSelection" value="0x1022" />
       <IDSymbol name="cmdidShrinkSelection" value="0x1023" />
       <IDSymbol name="cmdidFormatCode" value="0x1027" />
-      <IDSymbol name="cmdidMoveMemberUp" value="0x1031" />
-      <IDSymbol name="cmdidMoveMemberDown" value="0x1032" />
     </GuidSymbol>
 
     <GuidSymbol name="guidImages1" value="{fcb5d1b2-db20-41ee-993f-9d92d1441d65}">

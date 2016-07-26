@@ -65,8 +65,6 @@ namespace HotCommands
             base.Initialize();
             ToggleComment.Initialize(this);
             ExpandSelection.Initialize(this);
-            MoveMemberUp.Initialize(this);
-            MoveMemberDown.Initialize(this);
             FormatCode.Initialize(this);
             DuplicateSelection.Initialize(this);
         }

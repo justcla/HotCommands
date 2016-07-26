@@ -60,8 +60,6 @@
     <Compile Include="Commands\DuplicateSelection.cs" />
     <Compile Include="Commands\FormatCode.cs" />
     <Compile Include="Commands\ExpandSelection.cs" />
-    <Compile Include="Commands\MoveMemberDown.cs" />
-    <Compile Include="Commands\MoveMemberUp.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="HotCommandsPackage.cs" />
     <Compile Include="KeyBindingUtil.cs" />
