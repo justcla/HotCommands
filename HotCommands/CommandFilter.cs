@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.Text.Editor;
 using OLEConstants = Microsoft.VisualStudio.OLE.Interop.Constants;
 using System;
+using HotCommands.Commands;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Shell;
@@ -17,7 +18,7 @@ namespace HotCommands
         private readonly SVsServiceProvider globalServiceProvider;
         private IEditorOperations editorOperations;
 
-        public CommandFilter(IWpfTextView textView, IClassifierAggregatorService aggregatorFactory, 
+        public CommandFilter(IWpfTextView textView, IClassifierAggregatorService aggregatorFactory,
             SVsServiceProvider globalServiceProvider, IEditorOperationsFactoryService editorOperationsFactory)
         {
             this.textView = textView;
@@ -42,6 +43,10 @@ namespace HotCommands
                         return ExpandSelection.Instance.HandleCommand(textView);
                     case Constants.FormatCodeCmdId:
                         return FormatCode.Instance.HandleCommand(textView, GetShellCommandDispatcher());
+                    case Constants.DuplicateSelectionCmdId:
+                        return DuplicateSelection.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations);
+                    case Constants.DuplicateSelectionReverseCmdId:
+                        return DuplicateSelection.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations, true);
                 }
             }
 
@@ -62,6 +67,8 @@ namespace HotCommands
                 {
                     case Constants.ToggleCommentCmdId:
                     case Constants.ExpandSelectionCmdId:
+                    case Constants.DuplicateSelectionCmdId:
+                    case Constants.DuplicateSelectionReverseCmdId:
                         prgCmds[0].cmdf |= (uint)OLECMDF.OLECMDF_ENABLED;
                         return VSConstants.S_OK;
                 }

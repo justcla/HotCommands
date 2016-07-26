@@ -71,6 +71,27 @@
         </Strings>
       </Button>
 
+      <Button guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelection" priority="0x0000" type="Button">
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Duplicate Selection</ButtonText>
+          <MenuText>Duplicate Selection</MenuText>
+          <ToolTipText>Duplicates the selected lines.</ToolTipText>
+          <CommandName>DuplicateSelection</CommandName>
+        </Strings>
+      </Button>
+      <Button guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelectionReverse" priority="0x0000" type="Button">
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Duplicate Selection</ButtonText>
+          <MenuText>Duplicate Selection</MenuText>
+          <ToolTipText>Duplicates the selected lines.</ToolTipText>
+          <CommandName>DuplicateSelectionReverse</CommandName>
+        </Strings>
+      </Button>
+
       <Button guid="guidHotCommandsPackageCmdSet" id="cmdidExpandSelection" priority="0x0200" type="Button">
         <Icon guid="guidImages1" id="bmpPicSearch" />
         <CommandFlag>DynamicVisibility</CommandFlag>
@@ -112,18 +133,28 @@
     <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidFormatCode" priority="0x2795">
       <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
     </CommandPlacement>
+    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelection" priority="0x7515">
+      <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelectionReverse" priority="0x7515">
+      <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
+    </CommandPlacement>
   </CommandPlacements>
 
   <VisibilityConstraints>
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidToggleComment" context="GUID_TextEditorFactory"/>
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidExpandSelection" context="GUID_TextEditorFactory"/>
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidFormatCode" context="GUID_TextEditorFactory"/>
+    <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelection" context="GUID_TextEditorFactory"/>
+    <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelectionReverse" context="GUID_TextEditorFactory"/>
   </VisibilityConstraints>
   
   <KeyBindings>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidToggleComment" editor="GUID_TextEditorFactory" mod1="Control" key1="VK_OEM_2"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidExpandSelection" editor="GUID_TextEditorFactory" mod1="Control" key1="W"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidFormatCode" editor="GUID_TextEditorFactory" mod1="Control Alt" key1="F"/>
+    <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelection" editor="GUID_TextEditorFactory" mod1="Control" key1="D"/>
+    <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelectionReverse" editor="GUID_TextEditorFactory" mod1="Control Shift" key1="D"/>
   </KeyBindings>
 
   <Symbols>
@@ -132,6 +163,8 @@
 
     <!-- This is the guid used to group the menu commands together -->
     <GuidSymbol name="guidHotCommandsPackageCmdSet" value="{1023dc3d-550c-46b8-a3ec-c6b03431642c}">
+      <IDSymbol name="cmdidDuplicateSelection" value="0x1019" />
+      <IDSymbol name="cmdidDuplicateSelectionReverse" value="0x1020" />
       <IDSymbol name="cmdidToggleComment" value="0x1021" />
       <IDSymbol name="cmdidExpandSelection" value="0x1022" />
       <IDSymbol name="cmdidFormatCode" value="0x1027" />
