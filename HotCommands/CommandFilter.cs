@@ -46,6 +46,10 @@ namespace HotCommands
                         return MoveMemberUp.Instance.HandleCommand(textView);
                     case Constants.MoveMemberDownCmdId:
                         return MoveMemberDown.Instance.HandleCommand(textView);
+                    case Constants.cmdidMoveCursorPrevMember:
+                        return MoveCursorToAdjacentMember.MoveToPreviousMember(textView);
+                    case Constants.cmdidMoveCursorNextMember:
+                        return MoveCursorToAdjacentMember.MoveToNextMember(textView);
                 }
             }
 
@@ -68,6 +72,8 @@ namespace HotCommands
                     case Constants.ExpandSelectionCmdId:
                     case Constants.MoveMemberUpCmdId:
                     case Constants.MoveMemberDownCmdId:
+                    case Constants.cmdidMoveCursorPrevMember:
+                    case Constants.cmdidMoveCursorNextMember:
                         prgCmds[0].cmdf |= (uint)OLECMDF.OLECMDF_ENABLED;
                         return VSConstants.S_OK;
                 }

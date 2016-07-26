@@ -49,7 +49,7 @@ namespace HotCommands
             Property prop = props.Item("SchemeName");
             prop.Value = "MyBindings.vsk";
 
-            Commands cmds = dte.Commands;
+            EnvDTE.Commands cmds = dte.Commands;
 
             // Add a binding for ExpandSelection(TextEditor)
             {
