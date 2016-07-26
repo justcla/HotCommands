@@ -29,54 +29,6 @@ namespace HotCommands
     /// </summary>
     internal sealed class ExpandSelection : Command<ExpandSelection>
     {
-        /// <summary>
-        /// VS Package that provides this command, not null.
-        /// </summary>
-        private readonly Package package;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ExpandSelection"/> class.
-        /// Adds our command handlers for menu (commands must exist in the command table file)
-        /// </summary>
-        /// <param name="package">Owner package, not null.</param>
-        private ExpandSelection(Package package)
-        {
-            if (package == null)
-            {
-                throw new ArgumentNullException("package");
-            }
-
-            this.package = package;
-        }
-
-        /// <summary>
-        /// Gets the instance of the command.
-        /// </summary>
-        public static ExpandSelection Instance
-        {
-            get;
-            private set;
-        }
-
-        /// <summary>
-        /// Gets the service provider from the owner package.
-        /// </summary>
-        private IServiceProvider ServiceProvider
-        {
-            get
-            {
-                return this.package;
-            }
-        }
-
-        /// <summary>
-        /// Initializes the singleton instance of the command.
-        /// </summary>
-        /// <param name="package">Owner package, not null.</param>
-        public static void Initialize(Package package)
-        {
-            Instance = new ExpandSelection(package);
-        }
         public int HandleCommand(IWpfTextView textView, bool expand)
         {
             if (expand)
@@ -107,6 +59,10 @@ namespace HotCommands
             TextSpan currSelect = GetSyntaxSpan(trivia, token, node, new TextSpan(caretPos, 0));
             while(!IsOverlap(currSelect, startPosition.Position, endPosition.Position))
             {
+                if (currSelect.Start == startPosition.Position && currSelect.End == endPosition.Position)
+                {
+                    break;
+                }
                 spans.Add(currSelect);
                 trivia = syntaxRoot.FindTrivia(currSelect.Start);
                 token = syntaxRoot.FindToken(currSelect.Start);
@@ -116,7 +72,7 @@ namespace HotCommands
 
             if (spans.Count > 0)
             {
-                TextSpan finalSpan =  spans.Skip(Math.Max(0, spans.Count - 2)).First();
+                TextSpan finalSpan = spans.Last();
                 SetSelection(textView, finalSpan);
             }
 
@@ -155,7 +111,7 @@ namespace HotCommands
                 else // not a comment or already selecting comment so get selection of next open/close bracket
                 {
                     TextSpan innerBracketSpan = GetInnerBracketSpan(node);
-                    while (innerBracketSpan.Equals(new TextSpan(0, 0)))
+                    while (innerBracketSpan.Equals(new TextSpan(0, 0)) && node.Parent != null)
                     {
                         node = node.Parent;
                         innerBracketSpan = GetInnerBracketSpan(node);
@@ -170,7 +126,7 @@ namespace HotCommands
             }
             else // in node
             {
-                node = (IsOverlap(node, start, end)) ? node : node.Parent;
+                node = (IsOverlap(node, start, end) || node.Parent == null) ? node : node.Parent;
                 TextSpan innerBracketSpan = GetInnerBracketSpan(node);
                 if (IsOverlap(innerBracketSpan, start, end))
                 {
@@ -187,6 +143,10 @@ namespace HotCommands
 
         private static TextSpan GetInnerBracketSpan(SyntaxNode node)
         {
+            if (node == null || node.RawKind == 0)
+            {
+                return new TextSpan(0, 0);
+            } 
             var children = node.ChildNodesAndTokens();
             // node itself not fully selected, select it first
             var firstBracket = children.FirstOrDefault(x => x.RawKind == 8205);

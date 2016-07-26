@@ -73,13 +73,11 @@ namespace HotCommands
                 {
                     case Constants.ToggleCommentCmdId:
                     case Constants.ExpandSelectionCmdId:
-<<<<<<< HEAD
                     case Constants.MoveMemberUpCmdId:
                     case Constants.MoveMemberDownCmdId:
-=======
+                    case Constants.FormatCodeCmdId:
                     case Constants.DuplicateSelectionCmdId:
                     case Constants.DuplicateSelectionReverseCmdId:
->>>>>>> 156a26db0bf9e5c2191570233d84147883d0df96
                         prgCmds[0].cmdf |= (uint)OLECMDF.OLECMDF_ENABLED;
                         return VSConstants.S_OK;
                 }

@@ -41,7 +41,6 @@ namespace HotCommands.Commands
             if (selectedText.Length == 0)
             // if nothing is selected, we can consider the current line as a selection
             {
-                var offset = 0;
                 var virtualBufferPosition = editorOperations.TextView.Caret.Position.VirtualBufferPosition;
                 trackingPoint = textView.TextSnapshot.CreateTrackingPoint(virtualBufferPosition.Position, PointTrackingMode.Negative);
                 editorOperations.SelectLine(textView.Caret.ContainingTextViewLine, false);
