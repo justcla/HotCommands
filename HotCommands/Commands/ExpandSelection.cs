@@ -10,6 +10,13 @@ using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.CodeAnalysis.Text;
+using System.Linq;
+using System.Collections;
+using System.Windows;
+using System.ComponentModel.Composition;
+using Microsoft.VisualStudio.Text.Classification;
+using Microsoft.VisualStudio.Utilities;
 
 namespace HotCommands
 {
@@ -69,18 +76,26 @@ namespace HotCommands
 
         public int HandleCommand(IWpfTextView textView)
         {
-            // Show a message box to prove we were here
-            string message = string.Format(CultureInfo.CurrentCulture, "Inside {0}.HandleCommand()", this.GetType().FullName);
-            string title = "ExpandSelection";
-            VsShellUtilities.ShowMessageBox(
-                this.ServiceProvider,
-                message,
-                title,
-                OLEMSGICON.OLEMSGICON_INFO,
-                OLEMSGBUTTON.OLEMSGBUTTON_OK,
-                OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
+            //Get the Syntax Root 
+            var syntaxRoot = textView.TextSnapshot.GetOpenDocumentInCurrentContextWithChanges().GetSyntaxRootAsync().Result;
+            var caretLocation = new TextSpan(textView.Caret.Position.BufferPosition.Position, 0);
+            var node = syntaxRoot.FindNode(caretLocation);
 
-            // TODO: Implement Expand Selection logic
+            //Find the Current Declaration Member from caret Position
+            var currMember = syntaxRoot.FindMemberDeclarationAt(textView.Caret.Position.BufferPosition.Position);
+            
+            var currItem = textView.Caret.Position.BufferPosition.Snapshot.GetOpenDocumentInCurrentContextWithChanges();
+            if (currMember == null || currMember.Parent == null) return VSConstants.S_OK;
+
+            //Find the Next Declaration Member from caret Position
+            var nextMember = syntaxRoot.FindMemberDeclarationAt(currMember.FullSpan.End + 1);
+
+            //If the current or previous member belongs to same Parent Member, then Swap the members
+            if (currMember.Parent.Equals(nextMember?.Parent))
+            {
+                textView.SwapMembers(currMember, nextMember);
+            }
+
 
             return VSConstants.S_OK;
         }
