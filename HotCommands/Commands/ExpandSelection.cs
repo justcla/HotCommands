@@ -19,6 +19,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Utilities;
+using System.Threading.Tasks;
 
 namespace HotCommands
 {
@@ -75,42 +76,125 @@ namespace HotCommands
         {
             Instance = new ExpandSelection(package);
         }
-
         public int HandleCommand(IWpfTextView textView)
         {
+            return HandleCommandExpandTask(textView).Result;
+        }
+
+        private async Task<int> HandleCommandExpandTask(IWpfTextView textView)
+        {
             //Get the Syntax Root 
-            var syntaxRoot = textView.TextSnapshot.GetOpenDocumentInCurrentContextWithChanges().GetSyntaxRootAsync().Result;
+            var syntaxRoot = await textView.TextSnapshot.GetOpenDocumentInCurrentContextWithChanges().GetSyntaxRootAsync();
             var startPosition = textView.Selection.Start.Position;
             var endPosition = textView.Selection.End.Position;
             var length = endPosition - startPosition;
+            var selectionSpan = new TextSpan(startPosition.Position, length);
+            TextSpan finalSpan;
 
-            var caretLocation = new TextSpan(startPosition, length);
-            var node = syntaxRoot.FindNode(caretLocation);
+            var trivia = syntaxRoot.FindTrivia(startPosition.Position);
+            var token = syntaxRoot.FindToken(startPosition.Position);
+            var node = syntaxRoot.FindNode(selectionSpan);
 
-            if (node.SpanStart < startPosition || node.Span.End < endPosition)
+            if (trivia.RawKind == 8542 || trivia.RawKind == 8541) // in trivia
             {
-                // node itself not fully selected, select it first
-                SetSelection(textView, node);
+                if (IsOverlap(trivia.Span, startPosition.Position, endPosition.Position))
+                {
+                    finalSpan = trivia.Span;
+                }
+                else
+                {
+                    var bracketSpan = GetInnerBracketSpan(trivia.Token.Parent);
+                    if (IsOverlap(bracketSpan, startPosition.Position, endPosition.Position))
+                    {
+                        finalSpan = bracketSpan;
+                    }
+                    else
+                    {
+                        finalSpan = trivia.Token.Parent.Span;
+                    }
+                }
             }
-            else
+            else if (IsOverlap(token.Span, startPosition.Position, endPosition.Position) && trivia.RawKind == 0) // in token. If we found a valid trivia, we dont want to parse the token next to cursor
             {
-                SetSelection(textView, node.Parent);
+                finalSpan = token.Span;
+            }
+            else // in node
+            {
+                node = (IsOverlap(node, startPosition.Position, endPosition.Position)) ? node : node.Parent;
+                var innerBracketSpan = GetInnerBracketSpan(node);
+                if (IsOverlap(innerBracketSpan, startPosition.Position, endPosition.Position))
+                {
+                    finalSpan = innerBracketSpan;
+                } else
+                {
+                    finalSpan = node.Span;
+                }
             }
 
+            SetSelection(textView, finalSpan);
             return VSConstants.S_OK;
         }
 
-        private static void SetSelection(IWpfTextView textView, SyntaxNode node)
+        private static TextSpan GetInnerBracketSpan(SyntaxNode node)
         {
-            if (node == null)
+            var children = node.ChildNodesAndTokens();
+            // node itself not fully selected, select it first
+            var firstBracket = children.FirstOrDefault(x => x.RawKind == 8205);
+            var lastBracket = children.LastOrDefault(x => x.RawKind == 8206);
+            if (firstBracket.RawKind != 0 || lastBracket.RawKind != 0)
+            {
+                // We found an open and close brackets. Check and see if we need to only select the insides of the brackets
+                int start = firstBracket.Span.End;
+                int end;
+                SyntaxTrivia lastEOL = lastBracket.GetLeadingTrivia().LastOrDefault(x => x.RawKind == 8539);
+                if (lastEOL.RawKind == 8539)
+                {
+                    end = lastEOL.Span.Start;
+                } else
+                {
+                    var nodeOrToken = lastBracket.GetPreviousSibling();
+                    if(nodeOrToken.IsNode)
+                    {
+                        end = nodeOrToken.AsNode().Span.End;
+                    }
+                    else if (nodeOrToken.IsToken)
+                    {
+                        end = nodeOrToken.Span.End;
+                    } else
+                    {
+                        return new TextSpan(0, 0);
+                    }
+                }
+                return new TextSpan(start, end - start);
+            }
+            return new TextSpan(0, 0);
+        }
+
+        private static void SetSelection(IWpfTextView textView, TextSpan span)
+        {
+            if (span == null)
             {
                 return;
             }
 
             var snapshot = textView.TextSnapshot;
 
-            textView.Selection.Select(new SnapshotSpan(snapshot, node.SpanStart, node.Span.Length), false);
-            textView.Caret.MoveTo(new SnapshotPoint(snapshot, node.Span.End));
+            textView.Selection.Select(new SnapshotSpan(snapshot, span.Start, span.Length), false);
+            //textView.Caret.MoveTo(new SnapshotPoint(snapshot, node.Span.End));
+        }
+
+        private static bool IsOverlap(TextSpan span, int startPosition, int endPosition)
+        {
+            return span.Start < startPosition && span.End > endPosition || 
+                   (span.Start == startPosition && span.End > endPosition) ||
+                   (span.Start < startPosition && span.End == endPosition);
+        }
+
+        private static bool IsOverlap(SyntaxNode node, int startPosition, int endPosition)
+        {
+            return node.SpanStart < startPosition && node.Span.End > endPosition || 
+                   (node.SpanStart == startPosition && node.Span.End > endPosition) ||
+                   (node.SpanStart < startPosition && node.Span.End == endPosition);
         }
     }
 }
