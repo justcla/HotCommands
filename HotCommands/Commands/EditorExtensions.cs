@@ -3,6 +3,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using System.Linq;
 
@@ -10,16 +11,14 @@ namespace HotCommands
 {
     static class EditorExtensions
     {
-        internal static int MoveCurrentMemberUp(this IWpfTextView textView)
+        internal static int MoveMemberUp(this IWpfTextView textView)
         {
-            //Get the Syntax Root 
+            var caretPosition = textView.Caret.Position.BufferPosition.Position;
             var syntaxRoot = textView.TextSnapshot.GetOpenDocumentInCurrentContextWithChanges().GetSyntaxRootAsync().Result;
+            var currMember = syntaxRoot.FindMemberDeclarationAt(caretPosition);
 
-            //Find the Current Declaration Member from caret Position
-            var currMember = syntaxRoot.FindMemberDeclarationAt(textView.Caret.Position.BufferPosition.Position);
-
-            // If cursor is before start of MemberDeclaration consider parent as a Current Member
-            if (!currMember.ContainsCaretPosition(textView.Caret.Position.BufferPosition.Position))
+            // If cursor is outside the MemberDeclaration consider parent as a Current Member.
+            if (!currMember.ContainsCaretPosition(caretPosition))
             {
                 currMember = currMember?.Parent.AncestorsAndSelf().OfType<MemberDeclarationSyntax>().FirstOrDefault();
             }
@@ -28,26 +27,34 @@ namespace HotCommands
 
             //Find the Previous Declaration Member from caret Position
             var prevMember = syntaxRoot.FindMemberDeclarationAt(currMember.FullSpan.Start - 1);
-
-            //If current and previous declaration member belongs to same Parent, then Swap the members
-            if (currMember.Parent.Equals(prevMember?.Parent))
+            while (prevMember.IsRootNodeof(currMember) && prevMember.FullSpan.Start>0)            
             {
-                textView.SwapMembers(currMember, prevMember);
+                prevMember = syntaxRoot.FindMemberDeclarationAt(prevMember.FullSpan.Start - 1);
+                if (prevMember == null) return VSConstants.S_OK; ;
             }
+
+            //If previous member has any nested member declaration, get the nearest/closest member declaration
+            var nestedMembers = prevMember.ChildNodes().OfType<MemberDeclarationSyntax>();
+            while (nestedMembers.Count() > 0)
+            {
+                prevMember = nestedMembers.Last();
+                nestedMembers = prevMember.ChildNodes().OfType<MemberDeclarationSyntax>();
+            }
+
+            textView.SwapMembers(currMember, prevMember, true);
 
             return VSConstants.S_OK;
         }
+        
 
         internal static int MoveMemberDown(this IWpfTextView textView)
         {
-            //Get the Syntax Root 
+            var caretPosition = textView.Caret.Position.BufferPosition.Position;
             var syntaxRoot = textView.TextSnapshot.GetOpenDocumentInCurrentContextWithChanges().GetSyntaxRootAsync().Result;
+            var currMember = syntaxRoot.FindMemberDeclarationAt(caretPosition);
 
-            //Find the Current Declaration Member from caret Position
-            var currMember = syntaxRoot.FindMemberDeclarationAt(textView.Caret.Position.BufferPosition.Position);
-
-            // If cursor is before start of MemberDeclaration consider parent as a Current Member
-            if (!currMember.ContainsCaretPosition(textView.Caret.Position.BufferPosition.Position))
+            // If cursor is outside the MemberDeclaration consider parent as a Current Member.
+            if (!currMember.ContainsCaretPosition(caretPosition))
             {
                 currMember = currMember?.Parent.AncestorsAndSelf().OfType<MemberDeclarationSyntax>().FirstOrDefault();
             }
@@ -56,31 +63,35 @@ namespace HotCommands
 
             //Find the Next Declaration Member from caret Position
             var nextMember = syntaxRoot.FindMemberDeclarationAt(currMember.FullSpan.End + 1);
-
-            //If the current or previous member belongs to same Parent Member, then Swap the members
-            if (currMember.Parent.Equals(nextMember?.Parent))
+            while (nextMember.IsRootNodeof(currMember))
             {
-                textView.SwapMembers(currMember, nextMember);
+                nextMember = syntaxRoot.FindMemberDeclarationAt(nextMember.FullSpan.Start + 1);
+                if (nextMember == null) return VSConstants.S_OK; ;
             }
+
+            //If previous member has any nesteed member declaration, get the nearest/closest member declaration
+            var nestedMembers = nextMember.ChildNodes().OfType<MemberDeclarationSyntax>();
+            while (nestedMembers.Count() > 0)
+            {
+                nextMember = nestedMembers.First();
+                nestedMembers = nextMember.ChildNodes().OfType<MemberDeclarationSyntax>();
+            }
+
+            textView.SwapMembers(currMember, nextMember, false);
 
             return VSConstants.S_OK;
         }
 
-        internal static void SwapMembers(this IWpfTextView textView, MemberDeclarationSyntax member1, MemberDeclarationSyntax member2)
+        internal static void SwapMembers(this IWpfTextView textView, MemberDeclarationSyntax member1, MemberDeclarationSyntax member2, bool isMoveUp)
         {
-            var content = member2.GetText().ToString();
             var editor = textView.TextSnapshot.TextBuffer.CreateEdit();
-            editor.Delete(member2.FullSpan.Start, member2.FullSpan.Length);
-
-            if(member1.SpanStart> member2.SpanStart) // Moving UP
-            {
-                editor.Insert(member1.FullSpan.End, content);
-            }
-            else // Moving Down
-            {
-                editor.Insert(member1.FullSpan.Start, content);
-            }
+            editor.Delete(member1.FullSpan.Start, member1.FullSpan.Length);
+            editor.Insert(isMoveUp? member2.FullSpan.Start : member2.FullSpan.End, member1.GetText().ToString());
             editor.Apply();
+
+            var caretIndent = textView.Caret.Position.BufferPosition.Position - member1.FullSpan.Start;
+            int newCaretPosition = member2.FullSpan.Start + caretIndent;
+            textView.Caret.MoveTo(new SnapshotPoint(textView.TextSnapshot, newCaretPosition));
         }
 
         internal static MemberDeclarationSyntax FindMemberDeclarationAt(this SyntaxNode root, int position)
@@ -111,5 +122,17 @@ namespace HotCommands
             return true;
         }
 
+        private static bool IsRootNodeof(this SyntaxNode member, SyntaxNode currentMember)
+        {
+            while (currentMember.Parent != null)
+            {
+                if (currentMember.Parent.Equals(member))
+                {
+                    return true;
+                }
+                currentMember = currentMember.Parent;
+            }
+            return false;
+        }
     }
 }

@@ -59,7 +59,7 @@ namespace HotCommands
 
         public int HandleCommand(IWpfTextView textView)
         {
-            return textView.MoveCurrentMemberUp();
+            return textView.MoveMemberUp();
         }
     }
 }
