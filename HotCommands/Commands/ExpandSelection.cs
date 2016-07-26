@@ -15,6 +15,8 @@ using System.Linq;
 using System.Collections;
 using System.Windows;
 using System.ComponentModel.Composition;
+using Microsoft.CodeAnalysis;
+using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Utilities;
 
@@ -78,26 +80,37 @@ namespace HotCommands
         {
             //Get the Syntax Root 
             var syntaxRoot = textView.TextSnapshot.GetOpenDocumentInCurrentContextWithChanges().GetSyntaxRootAsync().Result;
-            var caretLocation = new TextSpan(textView.Caret.Position.BufferPosition.Position, 0);
+            var startPosition = textView.Selection.Start.Position;
+            var endPosition = textView.Selection.End.Position;
+            var length = endPosition - startPosition;
+
+            var caretLocation = new TextSpan(startPosition, length);
             var node = syntaxRoot.FindNode(caretLocation);
 
-            //Find the Current Declaration Member from caret Position
-            var currMember = syntaxRoot.FindMemberDeclarationAt(textView.Caret.Position.BufferPosition.Position);
-            
-            var currItem = textView.Caret.Position.BufferPosition.Snapshot.GetOpenDocumentInCurrentContextWithChanges();
-            if (currMember == null || currMember.Parent == null) return VSConstants.S_OK;
-
-            //Find the Next Declaration Member from caret Position
-            var nextMember = syntaxRoot.FindMemberDeclarationAt(currMember.FullSpan.End + 1);
-
-            //If the current or previous member belongs to same Parent Member, then Swap the members
-            if (currMember.Parent.Equals(nextMember?.Parent))
+            if (node.SpanStart < startPosition || node.Span.End < endPosition)
             {
-                textView.SwapMembers(currMember, nextMember);
+                // node itself not fully selected, select it first
+                SetSelection(textView, node);
+            }
+            else
+            {
+                SetSelection(textView, node.Parent);
             }
 
-
             return VSConstants.S_OK;
+        }
+
+        private static void SetSelection(IWpfTextView textView, SyntaxNode node)
+        {
+            if (node == null)
+            {
+                return;
+            }
+
+            var snapshot = textView.TextSnapshot;
+
+            textView.Selection.Select(new SnapshotSpan(snapshot, node.SpanStart, node.Span.Length), false);
+            textView.Caret.MoveTo(new SnapshotPoint(snapshot, node.Span.End));
         }
     }
 }
