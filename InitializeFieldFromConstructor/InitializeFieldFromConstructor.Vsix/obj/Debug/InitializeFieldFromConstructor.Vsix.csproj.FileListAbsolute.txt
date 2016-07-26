@@ -1,0 +1,8 @@
+C:\Users\loren\Source\Repos\Hackathon\HotCommands\InitializeFieldFromConstructor\InitializeFieldFromConstructor.Vsix\bin\Debug\InitializeFieldFromConstructor.Vsix.vsix
+C:\Users\loren\Source\Repos\Hackathon\HotCommands\InitializeFieldFromConstructor\InitializeFieldFromConstructor.Vsix\bin\Debug\extension.vsixmanifest
+C:\Users\loren\Source\Repos\Hackathon\HotCommands\InitializeFieldFromConstructor\InitializeFieldFromConstructor.Vsix\bin\Debug\InitializeFieldFromConstructor.dll
+C:\Users\loren\Source\Repos\Hackathon\HotCommands\InitializeFieldFromConstructor\InitializeFieldFromConstructor.Vsix\bin\Debug\InitializeFieldFromConstructor.pdb
+C:\Users\loren\Source\Repos\Hackathon\HotCommands\InitializeFieldFromConstructor\InitializeFieldFromConstructor.Vsix\obj\Debug\InitializeFieldFromConstructor.Vsix.csprojResolveAssemblyReference.cache
+C:\Users\loren\Source\Repos\Hackathon\HotCommands\InitializeFieldFromConstructor\InitializeFieldFromConstructor.Vsix\obj\Debug\InitializeFieldFromConstructor.Vsix.dll
+C:\Users\loren\Source\Repos\Hackathon\HotCommands\InitializeFieldFromConstructor\InitializeFieldFromConstructor.Vsix\obj\Debug\InitializeFieldFromConstructor.Vsix.pdb
+C:\Users\loren\Source\Repos\Hackathon\HotCommands\InitializeFieldFromConstructor\InitializeFieldFromConstructor.Vsix\obj\Debug\extension.vsixmanifest
