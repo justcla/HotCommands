@@ -85,10 +85,10 @@
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
-          <ButtonText>Duplicate Selection</ButtonText>
-          <MenuText>Duplicate Selection</MenuText>
-          <ToolTipText>Duplicates the selected lines.</ToolTipText>
-          <CommandName>DuplicateSelectionReverse</CommandName>
+          <ButtonText>Duplicate Selection Reversed</ButtonText>
+          <MenuText>Duplicate Selection Reversed</MenuText>
+          <ToolTipText>Duplicates the selected lines in reverse.</ToolTipText>
+          <CommandName>DuplicateSelectionReversed</CommandName>
         </Strings>
       </Button>
 
