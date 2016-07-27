@@ -67,6 +67,8 @@ namespace HotCommands
             ExpandSelection.Initialize(this);
             FormatCode.Initialize(this);
             DuplicateSelection.Initialize(this);
+            MoveMemberUp.Initialize(this);
+            MoveMemberDown.Initialize(this);            
         }
 
         #endregion

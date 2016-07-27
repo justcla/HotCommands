@@ -57,9 +57,12 @@
     <Compile Include="CommandFilterTextViewCreationListener.cs" />
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\DuplicateSelection.cs" />
+    <Compile Include="Commands\EditorExtensions.cs" />
     <Compile Include="Commands\FormatCode.cs" />
     <Compile Include="Commands\ExpandSelection.cs" />
     <Compile Include="Commands\MoveCursorToAdjacentMember.cs" />
+    <Compile Include="Commands\MoveMemberDown.cs" />
+    <Compile Include="Commands\MoveMemberUp.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="HotCommandsPackage.cs" />
     <Compile Include="KeyBindingUtil.cs" />
@@ -336,6 +339,12 @@
     <ProjectReference Include="..\ExtractClass\ExtractClass.csproj">
       <Project>{d6b5bf46-c337-47a6-bb5d-e2a847504e88}</Project>
       <Name>ExtractClass</Name>
+      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+    </ProjectReference>
+    <ProjectReference Include="..\InitializeFieldFromConstructor\InitializeFieldFromConstructor\InitializeFieldFromConstructor.csproj">
+      <Project>{4c5fc135-5989-49a5-bc59-06ea970bcb12}</Project>
+      <Name>InitializeFieldFromConstructor</Name>
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
