@@ -115,7 +115,7 @@
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
-          <ButtonText>Move up</ButtonText>
+          <ButtonText>MoveMemberUp</ButtonText>
         </Strings>
       </Button>
 
@@ -124,7 +124,7 @@
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
-          <ButtonText>Move down</ButtonText>
+          <ButtonText>MoveMemberDown</ButtonText>
         </Strings>
       </Button>
 
