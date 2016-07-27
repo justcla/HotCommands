@@ -1,6 +1,0 @@
-C:\Users\loren\AppData\Local\Microsoft\VisualStudio\14.0Roslyn\Extensions\loren\InitializeFieldFromConstructor\1.0\\InitializeFieldFromConstructor.dll
-C:\Users\loren\AppData\Local\Microsoft\VisualStudio\14.0Roslyn\Extensions\loren\InitializeFieldFromConstructor\1.0\\extension.vsixmanifest
-C:\Users\loren\AppData\Local\Microsoft\VisualStudio\14.0Roslyn\Extensions\loren\InitializeFieldFromConstructor\1.0\\InitializeFieldFromConstructor.pdb
-C:\Users\loren\AppData\Local\Microsoft\VisualStudio\14.0Roslyn\Extensions\loren\InitializeFieldFromConstructor\1.1\\InitializeFieldFromConstructor.dll
-C:\Users\loren\AppData\Local\Microsoft\VisualStudio\14.0Roslyn\Extensions\loren\InitializeFieldFromConstructor\1.1\\extension.vsixmanifest
-C:\Users\loren\AppData\Local\Microsoft\VisualStudio\14.0Roslyn\Extensions\loren\InitializeFieldFromConstructor\1.1\\InitializeFieldFromConstructor.pdb

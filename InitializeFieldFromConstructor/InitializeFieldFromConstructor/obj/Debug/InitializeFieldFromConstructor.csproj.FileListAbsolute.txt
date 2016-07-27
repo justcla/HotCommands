@@ -1,5 +1,0 @@
-C:\Users\loren\Source\Repos\Hackathon\HotCommands\InitializeFieldFromConstructor\InitializeFieldFromConstructor\bin\Debug\InitializeFieldFromConstructor.dll
-C:\Users\loren\Source\Repos\Hackathon\HotCommands\InitializeFieldFromConstructor\InitializeFieldFromConstructor\bin\Debug\InitializeFieldFromConstructor.pdb
-C:\Users\loren\Source\Repos\Hackathon\HotCommands\InitializeFieldFromConstructor\InitializeFieldFromConstructor\obj\Debug\InitializeFieldFromConstructor.dll
-C:\Users\loren\Source\Repos\Hackathon\HotCommands\InitializeFieldFromConstructor\InitializeFieldFromConstructor\obj\Debug\InitializeFieldFromConstructor.pdb
-C:\Users\loren\Source\Repos\Hackathon\HotCommands\InitializeFieldFromConstructor\InitializeFieldFromConstructor\obj\Debug\InitializeFieldFromConstructor.csprojResolveAssemblyReference.cache
