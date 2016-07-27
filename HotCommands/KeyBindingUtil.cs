@@ -65,6 +65,7 @@ namespace HotCommands
                 object[] newBindings = SingleKeyboardBinding(expandSelectionKeyBinding);
                 cmdExpandSelection.Bindings = (object)newBindings;
             }
+
             {
                 Command cmdToggleComment = cmds.Item("Edit.DuplicateSelection");
                 const string toggleCommentKeyBinding = "Text Editor::Ctrl+D";
