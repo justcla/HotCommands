@@ -170,7 +170,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RefactoringProviders\ExtractClassToAFile.cs" />
     <Compile Include="RefactoringProviders\ChangeModifier.cs" />
-    <Compile Include="RefactoringProviders\NamespaceRefactoring.cs" />
     <Compile Include="Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

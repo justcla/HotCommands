@@ -6,10 +6,11 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Composition;
 
 namespace ExtractClass.RefactoringProviders
 {
-    [ExportCodeRefactoringProvider(LanguageNames.CSharp)]
+    [ExportCodeRefactoringProvider(LanguageNames.CSharp), Shared]
     public sealed class ExtractClassToAFile : CodeRefactoringProvider
     {
         public override async Task ComputeRefactoringsAsync (CodeRefactoringContext context)
