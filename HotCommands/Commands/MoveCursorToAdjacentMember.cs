@@ -20,8 +20,6 @@ namespace HotCommands
             return MoveToAdjacentMember(textView, up: true);
         }
 
-        // cp,,,emt
-        [sdsa]
         public static int MoveToAdjacentMember(
             IWpfTextView textView,
             bool up)
@@ -29,22 +27,44 @@ namespace HotCommands
             var syntaxRoot = textView.TextSnapshot.GetOpenDocumentInCurrentContextWithChanges().GetSyntaxRootAsync().Result;
             var position = textView.Caret.Position.BufferPosition.Position;
             var currMember = FindDeclarationAt(syntaxRoot, position);
-            // Check if inside a method (then go to top of method)
-            // TODO: Check if on method signature.
+            // Check if outside of all namespaces and classes
+            if (currMember == null)
+            {
+                var children = syntaxRoot.ChildNodes().OfType<MemberDeclarationSyntax>();
+                if (children.Count() < 1)
+                {
+                    return VSConstants.S_OK;
+                }
+                if (up)
+                {
+                    var last = children.Last();
+                    if (position > last.SpanStart)
+                    {
+                        var node = last.DescendantNodesAndSelf().OfType<MemberDeclarationSyntax>().LastOrDefault();
+                        MoveCursor(textView, node);
+                        return VSConstants.S_OK;
+                    }
+                }
+                else
+                {
+                    var first = children.First();
+                    if (position < first.SpanStart)
+                    {
+                        MoveCursor(textView, first);
+                        return VSConstants.S_OK;
+                    }
+                }
+                return VSConstants.S_OK;
+            }
+            // Check if inside a method
             // Includes all annotations and comments (trivia??)
-            if (position != currMember.SpanStart)
+            if ((position < GetCorrectPosition(currMember) && !up) ||
+                (position > GetCorrectPosition(currMember) && up))
             {
                 MoveCursor(textView, currMember);
                 return VSConstants.S_OK;
             }
-            // Check if outside of all namespaces and classes
-            if (currMember == null)
-            {
-                // We are not inside a definition
-                // TODO: check for the nearest/next up/down
-                return VSConstants.S_OK;
-            }
-            SyntaxNode MoveToNode = null;
+            MemberDeclarationSyntax MoveToNode = null;
             // Check if inside Namespace or class
             if (isContainer(currMember))
             {
@@ -58,7 +78,12 @@ namespace HotCommands
                 // 2. We are at the bottom (or it is empty) and moving down
                 if (posInContainer >= 0 && !up)
                 {
-                    MoveToNode = getNext(currMember);
+                    var node = getNext(currMember);
+                    if (node != currMember)
+                    {
+                        MoveCursor(textView, node);
+                    }
+                    return VSConstants.S_OK;
                 }
                 // 3. We are at the top and moving down
                 if (posInContainer == -1 && !up)
@@ -82,14 +107,18 @@ namespace HotCommands
                 }
                 else  // down
                 {
-                    MoveToNode = getNext(currMember);
+                    var node = getNext(currMember);
+                    if (node != currMember)
+                    {
+                        MoveCursor(textView, node);
+                    }
+                    return VSConstants.S_OK;
                 }
             }
             MoveCursor(textView, MoveToNode);
             return VSConstants.S_OK;
         }
 
-        [annotation]
         public static MemberDeclarationSyntax getNext(SyntaxNode current)
         {
             // First, go to the parent
@@ -114,11 +143,12 @@ namespace HotCommands
                     return node;
                 }
             }
+
             // If we get here, the current node was the last declaration in the parent
             return getNext(Parent);
         }
 
-        public static SyntaxNode getPrevious(SyntaxNode current)
+        public static MemberDeclarationSyntax getPrevious(SyntaxNode current)
         {
             SyntaxNode parent = current.Parent;
             MemberDeclarationSyntax previous = null;
@@ -128,7 +158,7 @@ namespace HotCommands
                 {
                     if (previous == null)
                     {
-                        return parent;
+                        return parent.Parent != null ? (MemberDeclarationSyntax)parent : null;
                     }
                     if (isContainer(previous))
                     {
@@ -142,13 +172,19 @@ namespace HotCommands
             return null;
         }
 
-        public static void MoveCursor(IWpfTextView textView, SyntaxNode node)
+        public static void MoveCursor(IWpfTextView textView, MemberDeclarationSyntax node)
         {
             if (node != null)
             {
                 // move the cursor to the previous member
-                textView.Caret.MoveTo(new SnapshotPoint(textView.TextSnapshot, node.SpanStart));
+                textView.Caret.MoveTo(new SnapshotPoint(textView.TextSnapshot, GetCorrectPosition(node)));
             }
+        }
+
+        private static int GetCorrectPosition(MemberDeclarationSyntax node)
+        {
+            var children = node.ChildNodesAndTokens().Where(x => x.RawKind != (int)Microsoft.CodeAnalysis.CSharp.SyntaxKind.AttributeList);
+            return children.First().SpanStart;
         }
 
         private static bool isContainer(MemberDeclarationSyntax currMember)
