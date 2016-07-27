@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.Text.Operations;
 
 namespace HotCommands
 {
@@ -57,9 +58,9 @@ namespace HotCommands
             Instance = new MoveMemberUp(package);
         }
 
-        public int HandleCommand(IWpfTextView textView)
+        public int HandleCommand(IWpfTextView textView, IEditorOperations editorOperations)
         {
-            return textView.MoveMemberUp();
+            return textView.MoveMemberUp(editorOperations);
         }
     }
 }

@@ -5,15 +5,15 @@ using Microsoft.CodeAnalysis.Text;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.Text.Operations;
 using System.Linq;
-using System;
 
 namespace HotCommands
 {
     static class EditorExtensions
     {
 
-        internal static int MoveMemberUp(this IWpfTextView textView)
+        internal static int MoveMemberUp(this IWpfTextView textView, IEditorOperations editorOperations)
         {
             var position = textView.Caret.Position.BufferPosition.Position;
             var syntaxRoot = textView.TextSnapshot.GetOpenDocumentInCurrentContextWithChanges().GetSyntaxRootAsync().Result;
@@ -53,10 +53,11 @@ namespace HotCommands
             }
 
             textView.SwapMembers(currMember, prevMember, direction);
+            editorOperations.ScrollLineCenter();
             return VSConstants.S_OK;
         }
 
-        internal static int MoveMemberDown(this IWpfTextView textView)
+        internal static int MoveMemberDown(this IWpfTextView textView, IEditorOperations editorOperations)
         {
             var position = textView.Caret.Position.BufferPosition.Position;
             var syntaxRoot = textView.TextSnapshot.GetOpenDocumentInCurrentContextWithChanges().GetSyntaxRootAsync().Result;
@@ -96,6 +97,7 @@ namespace HotCommands
             }
 
             textView.SwapMembers(currMember, nextMember, direction);
+            editorOperations.ScrollLineCenter();
             return VSConstants.S_OK;
         }
 
