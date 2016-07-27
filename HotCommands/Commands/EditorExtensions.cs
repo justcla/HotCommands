@@ -6,61 +6,102 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using System.Linq;
+using System;
 
 namespace HotCommands
 {
     static class EditorExtensions
     {
-        
+
         internal static int MoveMemberUp(this IWpfTextView textView)
         {
             var position = textView.Caret.Position.BufferPosition.Position;
             var syntaxRoot = textView.TextSnapshot.GetOpenDocumentInCurrentContextWithChanges().GetSyntaxRootAsync().Result;
 
             //Find the Current member
-            var currMember = syntaxRoot.FindMemberDeclarationAt(position);            
+            var currMember = syntaxRoot.FindMemberDeclarationAt(position);
             if (!currMember.ContainsPosition(position))
             {
                 currMember = currMember?.Parent.AncestorsAndSelf().OfType<MemberDeclarationSyntax>().FirstOrDefault();
             }
-
             // If current member is outside the container, exit
-            if (currMember == null || currMember.Parent == null)
-            {
-                return VSConstants.S_OK;
-            }
-            
-            //Find the previous member
+            if (currMember == null || currMember.Parent == null) return VSConstants.S_OK;
+
             var prevMember = syntaxRoot.FindMemberDeclarationAt(currMember.FullSpan.Start - 1);
 
-            //if prev member is not a Container and Type declaration
-            if (!prevMember.Equals(currMember.Parent) && prevMember.IsTypeDeclaration()) // find nested member
+
+            if (!prevMember.IsContainerType())
             {
-                var nestedMembers = prevMember.ChildNodes().OfType<MemberDeclarationSyntax>();
-                while (nestedMembers.Count() > 0)
-                {
-                    prevMember = nestedMembers.Last();
-                    nestedMembers = prevMember.ChildNodes().OfType<MemberDeclarationSyntax>();
-                }
-                if (prevMember.IsTypeDeclaration())
-                {
-                    //If prevoius member is empty type declaration, place inside the type
-                    textView.SwapMembers(currMember, prevMember, MoveDirection.Middle);
-                }
-                else
-                {
-                    //Move at end of the previous nested Member declaration
-                    textView.SwapMembers(currMember, prevMember, MoveDirection.Down);
-                }
+                textView.SwapMembers(currMember, prevMember, MoveDirection.Up);
+                return VSConstants.S_OK;
             }
             else
             {
-                textView.SwapMembers(currMember, prevMember, MoveDirection.Up);
+                if (prevMember.Equals(currMember.Parent))   //prev member is a parent
+                {
+                    if (currMember.IsContainerType())
+                    {
+                        textView.SwapMembers(currMember, prevMember, MoveDirection.Up);
+                    }
+                    else
+                    {
+                        while (!prevMember.IsRootNodeof(currMember)) //untill valid
+                        {
+                            prevMember = prevMember.FindMemberDeclarationAt(prevMember.SpanStart - 1);
+                            FindLastChildMember(prevMember);
+                        }
+
+                    }
+
+                }
+                else  //prev member is Sibling
+                {
+                    prevMember = FindLastChildMember(prevMember);
+                    var direction = prevMember.IsContainerType() ? MoveDirection.Middle : MoveDirection.Down;
+                    textView.SwapMembers(currMember, prevMember, direction);
+                }
             }
+
+
+            #region
+            //if prev member is not a Container and Type declaration
+            //if (!prevMember.Equals(currMember.Parent) && prevMember.IsContainerType()) // find nested member
+            //{
+            //    var nestedMembers = prevMember.ChildNodes().OfType<MemberDeclarationSyntax>();
+            //    while (nestedMembers.Count() > 0)
+            //    {
+            //        prevMember = nestedMembers.Last();
+            //        nestedMembers = prevMember.ChildNodes().OfType<MemberDeclarationSyntax>();
+            //    }
+            //    if (prevMember.IsContainerType())
+            //    {
+            //        //If prevoius member is empty type declaration, place inside the type
+            //        textView.SwapMembers(currMember, prevMember, MoveDirection.Middle);
+            //    }
+            //    else
+            //    {
+            //        //Move at end of the previous nested Member declaration
+            //        textView.SwapMembers(currMember, prevMember, MoveDirection.Down);
+            //    }
+            //}
+
+            #endregion
 
             return VSConstants.S_OK;
         }
 
+
+
+        private static MemberDeclarationSyntax FindLastChildMember(MemberDeclarationSyntax member)
+        {
+            var childMembers = member.ChildNodes().OfType<MemberDeclarationSyntax>();
+            while (childMembers.Count() > 0)
+            {
+                member = childMembers.Last();
+                childMembers = member.ChildNodes().OfType<MemberDeclarationSyntax>();
+            }
+            return member;
+        }
 
         internal static int MoveMemberDown(this IWpfTextView textView)
         {
@@ -117,7 +158,7 @@ namespace HotCommands
             {
                 editor.Insert(member2.FullSpan.End, member1.GetText().ToString());
                 //if member 1 is above member2 case1 or case2
-                newCaretPosition = (member1.SpanStart <member2.SpanStart) ? member2.FullSpan.End + caretIndent - member1.FullSpan.Length : member2.FullSpan.End + caretIndent;
+                newCaretPosition = (member1.SpanStart < member2.SpanStart) ? member2.FullSpan.End + caretIndent - member1.FullSpan.Length : member2.FullSpan.End + caretIndent;
             }
             else if (direction == MoveDirection.Middle)
             {
@@ -128,6 +169,8 @@ namespace HotCommands
 
             editor.Apply();
             textView.Caret.MoveTo(new SnapshotPoint(textView.TextSnapshot, newCaretPosition));
+
+
         }
 
         internal static MemberDeclarationSyntax FindMemberDeclarationAt(this SyntaxNode root, int position)
@@ -171,7 +214,12 @@ namespace HotCommands
             return false;
         }
 
-        private static bool IsTypeDeclaration(this SyntaxNode node)
+        private static bool IsContainerType(this SyntaxNode node)
+        {
+            return node.IsKind(SyntaxKind.ClassDeclaration) || node.IsKind(SyntaxKind.StructDeclaration) || node.IsKind(SyntaxKind.InterfaceDeclaration) || node.IsKind(SyntaxKind.NamespaceDeclaration);
+        }
+
+        private static bool IsValidContainerforMethods(this SyntaxNode node)
         {
             return node.IsKind(SyntaxKind.ClassDeclaration) || node.IsKind(SyntaxKind.StructDeclaration) || node.IsKind(SyntaxKind.InterfaceDeclaration);
         }
