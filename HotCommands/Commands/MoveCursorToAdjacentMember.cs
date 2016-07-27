@@ -6,22 +6,24 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.CodeAnalysis;
 using System.Linq;
 using System;
+using Microsoft.VisualStudio.Text.Operations;
 
 namespace HotCommands
 {
     class MoveCursorToAdjacentMember : Command<MoveCursorToAdjacentMember>
     {
-        public static int MoveToNextMember(IWpfTextView textView)
+        public static int MoveToNextMember(IWpfTextView textView, IEditorOperations editorOperations)
         {
-            return MoveToAdjacentMember(textView, up: false);
+            return MoveToAdjacentMember(textView, editorOperations, up: false);
         }
-        public static int MoveToPreviousMember(IWpfTextView textView)
+        public static int MoveToPreviousMember(IWpfTextView textView, IEditorOperations editorOperations)
         {
-            return MoveToAdjacentMember(textView, up: true);
+            return MoveToAdjacentMember(textView, editorOperations, up: true);
         }
 
         public static int MoveToAdjacentMember(
             IWpfTextView textView,
+            IEditorOperations editorOperations,
             bool up)
         {
             var syntaxRoot = textView.TextSnapshot.GetOpenDocumentInCurrentContextWithChanges().GetSyntaxRootAsync().Result;
@@ -41,7 +43,7 @@ namespace HotCommands
                     if (position > last.SpanStart)
                     {
                         var node = last.DescendantNodesAndSelf().OfType<MemberDeclarationSyntax>().LastOrDefault();
-                        MoveCursor(textView, node);
+                        MoveCursor(textView, node, editorOperations);
                         return VSConstants.S_OK;
                     }
                 }
@@ -50,7 +52,7 @@ namespace HotCommands
                     var first = children.First();
                     if (position < first.SpanStart)
                     {
-                        MoveCursor(textView, first);
+                        MoveCursor(textView, first, editorOperations);
                         return VSConstants.S_OK;
                     }
                 }
@@ -61,7 +63,7 @@ namespace HotCommands
             if ((position < GetCorrectPosition(currMember) && !up) ||
                 (position > GetCorrectPosition(currMember) && up))
             {
-                MoveCursor(textView, currMember);
+                MoveCursor(textView, currMember, editorOperations);
                 return VSConstants.S_OK;
             }
             MemberDeclarationSyntax MoveToNode = null;
@@ -81,7 +83,7 @@ namespace HotCommands
                     var node = getNext(currMember);
                     if (node != currMember)
                     {
-                        MoveCursor(textView, node);
+                        MoveCursor(textView, node, editorOperations);
                     }
                     return VSConstants.S_OK;
                 }
@@ -110,12 +112,12 @@ namespace HotCommands
                     var node = getNext(currMember);
                     if (node != currMember)
                     {
-                        MoveCursor(textView, node);
+                        MoveCursor(textView, node, editorOperations);
                     }
                     return VSConstants.S_OK;
                 }
             }
-            MoveCursor(textView, MoveToNode);
+            MoveCursor(textView, MoveToNode, editorOperations);
             return VSConstants.S_OK;
         }
 
@@ -172,13 +174,23 @@ namespace HotCommands
             return null;
         }
 
-        public static void MoveCursor(IWpfTextView textView, MemberDeclarationSyntax node)
+        public static void MoveCursor(IWpfTextView textView, MemberDeclarationSyntax node, IEditorOperations editorOperations)
         {
             if (node != null)
             {
                 // move the cursor to the previous member
                 textView.Caret.MoveTo(new SnapshotPoint(textView.TextSnapshot, GetCorrectPosition(node)));
+                if (!CursorInView(textView))
+                {
+                    editorOperations.ScrollLineCenter();
+                }
             }
+        }
+
+        private static bool CursorInView(IWpfTextView textView)
+        {
+            var caretPos = textView.Caret.Position.BufferPosition.Position;
+            return caretPos < textView.ViewportBottom && caretPos > textView.ViewportTop;
         }
 
         private static int GetCorrectPosition(MemberDeclarationSyntax node)

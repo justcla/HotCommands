@@ -48,9 +48,9 @@ namespace HotCommands
                     case Constants.DuplicateSelectionReverseCmdId:
                         return DuplicateSelection.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations, true);
                     case Constants.cmdidMoveCursorPrevMember:
-                        return MoveCursorToAdjacentMember.MoveToPreviousMember(textView);
+                        return MoveCursorToAdjacentMember.MoveToPreviousMember(textView, editorOperations);
                     case Constants.cmdidMoveCursorNextMember:
-                        return MoveCursorToAdjacentMember.MoveToNextMember(textView);
+                        return MoveCursorToAdjacentMember.MoveToNextMember(textView, editorOperations);
                 }
             }
 
