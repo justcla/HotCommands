@@ -20,17 +20,32 @@ namespace HotCommands
             return MoveToAdjacentMember(textView, up: true);
         }
 
-        public static int MoveToAdjacentMember(IWpfTextView textView, bool up)
+        // cp,,,emt
+        [sdsa]
+        public static int MoveToAdjacentMember(
+            IWpfTextView textView,
+            bool up)
         {
             var syntaxRoot = textView.TextSnapshot.GetOpenDocumentInCurrentContextWithChanges().GetSyntaxRootAsync().Result;
             var position = textView.Caret.Position.BufferPosition.Position;
             var currMember = FindDeclarationAt(syntaxRoot, position);
+            // Check if inside a method (then go to top of method)
+            // TODO: Check if on method signature.
+            // Includes all annotations and comments (trivia??)
+            if (position != currMember.SpanStart)
+            {
+                MoveCursor(textView, currMember);
+                return VSConstants.S_OK;
+            }
+            // Check if outside of all namespaces and classes
             if (currMember == null)
             {
                 // We are not inside a definition
+                // TODO: check for the nearest/next up/down
                 return VSConstants.S_OK;
             }
             SyntaxNode MoveToNode = null;
+            // Check if inside Namespace or class
             if (isContainer(currMember))
             {
                 int posInContainer = getPosInContainer(currMember, position);
@@ -45,26 +60,27 @@ namespace HotCommands
                 {
                     MoveToNode = getNext(currMember);
                 }
-                // 1. We are at the top and moving down
+                // 3. We are at the top and moving down
                 if (posInContainer == -1 && !up)
                 {
                     // go to first child member declaration
                     MoveToNode = currMember.DescendantNodes().OfType<MemberDeclarationSyntax>().FirstOrDefault();
                 }
-                // 2. WE are at the bottom and moving up
+                // 4. WE are at the bottom and moving up
                 else if (posInContainer == 1 && up)
                 {
                     // go to the last member
                     MoveToNode = currMember.DescendantNodes().OfType<MemberDeclarationSyntax>().LastOrDefault();
                 }
             }
+            // Else we are not in a container
             else
             {
                 if (up)
                 {
                     MoveToNode = getPrevious(currMember);
                 }
-                else
+                else  // down
                 {
                     MoveToNode = getNext(currMember);
                 }
@@ -73,6 +89,7 @@ namespace HotCommands
             return VSConstants.S_OK;
         }
 
+        [annotation]
         public static MemberDeclarationSyntax getNext(SyntaxNode current)
         {
             // First, go to the parent
