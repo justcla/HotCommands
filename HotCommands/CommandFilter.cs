@@ -49,6 +49,10 @@ namespace HotCommands
                         return DuplicateSelection.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations);
                     case Constants.DuplicateSelectionReverseCmdId:
                         return DuplicateSelection.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations, true);
+                    case Constants.cmdidMoveCursorPrevMember:
+                        return MoveCursorToAdjacentMember.MoveToPreviousMember(textView, editorOperations);
+                    case Constants.cmdidMoveCursorNextMember:
+                        return MoveCursorToAdjacentMember.MoveToNextMember(textView, editorOperations);
                 }
             }
 
@@ -72,6 +76,8 @@ namespace HotCommands
                     case Constants.FormatCodeCmdId:
                     case Constants.DuplicateSelectionCmdId:
                     case Constants.DuplicateSelectionReverseCmdId:
+                    case Constants.cmdidMoveCursorPrevMember:
+                    case Constants.cmdidMoveCursorNextMember:
                         prgCmds[0].cmdf |= (uint)OLECMDF.OLECMDF_ENABLED;
                         return VSConstants.S_OK;
                 }

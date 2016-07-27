@@ -6,11 +6,12 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Composition;
 
 namespace ExtractClass.RefactoringProviders
 {
-    [ExportCodeRefactoringProvider(LanguageNames.CSharp)]
-    public sealed class ExtractClassToAFile : CodeRefactoringProvider
+    [ExportCodeRefactoringProvider(LanguageNames.CSharp, Name = nameof(ExtractClassToAFile)), Shared]
+    public class ExtractClassToAFile : CodeRefactoringProvider
     {
         public override async Task ComputeRefactoringsAsync (CodeRefactoringContext context)
         {
@@ -47,6 +48,17 @@ namespace ExtractClass.RefactoringProviders
             // find any existing document within the folder with the name same as namespace name
             Document anyExistingDocumentWithinNamespaceDirectory = project.FindDocument($"{node.Identifier.Text}.cs", document.Folders.ToArray());
 
+            if (anyExistingDocumentWithinNamespaceDirectory != null && classCount > 1)
+            {
+                // already existing file
+                context.RegisterRefactoring(new ExtractClassAction(new ExtractClassContext
+                {
+                    Title = $"A file with the name {node.Identifier.Text}.cs already exists. A new file will be created.",
+                    Folders = document.Folders.ToArray(),
+                    Context = context
+                }));
+            }
+
             if (anyExistingDocumentWithinNamespaceDirectory == null && classCount > 1)
             {
                 //extract class in the current document folder
@@ -70,6 +82,18 @@ namespace ExtractClass.RefactoringProviders
 
             // find any existing document within the folder structures
             Document anyExistingDocument = project.FindDocument($"{node.Identifier.Text}.cs", folders);
+
+            if (nested && anyExistingDocument != null && classCount > 1)
+            {
+                // already existing file
+                context.RegisterRefactoring(new ExtractClassAction(new ExtractClassContext
+                {
+                    Title = $"A file with the name {node.Identifier.Text}.cs already exists. A new file will be created.",
+                    Folders = folders,
+                    Context = context
+                }));
+            }
+
             if (nested && anyExistingDocument == null && classCount > 1)
             {
                 //extract class in a namespace based folder

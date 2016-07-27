@@ -111,7 +111,7 @@ namespace HotCommands
                 else // not a comment or already selecting comment so get selection of next open/close bracket
                 {
                     TextSpan innerBracketSpan = GetInnerBracketSpan(node);
-                    while (innerBracketSpan.Equals(new TextSpan(0, 0)) && node.Parent != null)
+                    while ((innerBracketSpan.Equals(node.Span) && node.Parent != null) || !IsOverlap(innerBracketSpan, start, end))
                     {
                         node = node.Parent;
                         innerBracketSpan = GetInnerBracketSpan(node);
@@ -128,6 +128,15 @@ namespace HotCommands
             {
                 node = (IsOverlap(node, start, end) || node.Parent == null) ? node : node.Parent;
                 TextSpan innerBracketSpan = GetInnerBracketSpan(node);
+                while ((innerBracketSpan.Equals(node.Span) && node.Parent != null) || !IsOverlap(innerBracketSpan, start, end))
+                {
+                    if (IsOverlap(node.Parent.Span, start, end) && GetInnerBracketSpan(node.Parent).Equals(node.Parent.Span))
+                    {
+                        return node.Span;
+                    }
+                    node = node.Parent;
+                    innerBracketSpan = GetInnerBracketSpan(node);
+                }
                 if (IsOverlap(innerBracketSpan, start, end))
                 {
                     finalSpan = innerBracketSpan;
@@ -177,7 +186,7 @@ namespace HotCommands
                 }
                 return new TextSpan(start, end - start);
             }
-            return new TextSpan(0, 0);
+            return node.Span;
         }
 
         private static void SetSelection(IWpfTextView textView, TextSpan span)

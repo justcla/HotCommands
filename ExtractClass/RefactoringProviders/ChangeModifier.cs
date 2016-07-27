@@ -5,11 +5,12 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Composition;
 
 namespace ExtractClass.RefactoringProviders
 {
-    [ExportCodeRefactoringProvider(LanguageNames.CSharp)]
-    public sealed class ChangeModifier : CodeRefactoringProvider
+    [ExportCodeRefactoringProvider(LanguageNames.CSharp, Name = nameof(ExtractClassToAFile)), Shared]
+    public class ChangeModifier : CodeRefactoringProvider
     {
         public override async Task ComputeRefactoringsAsync (CodeRefactoringContext context)
         {

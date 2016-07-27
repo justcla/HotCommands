@@ -9,6 +9,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotCommandsAggregator", "Ho
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractClass", "ExtractClass\ExtractClass.csproj", "{D6B5BF46-C337-47A6-BB5D-E2A847504E88}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InitializeFieldFromConstructor", "InitializeFieldFromConstructor\InitializeFieldFromConstructor\InitializeFieldFromConstructor.csproj", "{4C5FC135-5989-49A5-BC59-06EA970BCB12}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InitializeFieldFromConstructor.Vsix", "InitializeFieldFromConstructor\InitializeFieldFromConstructor.Vsix\InitializeFieldFromConstructor.Vsix.csproj", "{9C16D9B2-8A85-47DF-82EA-9EA71689CB82}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{D6B5BF46-C337-47A6-BB5D-E2A847504E88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6B5BF46-C337-47A6-BB5D-E2A847504E88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6B5BF46-C337-47A6-BB5D-E2A847504E88}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C5FC135-5989-49A5-BC59-06EA970BCB12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C5FC135-5989-49A5-BC59-06EA970BCB12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C5FC135-5989-49A5-BC59-06EA970BCB12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C5FC135-5989-49A5-BC59-06EA970BCB12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C16D9B2-8A85-47DF-82EA-9EA71689CB82}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C16D9B2-8A85-47DF-82EA-9EA71689CB82}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C16D9B2-8A85-47DF-82EA-9EA71689CB82}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C16D9B2-8A85-47DF-82EA-9EA71689CB82}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

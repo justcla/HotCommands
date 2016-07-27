@@ -46,7 +46,10 @@ namespace ExtractClass.Actions
             if (namespaces.Any())
             {
                 // do not consider the namespace definition     
-                var emptyNamespaces = namespaces.Where(n => { return n.ChildNodes().Where(x => !x.IsKind(SyntaxKind.QualifiedName)).Count() == 0; });
+                var emptyNamespaces = namespaces.Where(n =>
+                {
+                    return n.ChildNodes().Where(x => !x.IsKind(SyntaxKind.QualifiedName) || !x.IsKind(SyntaxKind.IdentifierName) || !x.IsKind(SyntaxKind.EmptyStatement)).Count() <= 1;
+                });
 
                 if (emptyNamespaces.Any())
                     replacedRoot = replacedRoot.RemoveNodes(emptyNamespaces, SyntaxRemoveOptions.KeepNoTrivia);

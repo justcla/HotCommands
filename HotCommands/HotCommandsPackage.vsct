@@ -119,6 +119,23 @@
         </Strings>
       </Button>
 
+      <Button guid="guidHotCommandsPackageCmdSet" id="cmdidMoveCursorPrevMember" priority="0x0200" type="Button">
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+        <ButtonText>Go To Previous Member</ButtonText>
+        </Strings>
+      </Button>
+      
+
+      <Button guid="guidHotCommandsPackageCmdSet" id="cmdidMoveCursorNextMember" priority="0x0200" type="Button">
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+        <ButtonText>Go To Next Member</ButtonText>
+        </Strings>
+      </Button>
+
     </Buttons>
 
     <!--The bitmaps section is used to define the bitmaps that are used for the commands.-->
@@ -151,6 +168,12 @@
     <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelectionReverse" priority="0x7515">
       <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
     </CommandPlacement>
+    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidMoveCursorPrevMember" priority="0x7536">
+      <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidMoveCursorNextMember" priority="0x7537">
+      <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
+    </CommandPlacement>
   </CommandPlacements>
 
   <VisibilityConstraints>
@@ -160,6 +183,8 @@
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidFormatCode" context="GUID_TextEditorFactory"/>
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelection" context="GUID_TextEditorFactory"/>
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelectionReverse" context="GUID_TextEditorFactory"/>
+    <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidMoveCursorPrevMember" context="GUID_TextEditorFactory"/>
+    <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidMoveCursorNextMember" context="GUID_TextEditorFactory"/>
   </VisibilityConstraints>
   
   <KeyBindings>
@@ -169,6 +194,8 @@
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidFormatCode" editor="GUID_TextEditorFactory" mod1="Control Alt" key1="F"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelection" editor="GUID_TextEditorFactory" mod1="Control" key1="D"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelectionReverse" editor="GUID_TextEditorFactory" mod1="Control Shift" key1="D"/>
+    <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidMoveCursorPrevMember" editor="GUID_TextEditorFactory" mod1="Control Alt" key1="VK_UP"/>
+    <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidMoveCursorNextMember" editor="GUID_TextEditorFactory" mod1="Control Alt" key1="VK_DOWN"/>
   </KeyBindings>
 
   <Symbols>
@@ -183,6 +210,8 @@
       <IDSymbol name="cmdidExpandSelection" value="0x1022" />
       <IDSymbol name="cmdidShrinkSelection" value="0x1023" />
       <IDSymbol name="cmdidFormatCode" value="0x1027" />
+      <IDSymbol name="cmdidMoveCursorPrevMember" value="0x1033" />
+      <IDSymbol name="cmdidMoveCursorNextMember" value="0x1034" />
     </GuidSymbol>
 
     <GuidSymbol name="guidImages1" value="{fcb5d1b2-db20-41ee-993f-9d92d1441d65}">
