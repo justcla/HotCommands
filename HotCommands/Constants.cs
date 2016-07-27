@@ -11,6 +11,8 @@ namespace HotCommands
         public const uint ExpandSelectionCmdId = 0x1022;
         public const uint ShrinkSelectionCmdId = 0x1023;
         public const uint FormatCodeCmdId = 0x1027;
+        public const uint MoveMemberUpCmdId = 0x1031;
+        public const uint MoveMemberDownCmdId = 0x1032;
         public const uint cmdidMoveCursorPrevMember = 0x1033;
         public const uint cmdidMoveCursorNextMember = 0x1034;
     }

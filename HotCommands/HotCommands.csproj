@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="..\packages\Microsoft.VSSDK.BuildTools.14.1.24720\build\Microsoft.VSSDK.BuildTools.props" Condition="Exists('..\packages\Microsoft.VSSDK.BuildTools.14.1.24720\build\Microsoft.VSSDK.BuildTools.props')" />
   <PropertyGroup>
@@ -57,9 +57,12 @@
     <Compile Include="CommandFilterTextViewCreationListener.cs" />
     <Compile Include="Commands\Command.cs" />
     <Compile Include="Commands\DuplicateSelection.cs" />
+    <Compile Include="Commands\EditorExtensions.cs" />
     <Compile Include="Commands\FormatCode.cs" />
     <Compile Include="Commands\ExpandSelection.cs" />
     <Compile Include="Commands\MoveCursorToAdjacentMember.cs" />
+    <Compile Include="Commands\MoveMemberDown.cs" />
+    <Compile Include="Commands\MoveMemberUp.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="HotCommandsPackage.cs" />
     <Compile Include="KeyBindingUtil.cs" />

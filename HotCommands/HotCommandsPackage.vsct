@@ -119,6 +119,24 @@
         </Strings>
       </Button>
 
+      <Button guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberUp" priority="0x0200" type="Button">
+        <Icon guid="guidImages1" id="bmpPicSearch" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>MoveMemberUp</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberDown" priority="0x0200" type="Button">
+        <Icon guid="guidImages1" id="bmpPicSearch" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>MoveMemberDown</ButtonText>
+        </Strings>
+      </Button>
+
       <Button guid="guidHotCommandsPackageCmdSet" id="cmdidMoveCursorPrevMember" priority="0x0200" type="Button">
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
@@ -168,6 +186,12 @@
     <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelectionReverse" priority="0x7515">
       <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
     </CommandPlacement>
+    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberUp" priority="0x7530">
+      <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberDown" priority="0x7535">
+      <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
+    </CommandPlacement>    
     <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidMoveCursorPrevMember" priority="0x7536">
       <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
     </CommandPlacement>
@@ -183,6 +207,8 @@
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidFormatCode" context="GUID_TextEditorFactory"/>
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelection" context="GUID_TextEditorFactory"/>
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelectionReverse" context="GUID_TextEditorFactory"/>
+    <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberUp" context="GUID_TextEditorFactory"/>
+    <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberDown" context="GUID_TextEditorFactory"/>
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidMoveCursorPrevMember" context="GUID_TextEditorFactory"/>
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidMoveCursorNextMember" context="GUID_TextEditorFactory"/>
   </VisibilityConstraints>
@@ -194,6 +220,8 @@
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidFormatCode" editor="GUID_TextEditorFactory" mod1="Control Alt" key1="F"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelection" editor="GUID_TextEditorFactory" mod1="Control" key1="D"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelectionReverse" editor="GUID_TextEditorFactory" mod1="Control Shift" key1="D"/>
+    <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberUp" editor="GUID_TextEditorFactory" mod1="Control" key1="VK_NUMPAD8" />
+    <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberDown" editor="GUID_TextEditorFactory" mod1="Control" key1="VK_NUMPAD2"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidMoveCursorPrevMember" editor="GUID_TextEditorFactory" mod1="Control Alt" key1="VK_UP"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidMoveCursorNextMember" editor="GUID_TextEditorFactory" mod1="Control Alt" key1="VK_DOWN"/>
   </KeyBindings>
@@ -210,6 +238,8 @@
       <IDSymbol name="cmdidExpandSelection" value="0x1022" />
       <IDSymbol name="cmdidShrinkSelection" value="0x1023" />
       <IDSymbol name="cmdidFormatCode" value="0x1027" />
+      <IDSymbol name="cmdidMoveMemberUp" value="0x1031" />
+      <IDSymbol name="cmdidMoveMemberDown" value="0x1032" />
       <IDSymbol name="cmdidMoveCursorPrevMember" value="0x1033" />
       <IDSymbol name="cmdidMoveCursorNextMember" value="0x1034" />
     </GuidSymbol>

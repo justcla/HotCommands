@@ -75,6 +75,21 @@ namespace HotCommands
                 const string toggleCommentKeyReverseBinding = "Text Editor::Ctrl+Shift+D";
                 cmdToggleComment.Bindings = AppendKeyboardBinding(cmdToggleComment, toggleCommentKeyReverseBinding);
             }
+
+            // Add a binding for MoveMemberUp(TextEditor)
+            {
+                Command cmdMoveMemberUP = cmds.Item("Edit.MoveMemberUp", 0x1031);
+                const string moveMemberUPKeyBinding = "Text Editor::Ctrl+Num 8";
+                cmdMoveMemberUP.Bindings = (object)AppendKeyboardBinding(cmdMoveMemberUP, moveMemberUPKeyBinding);
+            }
+
+            // Add a binding for MoveMemberDown(TextEditor)
+            {
+                Command cmdMoveMemberDown = cmds.Item("Edit.MoveMemberDown", 0x1032);
+                const string moveMemberDownKeyBinding = "Text Editor::Ctrl+Num 2";
+                cmdMoveMemberDown.Bindings = (object)AppendKeyboardBinding(cmdMoveMemberDown, moveMemberDownKeyBinding);
+            }
+
         }
 
         private static object[] SingleKeyboardBinding(string keyboardBindingDefn)
