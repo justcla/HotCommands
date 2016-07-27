@@ -43,7 +43,7 @@ namespace HotCommands
         /// </summary>
         internal void UpdateKeyBindings()
         {
-            // Make sure we're not using the Default keyboard mapping scheme
+            // Make sure we're not using the Default keyboard mapping schemess
             DTE dte = (DTE)ServiceProvider.GetService(typeof(DTE));
             Properties props = dte.Properties["Environment", "Keyboard"];
             Property prop = props.Item("SchemeName");

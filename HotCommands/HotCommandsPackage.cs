@@ -66,6 +66,7 @@ namespace HotCommands
             ToggleComment.Initialize(this);
             ExpandSelection.Initialize(this);
             FormatCode.Initialize(this);
+            GoToLastEditLocation.Initialize(this);
             DuplicateSelection.Initialize(this);
         }
 

@@ -109,6 +109,15 @@
           <ButtonText>Format Code</ButtonText>
         </Strings>
       </Button>
+
+      <Button guid="guidHotCommandsPackageCmdSet" id="cmdidGoToLastEditLocation" priority="0x0200" type="Button">
+        <Icon guid="guidImages1" id="bmpPicSearch" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Go To Last Edit Location</ButtonText>
+        </Strings>
+      </Button>
       
     </Buttons>
 
@@ -139,6 +148,9 @@
     <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelectionReverse" priority="0x7515">
       <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
     </CommandPlacement>
+    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidGoToLastEditLocation" priority="0x7525">
+      <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
+    </CommandPlacement>
   </CommandPlacements>
 
   <VisibilityConstraints>
@@ -147,6 +159,7 @@
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidFormatCode" context="GUID_TextEditorFactory"/>
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelection" context="GUID_TextEditorFactory"/>
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelectionReverse" context="GUID_TextEditorFactory"/>
+    <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidGoToLastEditLocation" context="GUID_TextEditorFactory"/>
   </VisibilityConstraints>
   
   <KeyBindings>
@@ -155,6 +168,8 @@
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidFormatCode" editor="GUID_TextEditorFactory" mod1="Control Alt" key1="F"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelection" editor="GUID_TextEditorFactory" mod1="Control" key1="D"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelectionReverse" editor="GUID_TextEditorFactory" mod1="Control Shift" key1="D"/>
+    <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidGoToLastEditLocation" editor="GUID_TextEditorFactory" mod1="Control Shift" key1="VK_BACK"/>
+
   </KeyBindings>
 
   <Symbols>
@@ -167,6 +182,7 @@
       <IDSymbol name="cmdidDuplicateSelectionReverse" value="0x1020" />
       <IDSymbol name="cmdidToggleComment" value="0x1021" />
       <IDSymbol name="cmdidExpandSelection" value="0x1022" />
+      <IDSymbol name="cmdidGoToLastEditLocation" value="0x1024"/>
       <IDSymbol name="cmdidFormatCode" value="0x1027" />
     </GuidSymbol>
 

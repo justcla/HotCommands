@@ -32,6 +32,7 @@ namespace HotCommands
             IWpfTextView textView = EditorAdaptersFactoryService.GetWpfTextView(textViewAdapter);
 
             CommandFilter commandFilter = new CommandFilter(textView, _aggregatorFactory, _globalServiceProvider, _editorOperationsFactory);
+            GoToLastEditLocation.newFile(textView);
             IOleCommandTarget next;
             textViewAdapter.AddCommandFilter(commandFilter, out next);
 

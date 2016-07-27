@@ -9,6 +9,7 @@ namespace HotCommands
         public const uint DuplicateSelectionReverseCmdId = 0x1020;
         public const uint ToggleCommentCmdId = 0x1021;
         public const uint ExpandSelectionCmdId = 0x1022;
+        public const uint GoToLastEditLocationCmdId = 0x1024;
         public const uint FormatCodeCmdId = 0x1027;
     }
 }

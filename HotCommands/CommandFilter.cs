@@ -47,6 +47,8 @@ namespace HotCommands
                         return DuplicateSelection.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations);
                     case Constants.DuplicateSelectionReverseCmdId:
                         return DuplicateSelection.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations, true);
+                    case Constants.GoToLastEditLocationCmdId:
+                        return GoToLastEditLocation.Instance.HandleCommand(textView, GetShellCommandDispatcher());
                 }
             }
 
