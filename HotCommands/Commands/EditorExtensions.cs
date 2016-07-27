@@ -3,9 +3,11 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Operations;
+using System;
 using System.Linq;
 
 namespace HotCommands
@@ -13,11 +15,11 @@ namespace HotCommands
     static class EditorExtensions
     {
 
-        internal static int MoveMemberUp(this IWpfTextView textView, IEditorOperations editorOperations)
+        internal static int MoveMemberUp(this IWpfTextView textView, IOleCommandTarget commandTarget, IEditorOperations editorOperations)
         {
             var position = textView.Caret.Position.BufferPosition.Position;
             var syntaxRoot = textView.TextSnapshot.GetOpenDocumentInCurrentContextWithChanges().GetSyntaxRootAsync().Result;
-            MoveDirection direction = MoveDirection.Up;
+            MovePosition movePsoition = MovePosition.Top;
 
             // Find the Current member, and exit if it is outside the container            
             var currMember = syntaxRoot.FindMemberDeclarationAt(position);
@@ -39,29 +41,30 @@ namespace HotCommands
                         while (prevMember.IsRootNodeof(currMember) || prevMember.IsKind(SyntaxKind.NamespaceDeclaration)) //untill valid
                         {
                             prevMember = syntaxRoot.FindMemberDeclarationAt(prevMember.FullSpan.Start - 1);
-                            prevMember.MovetoNextChildMember(true);
+                            prevMember = prevMember.IsRootNodeof(currMember) ? prevMember : prevMember.GetNextChildMember(true);
                             if (prevMember == null) return VSConstants.S_OK;
                         }
-                        direction = prevMember.IsContainerType() ? MoveDirection.MiddlefromBottom : MoveDirection.Down;
+                        movePsoition = prevMember.IsContainerType() ? MovePosition.MiddlefromBottom : MovePosition.Bottom;
                     }
                 }
                 else  //prev member is Sibling
                 {
-                    prevMember.MovetoNextChildMember(true);
-                    direction = prevMember.IsContainerType() ? MoveDirection.MiddlefromBottom : MoveDirection.Down;
+                    prevMember.GetNextChildMember(true);
+                    movePsoition = prevMember.IsContainerType() ? MovePosition.MiddlefromBottom : MovePosition.Bottom;
                 }
             }
 
-            textView.SwapMembers(currMember, prevMember, direction);
+            textView.SwapMembers(currMember, prevMember, movePsoition, MoveDirection.Up);
             editorOperations.ScrollLineCenter();
+            FormatDocument(commandTarget);
             return VSConstants.S_OK;
         }
 
-        internal static int MoveMemberDown(this IWpfTextView textView, IEditorOperations editorOperations)
+        internal static int MoveMemberDown(this IWpfTextView textView, IOleCommandTarget commandTarget, IEditorOperations editorOperations)
         {
             var position = textView.Caret.Position.BufferPosition.Position;
             var syntaxRoot = textView.TextSnapshot.GetOpenDocumentInCurrentContextWithChanges().GetSyntaxRootAsync().Result;
-            MoveDirection direction = MoveDirection.Down;
+            MovePosition movePsoition = MovePosition.Bottom;
 
             // Find the Current member, and exit if it is outside the container
             var currMember = syntaxRoot.FindMemberDeclarationAt(position);
@@ -83,25 +86,33 @@ namespace HotCommands
                         while (nextMember.IsRootNodeof(currMember) || nextMember.IsKind(SyntaxKind.NamespaceDeclaration)) //untill valid
                         {
                             nextMember = syntaxRoot.FindMemberDeclarationAt(nextMember.FullSpan.End + 1);
-                            nextMember.MovetoNextChildMember(false);
+                            nextMember = nextMember.IsRootNodeof(currMember) ? nextMember : nextMember.GetNextChildMember(false);
                             if (nextMember == null) return VSConstants.S_OK;
                         }
-                        direction = nextMember.IsContainerType() ? MoveDirection.MiddlefromTop : MoveDirection.Up;
+                        movePsoition = nextMember.IsContainerType() ? MovePosition.MiddlefromTop : MovePosition.Top;
                     }
                 }
                 else  //Next member is Sibling
                 {
-                    nextMember.MovetoNextChildMember(false);
-                    direction = nextMember.IsContainerType() ? MoveDirection.MiddlefromTop : MoveDirection.Up;
+                    nextMember.GetNextChildMember(false);
+                    movePsoition = nextMember.IsContainerType() ? MovePosition.MiddlefromTop : MovePosition.Top;
                 }
             }
 
-            textView.SwapMembers(currMember, nextMember, direction);
+            textView.SwapMembers(currMember, nextMember, movePsoition, MoveDirection.Down);
             editorOperations.ScrollLineCenter();
+            FormatDocument(commandTarget);
             return VSConstants.S_OK;
         }
 
-        internal static void SwapMembers(this IWpfTextView textView, MemberDeclarationSyntax member1, MemberDeclarationSyntax member2, MoveDirection direction)
+        private static void FormatDocument(IOleCommandTarget commandTarget)
+        {
+            Guid cmdGroup = VSConstants.VSStd2K;
+            uint cmdID = (uint)VSConstants.VSStd2KCmdID.FORMATDOCUMENT;
+            int hr = commandTarget.Exec(ref cmdGroup, cmdID, (uint)OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, IntPtr.Zero, IntPtr.Zero);
+        }
+
+        internal static void SwapMembers(this IWpfTextView textView, MemberDeclarationSyntax member1, MemberDeclarationSyntax member2, MovePosition position, MoveDirection direction)
         {
             if (member1 == null || member2 == null) return;
             int newCaretPosition = 0;
@@ -109,36 +120,35 @@ namespace HotCommands
             var caretIndent = textView.Caret.Position.BufferPosition.Position - member1.FullSpan.Start;
 
             editor.Delete(member1.FullSpan.Start, member1.FullSpan.Length);
-            if (direction == MoveDirection.Up)
+            if (position == MovePosition.Top)
             {
                 editor.Insert(member2.FullSpan.Start, member1.GetText().ToString());
-                newCaretPosition = member2.FullSpan.Start + caretIndent;
+                newCaretPosition = direction == MoveDirection.Up ? (member2.FullSpan.Start + caretIndent) : (member2.FullSpan.Start + caretIndent - member1.FullSpan.Length);
             }
-            else if (direction == MoveDirection.Down)
+            else if (position == MovePosition.Bottom)
             {
                 editor.Insert(member2.FullSpan.End, member1.GetText().ToString());
-                //if member 1 is above member2 case1 or case2
-                newCaretPosition = (member1.SpanStart < member2.SpanStart) ? member2.FullSpan.End + caretIndent - member1.FullSpan.Length : member2.FullSpan.End + caretIndent;
+                newCaretPosition = direction == MoveDirection.Up ? (member2.FullSpan.End + caretIndent) : (member2.FullSpan.End + caretIndent - member1.FullSpan.Length);
             }
-            else if (direction == MoveDirection.MiddlefromBottom)
+            else if (position == MovePosition.MiddlefromBottom)
             {
                 var blockToken = member2.ChildTokens().FirstOrDefault(t => t.IsKind(SyntaxKind.CloseBraceToken));
                 editor.Insert(blockToken.SpanStart - 1, member1.GetText().ToString());
-                newCaretPosition = blockToken.SpanStart - 1 + caretIndent;
+                newCaretPosition = direction == MoveDirection.Up ? (blockToken.SpanStart - 1 + caretIndent) : (blockToken.SpanStart - 1 + caretIndent - member2.FullSpan.Length);
             }
-            else if (direction == MoveDirection.MiddlefromTop)
+            else if (position == MovePosition.MiddlefromTop)
             {
                 var blockToken = member2.ChildTokens().FirstOrDefault(t => t.IsKind(SyntaxKind.OpenBraceToken));
                 editor.Insert(blockToken.SpanStart + 1, member1.GetText().ToString());
-                newCaretPosition = blockToken.SpanStart + 1 + caretIndent - member1.FullSpan.Length;
+                newCaretPosition = direction == MoveDirection.Up ? (blockToken.SpanStart + 1 + caretIndent) : blockToken.SpanStart + 1 + caretIndent - member1.FullSpan.Length;
             }
 
             editor.Apply();
             textView.Caret.MoveTo(new SnapshotPoint(textView.TextSnapshot, newCaretPosition));
 
         }
-                
-        private static void MovetoNextChildMember(this MemberDeclarationSyntax member, bool moveFromBottom)
+
+        private static MemberDeclarationSyntax GetNextChildMember(this MemberDeclarationSyntax member, bool moveFromBottom)
         {
             var childMembers = member?.ChildNodes().OfType<MemberDeclarationSyntax>();
             while (childMembers?.Count() > 0 && !member.IsKind(SyntaxKind.EnumDeclaration))
@@ -146,6 +156,7 @@ namespace HotCommands
                 member = moveFromBottom ? childMembers.Last() : childMembers.First();
                 childMembers = member.ChildNodes().OfType<MemberDeclarationSyntax>();
             }
+            return member;
         }
 
         internal static MemberDeclarationSyntax FindMemberDeclarationAt(this SyntaxNode root, int position)
@@ -194,12 +205,18 @@ namespace HotCommands
             return node.IsKind(SyntaxKind.ClassDeclaration) || node.IsKind(SyntaxKind.StructDeclaration) || node.IsKind(SyntaxKind.InterfaceDeclaration) || node.IsKind(SyntaxKind.NamespaceDeclaration);
         }
 
+        internal enum MovePosition
+        {
+            Top,
+            Bottom,
+            MiddlefromBottom,
+            MiddlefromTop
+        }
+
         internal enum MoveDirection
         {
             Up,
-            Down,
-            MiddlefromBottom,
-            MiddlefromTop
+            Down
         }
     }
 }

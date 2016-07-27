@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.Text.Operations;
+using OleInterop = Microsoft.VisualStudio.OLE.Interop;
 
 namespace HotCommands
 {
@@ -41,9 +42,9 @@ namespace HotCommands
             Instance = new MoveMemberDown(package);
         }
 
-        public int HandleCommand(IWpfTextView textView,IEditorOperations editorOperations)
+        public int HandleCommand(IWpfTextView textView, OleInterop.IOleCommandTarget commandTarget, IEditorOperations editorOperations)
         {
-            return textView.MoveMemberDown(editorOperations);
+            return textView.MoveMemberDown(commandTarget, editorOperations);
         }
 
     }
