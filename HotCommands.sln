@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InitializeFieldFromConstruc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InitializeFieldFromConstructor.Vsix", "InitializeFieldFromConstructor\InitializeFieldFromConstructor.Vsix\InitializeFieldFromConstructor.Vsix.csproj", "{9C16D9B2-8A85-47DF-82EA-9EA71689CB82}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractClass.Portable", "ExtractClass.Portable\ExtractClass.Portable.csproj", "{3BA53502-E884-442A-A0B1-D2C0E0CBB756}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{9C16D9B2-8A85-47DF-82EA-9EA71689CB82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9C16D9B2-8A85-47DF-82EA-9EA71689CB82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9C16D9B2-8A85-47DF-82EA-9EA71689CB82}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BA53502-E884-442A-A0B1-D2C0E0CBB756}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BA53502-E884-442A-A0B1-D2C0E0CBB756}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BA53502-E884-442A-A0B1-D2C0E0CBB756}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BA53502-E884-442A-A0B1-D2C0E0CBB756}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

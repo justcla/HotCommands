@@ -333,9 +333,9 @@
     <Analyzer Include="..\packages\Microsoft.CodeAnalysis.Analyzers.1.1.0\analyzers\dotnet\cs\Microsoft.CodeAnalysis.CSharp.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ExtractClass\ExtractClass.csproj">
-      <Project>{d6b5bf46-c337-47a6-bb5d-e2a847504e88}</Project>
-      <Name>ExtractClass</Name>
+    <ProjectReference Include="..\ExtractClass.Portable\ExtractClass.Portable.csproj">
+      <Project>{3ba53502-e884-442a-a0b1-d2c0e0cbb756}</Project>
+      <Name>ExtractClass.Portable</Name>
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
