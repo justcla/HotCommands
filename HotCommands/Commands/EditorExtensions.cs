@@ -65,8 +65,8 @@ namespace HotCommands
             var nextMember = syntaxRoot.FindMemberDeclarationAt(currMember.FullSpan.End + 1);
             while (nextMember.IsRootNodeof(currMember))
             {
-                nextMember = syntaxRoot.FindMemberDeclarationAt(nextMember.FullSpan.Start + 1);
-                if (nextMember == null) return VSConstants.S_OK; ;
+                nextMember = syntaxRoot.FindMemberDeclarationAt(nextMember.FullSpan.End + 1);
+                if (nextMember == null) return VSConstants.S_OK;
             }
 
             //If previous member has any nesteed member declaration, get the nearest/closest member declaration
@@ -84,13 +84,23 @@ namespace HotCommands
 
         internal static void SwapMembers(this IWpfTextView textView, MemberDeclarationSyntax member1, MemberDeclarationSyntax member2, bool isMoveUp)
         {
+            int newCaretPosition;
             var editor = textView.TextSnapshot.TextBuffer.CreateEdit();
+            var caretIndent = textView.Caret.Position.BufferPosition.Position - member1.FullSpan.Start;            
+                        
             editor.Delete(member1.FullSpan.Start, member1.FullSpan.Length);
-            editor.Insert(isMoveUp? member2.FullSpan.Start : member2.FullSpan.End, member1.GetText().ToString());
-            editor.Apply();
-
-            var caretIndent = textView.Caret.Position.BufferPosition.Position - member1.FullSpan.Start;
-            int newCaretPosition = member2.FullSpan.Start + caretIndent;
+            if(isMoveUp)
+            {
+                editor.Insert(member2.FullSpan.Start, member1.GetText().ToString());
+                newCaretPosition = member2.FullSpan.Start + caretIndent;
+            }
+            else
+            {
+                editor.Insert(member2.FullSpan.End, member1.GetText().ToString());
+                newCaretPosition = member2.FullSpan.End + caretIndent - member1.FullSpan.Length;
+            }
+            
+            editor.Apply();           
             textView.Caret.MoveTo(new SnapshotPoint(textView.TextSnapshot, newCaretPosition));
         }
 
