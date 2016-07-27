@@ -10,8 +10,8 @@ using System.Composition;
 
 namespace ExtractClass.RefactoringProviders
 {
-    [ExportCodeRefactoringProvider(LanguageNames.CSharp), Shared]
-    public sealed class ExtractClassToAFile : CodeRefactoringProvider
+    [ExportCodeRefactoringProvider(LanguageNames.CSharp, Name = nameof(ExtractClassToAFile)), Shared]
+    public class ExtractClassToAFile : CodeRefactoringProvider
     {
         public override async Task ComputeRefactoringsAsync (CodeRefactoringContext context)
         {
