@@ -103,6 +103,7 @@ namespace HotCommands
 
         internal static void SwapMembers(this IWpfTextView textView, MemberDeclarationSyntax member1, MemberDeclarationSyntax member2, MoveDirection direction)
         {
+            if (member1 == null || member2 == null) return;
             int newCaretPosition = 0;
             var editor = textView.TextSnapshot.TextBuffer.CreateEdit();
             var caretIndent = textView.Caret.Position.BufferPosition.Position - member1.FullSpan.Start;
