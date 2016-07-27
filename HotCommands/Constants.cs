@@ -10,5 +10,7 @@ namespace HotCommands
         public const uint ToggleCommentCmdId = 0x1021;
         public const uint ExpandSelectionCmdId = 0x1022;
         public const uint FormatCodeCmdId = 0x1027;
+        public const uint cmdidMoveCursorPrevMember = 0x1033;
+        public const uint cmdidMoveCursorNextMember = 0x1034;
     }
 }
