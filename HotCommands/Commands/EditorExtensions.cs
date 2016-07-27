@@ -39,7 +39,7 @@ namespace HotCommands
                         while (prevMember.IsRootNodeof(currMember) || prevMember.IsKind(SyntaxKind.NamespaceDeclaration)) //untill valid
                         {
                             prevMember = syntaxRoot.FindMemberDeclarationAt(prevMember.FullSpan.Start - 1);
-                            prevMember.MovetoLastChildMember();
+                            prevMember.MovetoNextChildMember(true);
                             if (prevMember == null) return VSConstants.S_OK;
                         }
                         direction = prevMember.IsContainerType() ? MoveDirection.MiddlefromBottom : MoveDirection.Down;
@@ -47,7 +47,7 @@ namespace HotCommands
                 }
                 else  //prev member is Sibling
                 {
-                    prevMember.MovetoLastChildMember();
+                    prevMember.MovetoNextChildMember(true);
                     direction = prevMember.IsContainerType() ? MoveDirection.MiddlefromBottom : MoveDirection.Down;
                 }
             }
@@ -82,7 +82,7 @@ namespace HotCommands
                         while (nextMember.IsRootNodeof(currMember) || nextMember.IsKind(SyntaxKind.NamespaceDeclaration)) //untill valid
                         {
                             nextMember = syntaxRoot.FindMemberDeclarationAt(nextMember.FullSpan.End + 1);
-                            nextMember.MovetoFirstChildMember();
+                            nextMember.MovetoNextChildMember(false);
                             if (nextMember == null) return VSConstants.S_OK;
                         }
                         direction = nextMember.IsContainerType() ? MoveDirection.MiddlefromTop : MoveDirection.Up;
@@ -90,7 +90,7 @@ namespace HotCommands
                 }
                 else  //Next member is Sibling
                 {
-                    MovetoFirstChildMember(nextMember);
+                    nextMember.MovetoNextChildMember(false);
                     direction = nextMember.IsContainerType() ? MoveDirection.MiddlefromTop : MoveDirection.Up;
                 }
             }
@@ -125,34 +125,22 @@ namespace HotCommands
             }
             else if (direction == MoveDirection.MiddlefromTop)
             {
-                var blockToken = member2.ChildTokens().FirstOrDefault(t => t.IsKind(SyntaxKind.CloseBraceToken));
-                editor.Insert(blockToken.SpanStart - 1, member1.GetText().ToString());
-                newCaretPosition = blockToken.SpanStart - 1 + caretIndent - member1.FullSpan.Length;
+                var blockToken = member2.ChildTokens().FirstOrDefault(t => t.IsKind(SyntaxKind.OpenBraceToken));
+                editor.Insert(blockToken.SpanStart + 1, member1.GetText().ToString());
+                newCaretPosition = blockToken.SpanStart + 1 + caretIndent - member1.FullSpan.Length;
             }
 
             editor.Apply();
             textView.Caret.MoveTo(new SnapshotPoint(textView.TextSnapshot, newCaretPosition));
 
-
         }
-
-        //TODO merge both method & remove return type
-        private static void MovetoLastChildMember(this MemberDeclarationSyntax member)
+                
+        private static void MovetoNextChildMember(this MemberDeclarationSyntax member, bool moveFromBottom)
         {
             var childMembers = member?.ChildNodes().OfType<MemberDeclarationSyntax>();
             while (childMembers?.Count() > 0 && !member.IsKind(SyntaxKind.EnumDeclaration))
             {
-                member = childMembers.Last();
-                childMembers = member.ChildNodes().OfType<MemberDeclarationSyntax>();
-            }
-        }
-
-        private static void MovetoFirstChildMember(this MemberDeclarationSyntax member)
-        {
-            var childMembers = member?.ChildNodes().OfType<MemberDeclarationSyntax>();
-            while (childMembers?.Count() > 0 && !member.IsKind(SyntaxKind.EnumDeclaration))
-            {
-                member = childMembers.First();
+                member = moveFromBottom ? childMembers.Last() : childMembers.First();
                 childMembers = member.ChildNodes().OfType<MemberDeclarationSyntax>();
             }
         }
