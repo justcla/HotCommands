@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="HotCommandsAggregator.Pramod Hegde.6ad5f3da-493c-4906-8218-787c77efefa0" Version="1.0.1" Language="en-US" Publisher="Microsoft" />
+    <Identity Id="HotCommandsAggregator.Microsoft.6ad5f3da-493c-4906-8218-787c77efefa0" Version="1.0.1" Language="en-US" Publisher="Microsoft" />
     <DisplayName>HotCommandsAggregator</DisplayName>
     <Description xml:space="preserve">A collection of Roslyn-based commands, analyzers, and refactorings</Description>
   </Metadata>
