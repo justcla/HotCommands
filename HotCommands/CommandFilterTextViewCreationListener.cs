@@ -7,6 +7,7 @@ using System.ComponentModel.Composition;
 using Microsoft.VisualStudio.Text.Classification;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Text.Operations;
+#pragma warning disable 0649
 
 namespace HotCommands
 {
