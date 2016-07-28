@@ -14,7 +14,6 @@ namespace HotCommands
 {
     static class EditorExtensions
     {
-
         internal static int MoveMemberUp(this IWpfTextView textView, IOleCommandTarget commandTarget, IEditorOperations editorOperations)
         {
             var position = textView.Caret.Position.BufferPosition.Position;
@@ -54,9 +53,8 @@ namespace HotCommands
                 }
             }
 
-            textView.SwapMembers(currMember, prevMember, movePsoition, MoveDirection.Up);
+            textView.SwapMembers(currMember, prevMember, movePsoition, MoveDirection.Up, commandTarget, editorOperations);
             editorOperations.ScrollLineCenter();
-            FormatDocument(commandTarget);
             return VSConstants.S_OK;
         }
 
@@ -80,7 +78,7 @@ namespace HotCommands
             {
                 if (nextMember.Equals(currMember.Parent))
                 {
-                    //Move Methods/Properties/Enum/Constructor/..
+                    //if Moving Methods,Properties,Enum,Constructor,.. (excludes class, interface, struct,..)
                     if (!currMember.IsContainerType())
                     {
                         while (nextMember.IsRootNodeof(currMember) || nextMember.IsKind(SyntaxKind.NamespaceDeclaration)) //untill valid
@@ -99,9 +97,8 @@ namespace HotCommands
                 }
             }
 
-            textView.SwapMembers(currMember, nextMember, movePsoition, MoveDirection.Down);
+            textView.SwapMembers(currMember, nextMember, movePsoition, MoveDirection.Down, commandTarget, editorOperations);
             editorOperations.ScrollLineCenter();
-            FormatDocument(commandTarget);
             return VSConstants.S_OK;
         }
 
@@ -112,40 +109,41 @@ namespace HotCommands
             int hr = commandTarget.Exec(ref cmdGroup, cmdID, (uint)OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, IntPtr.Zero, IntPtr.Zero);
         }
 
-        internal static void SwapMembers(this IWpfTextView textView, MemberDeclarationSyntax member1, MemberDeclarationSyntax member2, MovePosition position, MoveDirection direction)
+        private static void SwapMembers(this IWpfTextView textView, SyntaxNode member1, SyntaxNode member2, MovePosition position, MoveDirection direction, IOleCommandTarget commandTarget, IEditorOperations editorOperations)
         {
             if (member1 == null || member2 == null) return;
-            int newCaretPosition = 0;
-            var editor = textView.TextSnapshot.TextBuffer.CreateEdit();
-            var caretIndent = textView.Caret.Position.BufferPosition.Position - member1.FullSpan.Start;
+            int caretIndent = textView.Caret.Position.BufferPosition.Position - member1.FullSpan.Start;
+            int movePosition = 0;
+            string moveText = member1.GetText().ToString();
 
-            editor.Delete(member1.FullSpan.Start, member1.FullSpan.Length);
+            //Find the position to Move the Current method (i.e. member1)
             if (position == MovePosition.Top)
             {
-                editor.Insert(member2.FullSpan.Start, member1.GetText().ToString());
-                newCaretPosition = direction == MoveDirection.Up ? (member2.FullSpan.Start + caretIndent) : (member2.FullSpan.Start + caretIndent - member1.FullSpan.Length);
+                movePosition = member2.FullSpan.Start;
             }
             else if (position == MovePosition.Bottom)
             {
-                editor.Insert(member2.FullSpan.End, member1.GetText().ToString());
-                newCaretPosition = direction == MoveDirection.Up ? (member2.FullSpan.End + caretIndent) : (member2.FullSpan.End + caretIndent - member1.FullSpan.Length);
+                movePosition = member2.FullSpan.End;
             }
             else if (position == MovePosition.MiddlefromBottom)
             {
-                var blockToken = member2.ChildTokens().FirstOrDefault(t => t.IsKind(SyntaxKind.CloseBraceToken));
-                editor.Insert(blockToken.SpanStart - 1, member1.GetText().ToString());
-                newCaretPosition = direction == MoveDirection.Up ? (blockToken.SpanStart - 1 + caretIndent) : (blockToken.SpanStart - 1 + caretIndent - member2.FullSpan.Length);
+                movePosition = member2.ChildTokens().FirstOrDefault(t => t.IsKind(SyntaxKind.CloseBraceToken)).SpanStart - 1;
             }
             else if (position == MovePosition.MiddlefromTop)
             {
-                var blockToken = member2.ChildTokens().FirstOrDefault(t => t.IsKind(SyntaxKind.OpenBraceToken));
-                editor.Insert(blockToken.SpanStart + 1, member1.GetText().ToString());
-                newCaretPosition = direction == MoveDirection.Up ? (blockToken.SpanStart + 1 + caretIndent) : blockToken.SpanStart + 1 + caretIndent - member1.FullSpan.Length;
+                movePosition = member2.ChildTokens().FirstOrDefault(t => t.IsKind(SyntaxKind.OpenBraceToken)).SpanStart + 1;
             }
 
+            var editor = textView.TextSnapshot.TextBuffer.CreateEdit();
+            editor.Delete(member1.FullSpan.Start, member1.FullSpan.Length);
+            editor.Insert(movePosition, moveText);
             editor.Apply();
-            textView.Caret.MoveTo(new SnapshotPoint(textView.TextSnapshot, newCaretPosition));
 
+            int newCaretPosition = direction == MoveDirection.Up ? (movePosition + caretIndent) : (movePosition + caretIndent - moveText.Length);
+            textView.Caret.MoveTo(new SnapshotPoint(textView.TextSnapshot, newCaretPosition));
+            textView.Selection.Select(new SnapshotSpan(textView.TextSnapshot, (direction == MoveDirection.Up) ? movePosition : movePosition - moveText.Length, moveText.Length), false);
+            FormatDocument(commandTarget);
+            textView.Selection.Clear();
         }
 
         private static MemberDeclarationSyntax GetNextChildMember(this MemberDeclarationSyntax member, bool moveFromBottom)
@@ -159,7 +157,7 @@ namespace HotCommands
             return member;
         }
 
-        internal static MemberDeclarationSyntax FindMemberDeclarationAt(this SyntaxNode root, int position)
+        private static MemberDeclarationSyntax FindMemberDeclarationAt(this SyntaxNode root, int position)
         {
             if (position > root.FullSpan.End || position < root.FullSpan.Start) return null;
             var token = root.FindToken(position, false);
@@ -170,7 +168,7 @@ namespace HotCommands
             return member;
         }
 
-        internal static bool ContainsPosition(this MemberDeclarationSyntax currMember, int caretPosition)
+        private static bool ContainsPosition(this MemberDeclarationSyntax currMember, int caretPosition)
         {
             var trivia = currMember?.GetFirstToken().LeadingTrivia;
             foreach (var t in trivia)
@@ -205,7 +203,7 @@ namespace HotCommands
             return node.IsKind(SyntaxKind.ClassDeclaration) || node.IsKind(SyntaxKind.StructDeclaration) || node.IsKind(SyntaxKind.InterfaceDeclaration) || node.IsKind(SyntaxKind.NamespaceDeclaration);
         }
 
-        internal enum MovePosition
+        private enum MovePosition
         {
             Top,
             Bottom,
@@ -213,7 +211,7 @@ namespace HotCommands
             MiddlefromTop
         }
 
-        internal enum MoveDirection
+        private enum MoveDirection
         {
             Up,
             Down
