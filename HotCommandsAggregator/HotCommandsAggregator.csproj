@@ -51,17 +51,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ExtractClass\ExtractClass.csproj">
-      <Project>{d6b5bf46-c337-47a6-bb5d-e2a847504e88}</Project>
-      <Name>ExtractClass</Name>
-      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
-    </ProjectReference>
-    <ProjectReference Include="..\InitializeFieldFromConstructor\InitializeFieldFromConstructor\InitializeFieldFromConstructor.csproj">
-      <Project>{4C5FC135-5989-49A5-BC59-06EA970BCB12}</Project>
-      <Name>InitializeFieldFromConstructor</Name>
-      <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
-      <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
+    <ProjectReference Include="..\EditorCommands\EditorCommands.csproj">
+      <Project>{f52e35bd-d47e-4b30-a9d2-09611d23e23f}</Project>
+      <Name>EditorCommands</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

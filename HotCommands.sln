@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+VisualStudioVersion = 14.0.25414.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotCommands", "HotCommands\HotCommands.csproj", "{F0DDF909-9D14-44EC-8F0C-3D8858865CF0}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InitializeFieldFromConstructor", "InitializeFieldFromConstructor\InitializeFieldFromConstructor\InitializeFieldFromConstructor.csproj", "{4C5FC135-5989-49A5-BC59-06EA970BCB12}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Commands", "Commands", "{22830916-BB67-493B-9E3F-9B97FC8EA4E0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EditorCommands", "EditorCommands\EditorCommands.csproj", "{F52E35BD-D47E-4B30-A9D2-09611D23E23F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,6 +37,10 @@ Global
 		{4C5FC135-5989-49A5-BC59-06EA970BCB12}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C5FC135-5989-49A5-BC59-06EA970BCB12}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C5FC135-5989-49A5-BC59-06EA970BCB12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F52E35BD-D47E-4B30-A9D2-09611D23E23F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F52E35BD-D47E-4B30-A9D2-09611D23E23F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F52E35BD-D47E-4B30-A9D2-09611D23E23F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F52E35BD-D47E-4B30-A9D2-09611D23E23F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -43,5 +49,6 @@ Global
 		{F0DDF909-9D14-44EC-8F0C-3D8858865CF0} = {22830916-BB67-493B-9E3F-9B97FC8EA4E0}
 		{D6B5BF46-C337-47A6-BB5D-E2A847504E88} = {22830916-BB67-493B-9E3F-9B97FC8EA4E0}
 		{4C5FC135-5989-49A5-BC59-06EA970BCB12} = {22830916-BB67-493B-9E3F-9B97FC8EA4E0}
+		{F52E35BD-D47E-4B30-A9D2-09611D23E23F} = {22830916-BB67-493B-9E3F-9B97FC8EA4E0}
 	EndGlobalSection
 EndGlobal
