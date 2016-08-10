@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+VisualStudioVersion = 14.0.25414.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotCommands", "HotCommands\HotCommands.csproj", "{F0DDF909-9D14-44EC-8F0C-3D8858865CF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotCommandsAggregator", "HotCommandsAggregator\HotCommandsAggregator.csproj", "{C64AFF59-3C7C-4913-A959-B1AF2EFCCA15}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotCommandsVSIX", "HotCommandsVSIX\HotCommandsVSIX.csproj", "{C64AFF59-3C7C-4913-A959-B1AF2EFCCA15}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractClass", "ExtractClass\ExtractClass.csproj", "{D6B5BF46-C337-47A6-BB5D-E2A847504E88}"
 EndProject
