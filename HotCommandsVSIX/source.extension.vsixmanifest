@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="HotCommandsAggregator.Microsoft.6ad5f3da-493c-4906-8218-787c77efefa0" Version="1.0.2" Language="en-US" Publisher="Microsoft" />
-    <DisplayName>HotCommandsAggregator</DisplayName>
-    <Description xml:space="preserve">A collection of Roslyn-based commands, analyzers, and refactorings</Description>
+    <Identity Id="e8175b11-0e09-42b5-9c3c-ba7bfb53a311" Version="1.0.2" Language="en-US" Publisher="Microsoft" />
+    <DisplayName>Hot Commands for Visual Studio</DisplayName>
+    <Description xml:space="preserve">A collection of commands, analyzers, and refactorings for enhanced productivity in Visual Studio IDE</Description>
   </Metadata>
   <Installation>
     <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0]" />
@@ -14,5 +14,7 @@
   <Assets>
     <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="ExtractClass" Path="|ExtractClass|" />
     <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="InitializeFieldFromConstructor" Path="|InitializeFieldFromConstructor|" />
+    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="HotCommands" Path="|HotCommands|" />
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="HotCommands" Path="|HotCommands;PkgdefProjectOutputGroup|" />
   </Assets>
 </PackageManifest>
