@@ -126,8 +126,8 @@
           <Shortcut Command="Edit.OpenQuickDefLookup" Scope="Text Editor">Ctrl+Shift+I</Shortcut>
           <Shortcut Command="Edit.GoToTypeDeclaration" Scope="Text Editor">Ctrl+Shift+B</Shortcut>
           <Shortcut Command="Edit.GoToSuperMethod" Scope="Text Editor">Ctrl+U</Shortcut>    <!-- Go To super-method/super-class -->
-          <Shortcut Command="Edit.GoToPreviousMember" Scope="Text Editor">Alt+Up Arrow</Shortcut>
-          <Shortcut Command="Edit.GoToNextMember" Scope="Text Editor">Alt+Down Arrow</Shortcut>
+          <Shortcut Command="Edit.PreviousMethod" Scope="Text Editor">Alt+Up Arrow</Shortcut>
+          <Shortcut Command="Edit.NextMethod" Scope="Text Editor">Alt+Down Arrow</Shortcut>
           <Shortcut Command="Edit.MoveToCodeBlockStart" Scope="Text Editor">Ctrl+[</Shortcut>
           <Shortcut Command="Edit.MoveToCodeBlockEnd" Scope="Text Editor">Ctrl+]</Shortcut>
           <Shortcut Command="FileStructurePopup" Scope="Global">Ctrl+F12</Shortcut>
@@ -139,6 +139,8 @@
           <!-- Extras -->
           <Shortcut Command="Window.NextTab" Scope="Text Editor">Ctrl+PgDn</Shortcut>   <!-- Restore Global control for Ctrl+PgDn -->
           <Shortcut Command="Window.PreviousTab" Scope="Text Editor">Ctrl+PgUp</Shortcut> <!-- Restore Global control for Ctrl+PgUp -->
+          <Shortcut Command="Edit.MoveSelectedLinesUp" Scope="Text Editor">Ctrl+Shift+Up Arrow</Shortcut>
+          <Shortcut Command="Edit.MoveSelectedLinesDown" Scope="Text Editor">Ctrl+Shift+Down Arrow</Shortcut>
         </ShortcutsSchemeDef>
         <!-- Note: Whatever appears in the UserShortcuts will be applied to the current settings when imported -->
         <!-- These will be appended to any other user-applied shortcuts and the AppData\Roaming User.vsk will be updated -->
