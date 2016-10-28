@@ -53,9 +53,9 @@ namespace HotCommands
                         return MoveMemberUp.Instance.HandleCommand(textView,GetShellCommandDispatcher(), editorOperations);
                     case Constants.MoveMemberDownCmdId:
                         return MoveMemberDown.Instance.HandleCommand(textView,GetShellCommandDispatcher(), editorOperations);
-                    case Constants.cmdidMoveCursorPrevMember:
+                    case Constants.GoToPreviousMemberCmdId:
                         return MoveCursorToAdjacentMember.MoveToPreviousMember(textView, editorOperations);
-                    case Constants.cmdidMoveCursorNextMember:
+                    case Constants.GoToNextMemberCmdId:
                         return MoveCursorToAdjacentMember.MoveToNextMember(textView, editorOperations);
                 }
             }
@@ -82,8 +82,8 @@ namespace HotCommands
                     case Constants.DuplicateSelectionReverseCmdId:
                     case Constants.MoveMemberUpCmdId:
                     case Constants.MoveMemberDownCmdId:
-                    case Constants.cmdidMoveCursorPrevMember:
-                    case Constants.cmdidMoveCursorNextMember:
+                    case Constants.GoToPreviousMemberCmdId:
+                    case Constants.GoToNextMemberCmdId:
                         prgCmds[0].cmdf |= (uint)OLECMDF.OLECMDF_ENABLED;
                         return VSConstants.S_OK;
                 }

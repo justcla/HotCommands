@@ -60,14 +60,12 @@
           If you do not want an image next to your command, remove the Icon node /> -->
 
       <Button guid="guidHotCommandsPackageCmdSet" id="cmdidToggleComment" priority="0x0000" type="Button">
-        <Icon guid="guidImages1" id="bmpPicX" />
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
-          <ButtonText>Toggle &amp;Comment</ButtonText>
+          <ButtonText>Toggle Comment</ButtonText>
           <MenuText>Toggle &amp;Comment</MenuText>
           <ToolTipText>Comment or Uncomment the selected lines.</ToolTipText>
-          <CommandName>ToggleComment</CommandName>
         </Strings>
       </Button>
 
@@ -76,9 +74,8 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
           <ButtonText>Duplicate Selection</ButtonText>
-          <MenuText>Duplicate Selection</MenuText>
+          <MenuText>&amp;Duplicate Selection</MenuText>
           <ToolTipText>Duplicates the selected lines.</ToolTipText>
-          <CommandName>DuplicateSelection</CommandName>
         </Strings>
       </Button>
       <Button guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelectionReverse" priority="0x0000" type="Button">
@@ -86,67 +83,59 @@
         <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
           <ButtonText>Duplicate Selection Reversed</ButtonText>
-          <MenuText>Duplicate Selection Reversed</MenuText>
+          <MenuText>Duplicate Selection &amp;Reversed</MenuText>
           <ToolTipText>Duplicates the selected lines in reverse.</ToolTipText>
-          <CommandName>DuplicateSelectionReversed</CommandName>
         </Strings>
       </Button>
 
       <Button guid="guidHotCommandsPackageCmdSet" id="cmdidExpandSelection" priority="0x0200" type="Button">
-        <Icon guid="guidImages1" id="bmpPicSearch" />
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
-          <ButtonText>Expand Selection</ButtonText>
+          <ButtonText>Increase Selection</ButtonText>
+          <MenuText>&amp;Increase Selection</MenuText>
         </Strings>
       </Button>
-
       <Button guid="guidHotCommandsPackageCmdSet" id="cmdidShrinkSelection" priority="0x0200" type="Button">
-        <Icon guid="guidImages1" id="bmpPicSearch" />
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
-          <ButtonText>Shrink Selection</ButtonText>
+          <ButtonText>Decrease Selection</ButtonText>
+          <MenuText>&amp;Decrease Selection</MenuText>
         </Strings>
       </Button>
 
       <Button guid="guidHotCommandsPackageCmdSet" id="cmdidFormatCode" priority="0x0200" type="Button">
-        <Icon guid="guidImages1" id="bmpPicSearch" />
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
-          <ButtonText>Format Code</ButtonText>
+          <ButtonText>&amp;Format Code</ButtonText>
         </Strings>
       </Button>
 
       <Button guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberUp" priority="0x0200" type="Button">
-        <Icon guid="guidImages1" id="bmpPicSearch" />
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
-          <ButtonText>MoveMemberUp</ButtonText>
+          <ButtonText>Move Member Up</ButtonText>
         </Strings>
       </Button>
-
       <Button guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberDown" priority="0x0200" type="Button">
-        <Icon guid="guidImages1" id="bmpPicSearch" />
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
-          <ButtonText>MoveMemberDown</ButtonText>
+          <ButtonText>Move Member Down</ButtonText>
         </Strings>
       </Button>
 
-      <Button guid="guidHotCommandsPackageCmdSet" id="cmdidMoveCursorPrevMember" priority="0x0200" type="Button">
+      <Button guid="guidHotCommandsPackageCmdSet" id="cmdidGoToPreviousMember" priority="0x0200" type="Button">
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
-        <ButtonText>Go To Previous Member</ButtonText>
+          <ButtonText>Go To Previous Member</ButtonText>
         </Strings>
       </Button>
-      
-
-      <Button guid="guidHotCommandsPackageCmdSet" id="cmdidMoveCursorNextMember" priority="0x0200" type="Button">
+      <Button guid="guidHotCommandsPackageCmdSet" id="cmdidGoToNextMember" priority="0x0200" type="Button">
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
@@ -180,23 +169,23 @@
     <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidFormatCode" priority="0x2795">
       <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
     </CommandPlacement>
-    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelection" priority="0x7515">
+    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelection" priority="0x7516">
       <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
     </CommandPlacement>
-    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelectionReverse" priority="0x7515">
+    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelectionReverse" priority="0x7517">
       <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
     </CommandPlacement>
-    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberUp" priority="0x7530">
+    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberUp" priority="0x3005">
       <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
     </CommandPlacement>
-    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberDown" priority="0x7535">
+    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberDown" priority="0x3010">
       <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
     </CommandPlacement>    
-    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidMoveCursorPrevMember" priority="0x7536">
-      <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
+    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidGoToPreviousMember" priority="0x8180">
+      <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_CMDS"/>
     </CommandPlacement>
-    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidMoveCursorNextMember" priority="0x7537">
-      <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
+    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidGoToNextMember" priority="0x8190">
+      <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_CMDS"/>
     </CommandPlacement>
   </CommandPlacements>
 
@@ -209,8 +198,8 @@
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelectionReverse" context="GUID_TextEditorFactory"/>
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberUp" context="GUID_TextEditorFactory"/>
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberDown" context="GUID_TextEditorFactory"/>
-    <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidMoveCursorPrevMember" context="GUID_TextEditorFactory"/>
-    <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidMoveCursorNextMember" context="GUID_TextEditorFactory"/>
+    <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidGoToPreviousMember" context="GUID_TextEditorFactory"/>
+    <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidGoToNextMember" context="GUID_TextEditorFactory"/>
   </VisibilityConstraints>
   
   <KeyBindings>
@@ -220,10 +209,10 @@
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidFormatCode" editor="GUID_TextEditorFactory" mod1="Control Alt" key1="F"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelection" editor="GUID_TextEditorFactory" mod1="Control" key1="D"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelectionReverse" editor="GUID_TextEditorFactory" mod1="Control Shift" key1="D"/>
-    <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberUp" editor="GUID_TextEditorFactory" mod1="Control" key1="VK_NUMPAD8" />
-    <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberDown" editor="GUID_TextEditorFactory" mod1="Control" key1="VK_NUMPAD2"/>
-    <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidMoveCursorPrevMember" editor="GUID_TextEditorFactory" mod1="Control Alt" key1="VK_UP"/>
-    <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidMoveCursorNextMember" editor="GUID_TextEditorFactory" mod1="Control Alt" key1="VK_DOWN"/>
+    <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidGoToPreviousMember" editor="GUID_TextEditorFactory" mod1="Control Alt" key1="VK_UP"/>
+    <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidGoToNextMember" editor="GUID_TextEditorFactory" mod1="Control Alt" key1="VK_DOWN"/>
+    <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberUp" editor="GUID_TextEditorFactory"  mod1="Control Shift Alt" key1="VK_UP"/>
+    <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberDown" editor="GUID_TextEditorFactory" mod1="Control Shift Alt" key1="VK_DOWN"/>
   </KeyBindings>
 
   <Symbols>
@@ -240,8 +229,8 @@
       <IDSymbol name="cmdidFormatCode" value="0x1027" />
       <IDSymbol name="cmdidMoveMemberUp" value="0x1031" />
       <IDSymbol name="cmdidMoveMemberDown" value="0x1032" />
-      <IDSymbol name="cmdidMoveCursorPrevMember" value="0x1033" />
-      <IDSymbol name="cmdidMoveCursorNextMember" value="0x1034" />
+      <IDSymbol name="cmdidGoToPreviousMember" value="0x1033" />
+      <IDSymbol name="cmdidGoToNextMember" value="0x1034" />
     </GuidSymbol>
 
     <GuidSymbol name="guidImages1" value="{fcb5d1b2-db20-41ee-993f-9d92d1441d65}">
