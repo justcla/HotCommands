@@ -4,21 +4,13 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
-using System.Globalization;
 using Microsoft.VisualStudio.Shell;
-using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.CodeAnalysis.Text;
 using System.Linq;
-using System.Collections;
-using System.Windows;
-using System.ComponentModel.Composition;
 using Microsoft.CodeAnalysis;
 using Microsoft.VisualStudio.Text;
-using Microsoft.VisualStudio.Text.Classification;
-using Microsoft.VisualStudio.Utilities;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 
@@ -29,6 +21,23 @@ namespace HotCommands
     /// </summary>
     internal sealed class ExpandSelection : Command<ExpandSelection>
     {
+        public new static void Initialize(Package package)
+        {
+            Command<ExpandSelection>.Initialize(package);
+            ForceKeyboardBindings(package);
+        }
+
+        private static void ForceKeyboardBindings(Package package)
+        {
+            KeyBindingUtil.Initialize(package);
+            // We only want to force this keyboard binding if it is currently set to the default VS shortcut
+            // ie. Ctrl+W bound to Edit.SelectCurrentWord
+            if (KeyBindingUtil.BindingExists("Edit.SelectCurrentWord", "Text Editor::Ctrl+W"))
+            {
+                KeyBindingUtil.BindShortcut("Edit.IncreaseSelection", "Text Editor::Ctrl+W");
+            }
+        }
+
         public int HandleCommand(IWpfTextView textView, bool expand)
         {
             if (expand)

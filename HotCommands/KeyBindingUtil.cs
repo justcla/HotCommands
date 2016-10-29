@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.VisualStudio.Shell;
 using EnvDTE;
 
@@ -34,6 +35,35 @@ namespace HotCommands
             {
                 return package;
             }
+        }
+
+        /// <summary>
+        /// Adds (appends) a binding for the given shortcut
+        /// </summary>
+        /// <param name="commandName"></param>
+        /// <param name="shortcutDef"></param>
+        public static void BindShortcut(string commandName, string shortcutDef)
+        {
+            // Make sure we're not using the Default keyboard mapping scheme
+            DTE dte = (DTE)((IServiceProvider)package).GetService(typeof(DTE));
+            EnvDTE.Commands cmds = dte.Commands;
+            Command cmd = cmds.Item(commandName);
+            object[] newBindings = AppendKeyboardBinding(cmd, shortcutDef);
+            cmd.Bindings = newBindings;
+        }
+
+        internal static bool BindingExists(string commandName, string shortcutDef)
+        {
+            DTE dte = (DTE)((IServiceProvider)package).GetService(typeof(DTE));
+            EnvDTE.Commands cmds = dte.Commands;
+            // Find command
+            Command cmd = cmds.Item(commandName);
+            if (cmd == null) return false;
+            // Check if the binding is attached to it
+            object[] existingBindings = (object[])cmd.Bindings;
+            if (existingBindings == null) return false;
+            // Check if the keyboard binding is already there
+            return existingBindings.Contains(shortcutDef);
         }
 
         /// <summary>

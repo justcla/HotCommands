@@ -4,7 +4,6 @@
 // </copyright>
 //------------------------------------------------------------------------------
 
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using HotCommands.Commands;
@@ -68,7 +67,7 @@ namespace HotCommands
             FormatCode.Initialize(this);
             DuplicateSelection.Initialize(this);
             MoveMemberUp.Initialize(this);
-            MoveMemberDown.Initialize(this);            
+            MoveMemberDown.Initialize(this);
         }
 
         #endregion
