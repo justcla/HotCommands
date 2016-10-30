@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeRefactorings;
 
-namespace ExtractClass.Actions
+namespace HotCommands
 {
     internal sealed class ChangeModifierContext : IModifierActionContext
     {

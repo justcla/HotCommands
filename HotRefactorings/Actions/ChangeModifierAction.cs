@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis.CodeActions;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace ExtractClass.Actions
+namespace HotCommands
 {
     internal sealed class ChangeModifierAction : CodeAction
     {

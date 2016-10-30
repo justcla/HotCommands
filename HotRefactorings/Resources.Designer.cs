@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ExtractClass {
+namespace HotCommands {
     using System;
     
     

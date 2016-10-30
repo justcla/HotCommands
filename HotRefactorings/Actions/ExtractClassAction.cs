@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
-namespace ExtractClass.Actions
+namespace HotCommands
 {
     internal sealed class ExtractClassAction : CodeAction
     {

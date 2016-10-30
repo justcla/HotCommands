@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ExtractClass
+namespace HotCommands
 {
     internal static class CSharpExtensions
     {

@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis;
 using System.Threading;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace ExtractClass.Actions
+namespace HotCommands
 {
     internal sealed class RenameFileAction : CodeAction
     {

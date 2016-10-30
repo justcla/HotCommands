@@ -1,6 +1,6 @@
 ﻿using Microsoft.CodeAnalysis.CodeRefactorings;
 
-namespace ExtractClass.Actions
+namespace HotCommands
 {
     class ExtractClassContext : IClassActionContext
     {

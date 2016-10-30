@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace ExtractClass
+namespace HotCommands
 {
     internal static class RoslynExtensions
     {

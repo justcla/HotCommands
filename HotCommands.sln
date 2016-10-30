@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotCommands", "HotCommands\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotCommandsVSIX", "HotCommandsVSIX\HotCommandsVSIX.csproj", "{C64AFF59-3C7C-4913-A959-B1AF2EFCCA15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractClass", "ExtractClass\ExtractClass.csproj", "{D6B5BF46-C337-47A6-BB5D-E2A847504E88}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotRefactorings", "HotRefactorings\HotRefactorings.csproj", "{D6B5BF46-C337-47A6-BB5D-E2A847504E88}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Commands", "Commands", "{22830916-BB67-493B-9E3F-9B97FC8EA4E0}"
 EndProject

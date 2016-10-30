@@ -1,6 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 
-namespace ExtractClass.Actions
+namespace HotCommands
 {
     internal interface IModifierActionContext : IActionContext
     {

@@ -1,4 +1,4 @@
-﻿namespace ExtractClass.Actions
+﻿namespace HotCommands
 {
     interface IClassActionContext : IActionContext
     {

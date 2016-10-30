@@ -51,9 +51,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ExtractClass\ExtractClass.csproj">
+    <ProjectReference Include="..\HotRefactorings\HotRefactorings.csproj">
       <Project>{d6b5bf46-c337-47a6-bb5d-e2a847504e88}</Project>
-      <Name>ExtractClass</Name>
+      <Name>HotRefactorings</Name>
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>

@@ -10,7 +10,7 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using static Microsoft.CodeAnalysis.CSharp.SyntaxFactory;
 
-namespace ExtractClass.RefactoringProviders
+namespace HotCommands
 {
     [ExportCodeRefactoringProvider(LanguageNames.CSharp, Name = nameof(InitializeFieldFromConstructor)), Shared]
     internal class InitializeFieldFromConstructor : CodeRefactoringProvider
