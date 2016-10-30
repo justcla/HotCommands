@@ -31,95 +31,107 @@ namespace ExtractClass.RefactoringProviders
             Document document = context.Document;
             Project project = document.Project;
 
-
-            string traditionalNamespaceDeclararion = document.Folders.Any() ? $"{document.Project.AssemblyName}.{document.Folders.Join(".")}" :
-                                                                 $"{document.Project.AssemblyName}{document.Folders.Join(".")}";
-
             string nodeNamespace = node.Namespace();
 
-            string[] folders = document.Folders.ToArray();
+            // find any existing document within the folder with the name same as namespace name
+            bool documentExistsInNamespaceDirectory = DocumentExistsInNamespaceDirectory(project, node, document);
+
+            if (documentExistsInNamespaceDirectory)
+            {
+                if (classCount > 1)
+                {
+                    // Already existing file. (Probably this one!) Offer to extract to new file.
+                    context.RegisterRefactoring(new ExtractClassAction(new ExtractClassContext
+                    {
+                        Title = $"Extract {node.Identifier.Text} to new file",
+                        Folders = document.Folders.ToArray(),
+                        Context = context
+                    }));
+                }
+            }
+            else //if (anyExistingDocumentWithinNamespaceDirectory == null)
+            {
+                if (classCount > 1)
+                {
+                    //extract class in the current document folder
+                    context.RegisterRefactoring(new ExtractClassAction(new ExtractClassContext
+                    {
+                        Title = $"Extract {node.Identifier.Text} to {node.Identifier.Text}.cs",
+                        Folders = document.Folders.ToArray(),
+                        Context = context
+                    }));
+                }
+                else if (classCount == 1)
+                {
+                    //rename file
+                    context.RegisterRefactoring(new RenameFileAction(new ExtractClassContext
+                    {
+                        Title = $"Rename file to {node.Identifier.Text}.cs",
+                        Context = context
+                    }));
+                }
+            }
+
+            string traditionalNamespaceDeclararion = document.Folders.Any() ? $"{document.Project.AssemblyName}.{document.Folders.Join(".")}" :
+                $"{document.Project.AssemblyName}{document.Folders.Join(".")}";
 
             // make nested folders
-            var nested = nodeNamespace.StartsWith($"{project.AssemblyName}", StringComparison.Ordinal) && nodeNamespace.NotEquals(traditionalNamespaceDeclararion);
-            if (nested)
+            bool isNested = nodeNamespace.StartsWith($"{project.AssemblyName}", StringComparison.Ordinal)
+                            && nodeNamespace.NotEquals(traditionalNamespaceDeclararion);
+            if (isNested)
             {
-                folders = nodeNamespace
-                    .Substring(project.AssemblyName.Length)
-                    .Split('.')
-                    .Where(s => !string.IsNullOrEmpty(s))
-                    .ToArray();
-            }
+                var folders = nodeNamespace.Substring(project.AssemblyName.Length).Split('.').Where(s => !string.IsNullOrEmpty(s)).ToArray();
 
-            // find any existing document within the folder with the name same as namespace name
-            Document anyExistingDocumentWithinNamespaceDirectory = project.FindDocument($"{node.Identifier.Text}.cs", document.Folders.ToArray());
+                // find any existing document within the folder structures
+                bool documentExistsInProject = DocumentExistsInProject(project, node, folders);
 
-            if (anyExistingDocumentWithinNamespaceDirectory != null && classCount > 1)
-            {
-                // already existing file
-                context.RegisterRefactoring(new ExtractClassAction(new ExtractClassContext
+                if (documentExistsInProject)
                 {
-                    Title = $"A file with the name {node.Identifier.Text}.cs already exists. A new file will be created.",
-                    Folders = document.Folders.ToArray(),
-                    Context = context
-                }));
-            }
-
-            if (anyExistingDocumentWithinNamespaceDirectory == null && classCount > 1)
-            {
-                //extract class in the current document folder
-                context.RegisterRefactoring(new ExtractClassAction(new ExtractClassContext
+                    if (classCount > 1)
+                    {
+                        // already existing file
+                        context.RegisterRefactoring(new ExtractClassAction(new ExtractClassContext
+                        {
+                            Title = $"Extract {node.Identifier.Text} to new file under namespace folder",
+                            Folders = folders,
+                            Context = context
+                        }));
+                    }
+                }
+                else // if (anyExistingDocument == null)
                 {
-                    Title = $"Extract {node.Identifier.Text} to {node.Identifier.Text}.cs",
-                    Folders = document.Folders.ToArray(),
-                    Context = context
-                }));
+                    if (classCount > 1)
+                    {
+                        //extract class in a namespace based folder
+                        context.RegisterRefactoring(new ExtractClassAction(new ExtractClassContext
+                        {
+                            Context = context,
+                            Folders = folders,
+                            Title = $"Extract {node.Identifier.Text} to {node.Identifier.Text}.cs under namespace folder"
+                        }));
+                    }
+                    else if (classCount == 1)
+                    {
+                        //move file under namespace folder & rename if necessary
+                        context.RegisterRefactoring(new MoveFileToFolderAction(new ExtractClassContext
+                        {
+                            Context = context,
+                            Folders = folders,
+                            Title = $"Move {node.Identifier.Text}.cs under namespace folder"
+                        }));
+                    }
+                }
             }
+        }
 
-            if (anyExistingDocumentWithinNamespaceDirectory == null && classCount == 1)
-            {
-                //rename file
-                context.RegisterRefactoring(new RenameFileAction(new ExtractClassContext
-                {
-                    Title = $"Rename file to {node.Identifier.Text}.cs",
-                    Context = context
-                }));
-            }
+        private static bool DocumentExistsInNamespaceDirectory(Project project, BaseTypeDeclarationSyntax node, Document document)
+        {
+            return project.FindDocument($"{node.Identifier.Text}.cs", document.Folders.ToArray()) != null;
+        }
 
-            // find any existing document within the folder structures
-            Document anyExistingDocument = project.FindDocument($"{node.Identifier.Text}.cs", folders);
-
-            if (nested && anyExistingDocument != null && classCount > 1)
-            {
-                // already existing file
-                context.RegisterRefactoring(new ExtractClassAction(new ExtractClassContext
-                {
-                    Title = $"A file with the name {node.Identifier.Text}.cs already exists. A new file will be created.",
-                    Folders = folders,
-                    Context = context
-                }));
-            }
-
-            if (nested && anyExistingDocument == null && classCount > 1)
-            {
-                //extract class in a namespace based folder
-                context.RegisterRefactoring(new ExtractClassAction(new ExtractClassContext
-                {
-                    Context = context,
-                    Folders = folders,
-                    Title = $"Extract {node.Identifier.Text} to {node.Identifier.Text}.cs with directory structure"
-                }));
-            }
-
-            if (nested && anyExistingDocument == null && classCount == 1)
-            {
-                //move file under namespace folder & rename if necessary
-                context.RegisterRefactoring(new MoveFileToFolderAction(new ExtractClassContext
-                {
-                    Context = context,
-                    Folders = folders,
-                    Title = $"Move {node.Identifier.Text}.cs under namespace folder"
-                }));
-            }
+        private static bool DocumentExistsInProject(Project project, BaseTypeDeclarationSyntax node, string[] folders)
+        {
+            return project.FindDocument($"{node.Identifier.Text}.cs", folders) != null;
         }
     }
 }

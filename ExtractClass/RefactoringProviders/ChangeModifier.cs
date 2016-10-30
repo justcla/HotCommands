@@ -30,7 +30,7 @@ namespace ExtractClass.RefactoringProviders
 
             var modifierCount = node.Modifiers.Count();
 
-            if (!node.Modifiers.Any(SyntaxKind.PublicKeyword) || modifierCount > 1)
+            if (modifierCount > 1 || !node.Modifiers.Any(SyntaxKind.PublicKeyword))
             {
                 context.RegisterRefactoring(new ChangeModifierAction(new ChangeModifierContext
                 {
@@ -40,7 +40,7 @@ namespace ExtractClass.RefactoringProviders
                 }));
             }
 
-            if (!node.Modifiers.Any(SyntaxKind.ProtectedKeyword) || modifierCount > 1)
+            if (modifierCount > 1 || !node.Modifiers.Any(SyntaxKind.ProtectedKeyword))
             {
                 context.RegisterRefactoring(new ChangeModifierAction(new ChangeModifierContext
                 {
@@ -50,7 +50,7 @@ namespace ExtractClass.RefactoringProviders
                 }));
             }
 
-            if (!node.Modifiers.Any(SyntaxKind.InternalKeyword) || modifierCount > 1)       // Consider: modifierCount != 0
+            if (modifierCount > 1 || !node.Modifiers.Any(SyntaxKind.InternalKeyword))       // Consider: modifierCount != 0
             {
                 context.RegisterRefactoring(new ChangeModifierAction(new ChangeModifierContext
                 {
@@ -60,7 +60,7 @@ namespace ExtractClass.RefactoringProviders
                 }));
             }
 
-            if (!node.Modifiers.Any(SyntaxKind.PrivateKeyword) || modifierCount > 1)
+            if (modifierCount > 1 || !node.Modifiers.Any(SyntaxKind.PrivateKeyword))
             {
                 context.RegisterRefactoring(new ChangeModifierAction(new ChangeModifierContext
                 {
@@ -70,7 +70,7 @@ namespace ExtractClass.RefactoringProviders
                 }));
             }
 
-            if (!(node.Modifiers.Any(SyntaxKind.ProtectedKeyword) && node.Modifiers.Any(SyntaxKind.InternalKeyword)) || modifierCount > 2)
+            if (modifierCount > 2 || !(node.Modifiers.Any(SyntaxKind.ProtectedKeyword) && node.Modifiers.Any(SyntaxKind.InternalKeyword)))
             {
                 context.RegisterRefactoring(new ChangeModifierAction(new ChangeModifierContext
                 {
