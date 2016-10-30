@@ -18,8 +18,13 @@ namespace ExtractClass.RefactoringProviders
             SyntaxNode rootNode = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
             if (rootNode == null) return;
 
+            // Check if the selected token is at the start of a class
             BaseTypeDeclarationSyntax node = rootNode.FindNode(context.Span) as BaseTypeDeclarationSyntax;
-            if (node == null || node.Modifiers.Any(SyntaxKind.PrivateKeyword) || node.IsNested()) return;
+            if (node == null) return;
+            // Don't apply the refactoring if the class is nested
+            if (node.IsNested()) return;
+            // Don't apply the refactoring if it's a Private class
+            if (node.Modifiers.Any(SyntaxKind.PrivateKeyword)) return;
 
             int classCount = rootNode.DescendantNodes().OfType<BaseTypeDeclarationSyntax>().Count();
 

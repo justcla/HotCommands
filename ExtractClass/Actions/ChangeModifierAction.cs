@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CodeActions;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace ExtractClass.Actions
@@ -30,20 +31,29 @@ namespace ExtractClass.Actions
 
             SyntaxNode rootNode = await document.GetSyntaxRootAsync(_context.Context.CancellationToken).ConfigureAwait(false);
             BaseTypeDeclarationSyntax node = rootNode.FindNode(_context.Context.Span) as BaseTypeDeclarationSyntax;
-
-            ClassDeclarationSyntax nodeClassConceiler = node.AncestorsAndSelf().OfType<ClassDeclarationSyntax>().Single();
+            if (node == null) return document;
 
             // if the context is not in a class, return the Document
+            ClassDeclarationSyntax nodeClassConceiler = node.AncestorsAndSelf().OfType<ClassDeclarationSyntax>().Single();
             if (nodeClassConceiler == null) return document;
 
-            SyntaxToken oldToken = node.Modifiers.First(m => m.GetType().Equals(_context.OldModifier.GetType()));
-
-            // if no 'Private' keyword return the same old Document
-            if (oldToken == null) return document;
-
             // get the syntax root & replace the tokens
-            SyntaxNode newRoot = rootNode.ReplaceToken(oldToken, new[] { _context.NewModifier });
-            return document.WithSyntaxRoot(newRoot);
+            rootNode = rootNode.ReplaceToken(node.Modifiers.First(), _context.NewModifiers);
+            node = GetClassTypeNode(rootNode);
+
+            // Cleanup additional modifiers (ie. "internal" left behind)
+            while (GetClassTypeNode(rootNode).Modifiers.Count(m => !m.IsKind(SyntaxKind.None)) > _context.NewModifiers.Length)
+            {
+                rootNode = rootNode.ReplaceToken(node.Modifiers.Last(), SyntaxFactory.Token(SyntaxKind.None));
+                node = GetClassTypeNode(rootNode);
+            }
+
+            return document.WithSyntaxRoot(rootNode);
+        }
+
+        private BaseTypeDeclarationSyntax GetClassTypeNode(SyntaxNode rootNode)
+        {
+            return rootNode.FindNode(_context.Context.Span) as BaseTypeDeclarationSyntax;
         }
     }
 }

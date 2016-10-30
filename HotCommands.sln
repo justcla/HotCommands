@@ -1,15 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25414.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotCommands", "HotCommands\HotCommands.csproj", "{F0DDF909-9D14-44EC-8F0C-3D8858865CF0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotCommandsVSIX", "HotCommandsVSIX\HotCommandsVSIX.csproj", "{C64AFF59-3C7C-4913-A959-B1AF2EFCCA15}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExtractClass", "ExtractClass\ExtractClass.csproj", "{D6B5BF46-C337-47A6-BB5D-E2A847504E88}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InitializeFieldFromConstructor", "InitializeFieldFromConstructor\InitializeFieldFromConstructor\InitializeFieldFromConstructor.csproj", "{4C5FC135-5989-49A5-BC59-06EA970BCB12}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Commands", "Commands", "{22830916-BB67-493B-9E3F-9B97FC8EA4E0}"
 EndProject
@@ -31,10 +29,6 @@ Global
 		{D6B5BF46-C337-47A6-BB5D-E2A847504E88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D6B5BF46-C337-47A6-BB5D-E2A847504E88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D6B5BF46-C337-47A6-BB5D-E2A847504E88}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4C5FC135-5989-49A5-BC59-06EA970BCB12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4C5FC135-5989-49A5-BC59-06EA970BCB12}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4C5FC135-5989-49A5-BC59-06EA970BCB12}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4C5FC135-5989-49A5-BC59-06EA970BCB12}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,6 +36,5 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{F0DDF909-9D14-44EC-8F0C-3D8858865CF0} = {22830916-BB67-493B-9E3F-9B97FC8EA4E0}
 		{D6B5BF46-C337-47A6-BB5D-E2A847504E88} = {22830916-BB67-493B-9E3F-9B97FC8EA4E0}
-		{4C5FC135-5989-49A5-BC59-06EA970BCB12} = {22830916-BB67-493B-9E3F-9B97FC8EA4E0}
 	EndGlobalSection
 EndGlobal

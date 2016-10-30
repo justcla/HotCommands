@@ -13,7 +13,6 @@
   </Dependencies>
   <Assets>
     <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="ExtractClass" Path="|ExtractClass|" />
-    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="InitializeFieldFromConstructor" Path="|InitializeFieldFromConstructor|" />
     <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="HotCommands" Path="|HotCommands|" />
     <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="HotCommands" Path="|HotCommands;PkgdefProjectOutputGroup|" />
   </Assets>

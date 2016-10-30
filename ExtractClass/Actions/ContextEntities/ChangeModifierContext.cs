@@ -7,9 +7,7 @@ namespace ExtractClass.Actions
     {
         public CodeRefactoringContext Context { get; set; }
 
-        public SyntaxToken NewModifier { get; set; }
-
-        public SyntaxToken OldModifier { get; set; }
+        public SyntaxToken[] NewModifiers { get; set; }
 
         public string Title { get; set; }
     }
