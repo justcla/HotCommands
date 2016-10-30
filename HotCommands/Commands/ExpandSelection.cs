@@ -32,10 +32,10 @@ namespace HotCommands
             KeyBindingUtil.Initialize(package);
             // We only want to force this keyboard binding if it is currently set to the default VS shortcut
             // ie. Ctrl+W bound to Edit.SelectCurrentWord
-            if (KeyBindingUtil.BindingExists("Edit.SelectCurrentWord", "Text Editor::Ctrl+W"))
-            {
+            //if (KeyBindingUtil.BindingExists("Edit.SelectCurrentWord", "Text Editor::Ctrl+W"))
+            //{
                 KeyBindingUtil.BindShortcut("Edit.IncreaseSelection", "Text Editor::Ctrl+W");
-            }
+            //}
         }
 
         public int HandleCommand(IWpfTextView textView, bool expand)
