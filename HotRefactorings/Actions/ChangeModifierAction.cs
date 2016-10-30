@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.CodeAnalysis;
@@ -30,30 +31,48 @@ namespace HotCommands
             Document document = _context.Context.Document;
 
             SyntaxNode rootNode = await document.GetSyntaxRootAsync(_context.Context.CancellationToken).ConfigureAwait(false);
-            BaseTypeDeclarationSyntax node = rootNode.FindNode(_context.Context.Span) as BaseTypeDeclarationSyntax;
+            BaseTypeDeclarationSyntax node = GetClassTypeNode(rootNode);
             if (node == null) return document;
 
             // if the context is not in a class, return the Document
             ClassDeclarationSyntax nodeClassConceiler = node.AncestorsAndSelf().OfType<ClassDeclarationSyntax>().Single();
             if (nodeClassConceiler == null) return document;
 
-            // get the syntax root & replace the tokens
-            rootNode = rootNode.ReplaceToken(node.Modifiers.First(), _context.NewModifiers);
-            node = GetClassTypeNode(rootNode);
-
-            // Cleanup additional modifiers (ie. "internal" left behind)
-            while (GetClassTypeNode(rootNode).Modifiers.Count(m => !m.IsKind(SyntaxKind.None)) > _context.NewModifiers.Length)
+            // First, remove all but the first MainModifier
+            while (HasMoreThanOneMainModifier(node))
             {
-                rootNode = rootNode.ReplaceToken(node.Modifiers.Last(), SyntaxFactory.Token(SyntaxKind.None));
+                // Remove the last MainModifier
+                rootNode = rootNode.ReplaceToken(GetLastMainModifier(node), SyntaxFactory.Token(SyntaxKind.None));
                 node = GetClassTypeNode(rootNode);
             }
 
+            // Second, replace the MainModifier with the NewModifiers
+            rootNode = rootNode.ReplaceToken(node.Modifiers.First(), _context.NewModifiers);
+
+            // Cleanup additional modifiers (ie. "internal" left behind)
             return document.WithSyntaxRoot(rootNode);
         }
 
         private BaseTypeDeclarationSyntax GetClassTypeNode(SyntaxNode rootNode)
         {
             return rootNode.FindNode(_context.Context.Span) as BaseTypeDeclarationSyntax;
+        }
+
+        private bool HasMoreThanOneMainModifier(BaseTypeDeclarationSyntax node)
+        {
+            var mainModifierCount = node.Modifiers.Count(m => m.IsKind(SyntaxKind.PublicKeyword) ||
+                                                  m.IsKind(SyntaxKind.ProtectedKeyword) ||
+                                                  m.IsKind(SyntaxKind.InternalKeyword) ||
+                                                  m.IsKind(SyntaxKind.PrivateKeyword));
+            return mainModifierCount > 1;
+        }
+
+        private static SyntaxToken GetLastMainModifier(BaseTypeDeclarationSyntax node)
+        {
+            return node.Modifiers.Last(m => m.IsKind(SyntaxKind.PublicKeyword) ||
+                                            m.IsKind(SyntaxKind.ProtectedKeyword) ||
+                                            m.IsKind(SyntaxKind.InternalKeyword) ||
+                                            m.IsKind(SyntaxKind.PrivateKeyword));
         }
     }
 }

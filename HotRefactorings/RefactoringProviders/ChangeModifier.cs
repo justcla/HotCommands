@@ -24,59 +24,76 @@ namespace HotCommands
             if (node.IsNested()) return;
 
             // Activate if modifier is Public, Private, Protected or Internal
-            if (!node.Modifiers.Any()) return;
-            var mainModifierCount = node.Modifiers.Count(m => m.IsKind(SyntaxKind.PublicKeyword))
-                + node.Modifiers.Count(m => m.IsKind(SyntaxKind.ProtectedKeyword))
-                + node.Modifiers.Count(m => m.IsKind(SyntaxKind.InternalKeyword))
-                + node.Modifiers.Count(m => m.IsKind(SyntaxKind.PrivateKeyword));
+            var mainModifierCount = node.Modifiers.Count(m => m.IsKind(SyntaxKind.PublicKeyword) ||
+                                                              m.IsKind(SyntaxKind.ProtectedKeyword) ||
+                                                              m.IsKind(SyntaxKind.InternalKeyword) ||
+                                                              m.IsKind(SyntaxKind.PrivateKeyword));
+            // Don't offer this refactoring if there are no modifiers (only because I don't know how to add new modifiers without "ReplaceToken")
             if (mainModifierCount == 0) return;
 
-            if (!node.Modifiers.Any(SyntaxKind.PublicKeyword))
+            var hasPublicKeyword = node.Modifiers.Any(SyntaxKind.PublicKeyword);
+            var hasProtectedKeyword = node.Modifiers.Any(SyntaxKind.ProtectedKeyword);
+            var hasInternalKeyword = node.Modifiers.Any(SyntaxKind.InternalKeyword);
+            var hasPrivateKeyword = node.Modifiers.Any(SyntaxKind.PrivateKeyword);
+            var hasProtectedInternalKeywords = hasProtectedKeyword && hasInternalKeyword;
+
+            var hasRedundantModifiers = (hasProtectedInternalKeywords && mainModifierCount > 2) ||
+                                        (!hasProtectedInternalKeywords && mainModifierCount > 1);
+
+            if (mainModifierCount > 1 || !hasPublicKeyword)
             {
                 context.RegisterRefactoring(new ChangeModifierAction(new ChangeModifierContext
                 {
                     Context = context,
-                    Title = "To Public",
+                    Title = "To Public" + (hasRedundantModifiers ? " (Remove redundant modifiers)" : ""),
                     NewModifiers = new[] {SyntaxFactory.Token(SyntaxKind.PublicKeyword)}
                 }));
             }
 
-            if (!node.Modifiers.Any(SyntaxKind.ProtectedKeyword))
+            if (mainModifierCount > 1 || !hasProtectedKeyword || hasInternalKeyword)
             {
+                var title = "To Protected";
+                if (hasRedundantModifiers) title += " (Remove redundant modifiers)";
+                else if (hasProtectedInternalKeywords) title += " (only)";
+
                 context.RegisterRefactoring(new ChangeModifierAction(new ChangeModifierContext
                 {
                     Context = context,
-                    Title = "To Protected",
+                    Title = title,
                     NewModifiers = new[] { SyntaxFactory.Token(SyntaxKind.ProtectedKeyword) }
                 }));
             }
 
-            if (!node.Modifiers.Any(SyntaxKind.InternalKeyword))       // Consider: modifierCount != 0
+            if (mainModifierCount > 1 || !hasInternalKeyword || hasProtectedKeyword)
             {
+                var title = "To Internal";
+                if (hasRedundantModifiers) title += " (Remove redundant modifiers)";
+                else if (hasProtectedInternalKeywords) title += " (only)";
+
                 context.RegisterRefactoring(new ChangeModifierAction(new ChangeModifierContext
                 {
                     Context = context,
-                    Title = "To Internal",
+                    Title = title,
                     NewModifiers = new[] {SyntaxFactory.Token(SyntaxKind.InternalKeyword)}
                 }));
             }
 
-            if (!node.Modifiers.Any(SyntaxKind.PrivateKeyword))
+            if (mainModifierCount > 1 || !hasPrivateKeyword)
             {
                 context.RegisterRefactoring(new ChangeModifierAction(new ChangeModifierContext
                 {
                     Context = context,
-                    Title = "To Private",
+                    Title = "To Private" + (hasRedundantModifiers ? " (Remove redundant modifiers)" : ""),
                     NewModifiers = new[] {SyntaxFactory.Token(SyntaxKind.PrivateKeyword)}
                 }));
             }
 
-            if (!(node.Modifiers.Any(SyntaxKind.ProtectedKeyword) && node.Modifiers.Any(SyntaxKind.InternalKeyword)))
+            if (mainModifierCount > 2 || !hasProtectedInternalKeywords)
             {
                 context.RegisterRefactoring(new ChangeModifierAction(new ChangeModifierContext
                 {
                     Context = context,
-                    Title = "To Protected Internal",
+                    Title = "To Protected Internal" + (hasRedundantModifiers ? " (Remove redundant modifiers)" : ""),
                     NewModifiers = new[] {SyntaxFactory.Token(SyntaxKind.ProtectedKeyword), SyntaxFactory.Token(SyntaxKind.InternalKeyword)}
                 }));
             }
