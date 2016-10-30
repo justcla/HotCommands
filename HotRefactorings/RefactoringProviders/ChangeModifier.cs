@@ -23,13 +23,15 @@ namespace HotCommands
             // Skip if nested class (Nested implementation needs work. Disabled for now.)
             if (node.IsNested()) return;
 
-            // Activate if modifier is Public, Private or Internal
-            if (!node.Modifiers.Any())
-                return;
+            // Activate if modifier is Public, Private, Protected or Internal
+            if (!node.Modifiers.Any()) return;
+            var mainModifierCount = node.Modifiers.Count(m => m.IsKind(SyntaxKind.PublicKeyword))
+                + node.Modifiers.Count(m => m.IsKind(SyntaxKind.ProtectedKeyword))
+                + node.Modifiers.Count(m => m.IsKind(SyntaxKind.InternalKeyword))
+                + node.Modifiers.Count(m => m.IsKind(SyntaxKind.PrivateKeyword));
+            if (mainModifierCount == 0) return;
 
-            var modifierCount = node.Modifiers.Count();
-
-            if (modifierCount > 1 || !node.Modifiers.Any(SyntaxKind.PublicKeyword))
+            if (!node.Modifiers.Any(SyntaxKind.PublicKeyword))
             {
                 context.RegisterRefactoring(new ChangeModifierAction(new ChangeModifierContext
                 {
@@ -39,7 +41,7 @@ namespace HotCommands
                 }));
             }
 
-            if (modifierCount > 1 || !node.Modifiers.Any(SyntaxKind.ProtectedKeyword))
+            if (!node.Modifiers.Any(SyntaxKind.ProtectedKeyword))
             {
                 context.RegisterRefactoring(new ChangeModifierAction(new ChangeModifierContext
                 {
@@ -49,7 +51,7 @@ namespace HotCommands
                 }));
             }
 
-            if (modifierCount > 1 || !node.Modifiers.Any(SyntaxKind.InternalKeyword))       // Consider: modifierCount != 0
+            if (!node.Modifiers.Any(SyntaxKind.InternalKeyword))       // Consider: modifierCount != 0
             {
                 context.RegisterRefactoring(new ChangeModifierAction(new ChangeModifierContext
                 {
@@ -59,7 +61,7 @@ namespace HotCommands
                 }));
             }
 
-            if (modifierCount > 1 || !node.Modifiers.Any(SyntaxKind.PrivateKeyword))
+            if (!node.Modifiers.Any(SyntaxKind.PrivateKeyword))
             {
                 context.RegisterRefactoring(new ChangeModifierAction(new ChangeModifierContext
                 {
@@ -69,7 +71,7 @@ namespace HotCommands
                 }));
             }
 
-            if (modifierCount > 2 || !(node.Modifiers.Any(SyntaxKind.ProtectedKeyword) && node.Modifiers.Any(SyntaxKind.InternalKeyword)))
+            if (!(node.Modifiers.Any(SyntaxKind.ProtectedKeyword) && node.Modifiers.Any(SyntaxKind.InternalKeyword)))
             {
                 context.RegisterRefactoring(new ChangeModifierAction(new ChangeModifierContext
                 {
