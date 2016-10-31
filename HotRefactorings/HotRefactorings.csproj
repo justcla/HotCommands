@@ -7,8 +7,8 @@
     <ProjectGuid>{D6B5BF46-C337-47A6-BB5D-E2A847504E88}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ExtractClass</RootNamespace>
-    <AssemblyName>ExtractClass</AssemblyName>
+    <RootNamespace>HotCommands</RootNamespace>
+    <AssemblyName>HotRefactorings</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
