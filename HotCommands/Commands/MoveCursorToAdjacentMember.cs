@@ -5,7 +5,6 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.VisualStudio.Text;
 using Microsoft.CodeAnalysis;
 using System.Linq;
-using System;
 using Microsoft.VisualStudio.Text.Operations;
 
 namespace HotCommands
