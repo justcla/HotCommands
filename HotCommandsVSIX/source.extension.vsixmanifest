@@ -16,6 +16,11 @@
     <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="HotCommands" Path="|HotCommands|" />
     <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="HotCommands" Path="|HotCommands;PkgdefProjectOutputGroup|" />
   </Assets>
+  <Installer>
+    <SetupDependencies>
+      <SetupDependency Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0.25826.2,16.0)" DisplayName="Visual Studio core editor" />
+    </SetupDependencies>
+  </Installer>
   <Prerequisites>
     <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0.25826.2,16.0)" DisplayName="Visual Studio core editor" />
   </Prerequisites>
