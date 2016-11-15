@@ -70,8 +70,6 @@ Project for creating new commands and shortcuts for Visual Studio.
 </tr>
 </tbody>
 </table>
-
-Notes:
-Existings OOB commands defined in: 
-VS\src\appid\cmddef\pkgui and 
-VS\src\appid\inc
+<br/>
+<img src="EditAdvancedMenu.png"/>
+<br/>
