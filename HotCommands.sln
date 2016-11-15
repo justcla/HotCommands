@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.25826.2
+VisualStudioVersion = 15.0.25907.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Commands", "Commands", "{22830916-BB67-493B-9E3F-9B97FC8EA4E0}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotCommands", "HotCommands\HotCommands.csproj", "{F0DDF909-9D14-44EC-8F0C-3D8858865CF0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotCommandsVSIX", "HotCommandsVSIX\HotCommandsVSIX.csproj", "{C64AFF59-3C7C-4913-A959-B1AF2EFCCA15}"
@@ -32,9 +30,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{F0DDF909-9D14-44EC-8F0C-3D8858865CF0} = {22830916-BB67-493B-9E3F-9B97FC8EA4E0}
-		{D6B5BF46-C337-47A6-BB5D-E2A847504E88} = {22830916-BB67-493B-9E3F-9B97FC8EA4E0}
 	EndGlobalSection
 EndGlobal
