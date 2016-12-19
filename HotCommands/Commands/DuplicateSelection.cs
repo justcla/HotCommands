@@ -35,24 +35,23 @@ namespace HotCommands.Commands
         public static int HandleCommand(IWpfTextView textView, IClassifier classifier, IOleCommandTarget commandTarget, IEditorOperations editorOperations, bool shiftPressed = false)
         {
             //Guid cmdGroup = VSConstants.VSStd2K;
-            var isSingleLine = false;
             var selectedText = editorOperations.SelectedText;
             ITrackingPoint trackingPoint = null;
             if (selectedText.Length == 0)
-            // if nothing is selected, we can consider the current line as a selection
             {
+                // if nothing is selected, we can consider the current line as a selection
                 var virtualBufferPosition = editorOperations.TextView.Caret.Position.VirtualBufferPosition;
                 trackingPoint = textView.TextSnapshot.CreateTrackingPoint(virtualBufferPosition.Position, PointTrackingMode.Negative);
+
+                // Select all the text on the current line
                 editorOperations.SelectLine(textView.Caret.ContainingTextViewLine, false);
-                isSingleLine = true;
-            }
-
-            if (isSingleLine)
-            {
                 var text = editorOperations.SelectedText;
-                editorOperations.ReplaceSelection(string.Concat(text, text));
-                editorOperations.MoveToPreviousCharacter(false);
 
+                // Move to start of next line, then insert the text.
+                editorOperations.MoveToStartOfLine(false);
+                editorOperations.InsertText(text);
+
+                // Return the cursor
                 textView.Caret.MoveTo(new VirtualSnapshotPoint(trackingPoint.GetPoint(textView.TextSnapshot)).TranslateTo(textView.TextSnapshot));
                 if (!shiftPressed) editorOperations.MoveLineDown(false);
             }
