@@ -49,9 +49,8 @@ namespace HotCommands.Commands
 
             if (isSingleLine)
             {
-                editorOperations.CopySelection();
-                editorOperations.MoveToNextCharacter(false);
-                editorOperations.Paste();
+                var text = editorOperations.SelectedText;
+                editorOperations.ReplaceSelection(string.Concat(text, text));
                 editorOperations.MoveToPreviousCharacter(false);
 
                 textView.Caret.MoveTo(new VirtualSnapshotPoint(trackingPoint.GetPoint(textView.TextSnapshot)).TranslateTo(textView.TextSnapshot));
