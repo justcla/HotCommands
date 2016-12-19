@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="e8175b11-0e09-42b5-9c3c-ba7bfb53a311" Version="1.1.2" Language="en-US" Publisher="Justin Clareburt" />
+    <Identity Id="e8175b11-0e09-42b5-9c3c-ba7bfb53a311" Version="1.1.3" Language="en-US" Publisher="Justin Clareburt" />
     <DisplayName>Hot Commands for Visual Studio</DisplayName>
     <Description xml:space="preserve">A collection of commands, analyzers, and refactorings for enhanced productivity in Visual Studio IDE</Description>
     <MoreInfo>https://marketplace.visualstudio.com/items?itemName=JustinClareburtMSFT.HotCommandsforVisualStudio</MoreInfo>
@@ -22,11 +22,6 @@
     <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="HotCommands" Path="|HotCommands|" />
     <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="HotCommands" Path="|HotCommands;PkgdefProjectOutputGroup|" />
   </Assets>
-  <!--<Installer>
-    <SetupDependencies>
-      <SetupDependency Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0.25826.2,16.0)" DisplayName="Visual Studio core editor" />
-    </SetupDependencies>
-  </Installer>-->
   <Prerequisites>
     <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0.25826.2,16.0)" DisplayName="Visual Studio core editor" />
   </Prerequisites>
