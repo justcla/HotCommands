@@ -61,6 +61,7 @@
     <Compile Include="Commands\EditorExtensions.cs" />
     <Compile Include="Commands\FormatCode.cs" />
     <Compile Include="Commands\ExpandSelection.cs" />
+    <Compile Include="Commands\JoinLines.cs" />
     <Compile Include="Commands\MoveCursorToAdjacentMember.cs" />
     <Compile Include="Commands\MoveMemberDown.cs" />
     <Compile Include="Commands\MoveMemberUp.cs" />

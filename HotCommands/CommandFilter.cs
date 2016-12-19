@@ -49,6 +49,8 @@ namespace HotCommands
                         return DuplicateSelection.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations);
                     case Constants.DuplicateSelectionReverseCmdId:
                         return DuplicateSelection.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations, true);
+                    case Constants.JoinLinesCmdId:
+                        return JoinLines.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations);
                     case Constants.MoveMemberUpCmdId:
                         return MoveMemberUp.Instance.HandleCommand(textView,GetShellCommandDispatcher(), editorOperations);
                     case Constants.MoveMemberDownCmdId:

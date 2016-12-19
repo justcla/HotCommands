@@ -88,6 +88,16 @@
         </Strings>
       </Button>
 
+      <Button guid="guidHotCommandsPackageCmdSet" id="cmdidJoinLines" priority="0x0000" type="Button">
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+          <ButtonText>Join Lines</ButtonText>
+          <MenuText>&amp;Join Lines</MenuText>
+          <ToolTipText>Merge text with the line below.</ToolTipText>
+        </Strings>
+      </Button>
+
       <Button guid="guidHotCommandsPackageCmdSet" id="cmdidExpandSelection" priority="0x0200" type="Button">
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
@@ -145,15 +155,6 @@
 
     </Buttons>
 
-    <!--The bitmaps section is used to define the bitmaps that are used for the commands.-->
-    <Bitmaps>
-      <!--  The bitmap id is defined in a way that is a little bit different from the others:
-            the declaration starts with a guid for the bitmap strip, then there is the resource id of the
-            bitmap strip containing the bitmaps and then there are the numeric ids of the elements used
-            inside a button definition. An important aspect of this declaration is that the element id
-            must be the actual index (1-based) of the bitmap inside the bitmap strip. -->
-      <Bitmap guid="guidImages1" href="Resources\ToggleComment.png" usedList="bmpPic1, bmpPic2, bmpPicSearch, bmpPicX, bmpPicArrows, bmpPicStrikethrough" />
-    </Bitmaps>
   </Commands>
 
   <CommandPlacements>
@@ -173,6 +174,9 @@
       <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
     </CommandPlacement>
     <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelectionReverse" priority="0x7517">
+      <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidJoinLines" priority="0x7518">
       <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
     </CommandPlacement>
     <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberUp" priority="0x3005">
@@ -196,6 +200,7 @@
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidFormatCode" context="GUID_TextEditorFactory"/>
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelection" context="GUID_TextEditorFactory"/>
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelectionReverse" context="GUID_TextEditorFactory"/>
+    <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidJoinLines" context="GUID_TextEditorFactory"/>
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberUp" context="GUID_TextEditorFactory"/>
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberDown" context="GUID_TextEditorFactory"/>
     <VisibilityItem guid="guidHotCommandsPackageCmdSet" id="cmdidGoToPreviousMember" context="GUID_TextEditorFactory"/>
@@ -209,6 +214,7 @@
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidFormatCode" editor="GUID_TextEditorFactory" mod1="Control Alt" key1="F"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelection" editor="GUID_TextEditorFactory" mod1="Control" key1="D"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelectionReverse" editor="GUID_TextEditorFactory" mod1="Control Shift" key1="D"/>
+    <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidJoinLines" editor="GUID_TextEditorFactory" mod1="Control Shift" key1="J"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidGoToPreviousMember" editor="GUID_TextEditorFactory" mod1="Control Alt" key1="VK_UP"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidGoToNextMember" editor="GUID_TextEditorFactory" mod1="Control Alt" key1="VK_DOWN"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberUp" editor="GUID_TextEditorFactory"  mod1="Control Shift Alt" key1="VK_UP"/>
@@ -231,16 +237,8 @@
       <IDSymbol name="cmdidMoveMemberDown" value="0x1032" />
       <IDSymbol name="cmdidGoToPreviousMember" value="0x1033" />
       <IDSymbol name="cmdidGoToNextMember" value="0x1034" />
+      <IDSymbol name="cmdidJoinLines" value="0x1040" />
     </GuidSymbol>
 
-    <GuidSymbol name="guidImages1" value="{fcb5d1b2-db20-41ee-993f-9d92d1441d65}">
-      <IDSymbol name="bmpPic1" value="1" />
-      <IDSymbol name="bmpPic2" value="2" />
-      <IDSymbol name="bmpPicSearch" value="3" />
-      <IDSymbol name="bmpPicX" value="4" />
-      <IDSymbol name="bmpPicArrows" value="5" />
-      <IDSymbol name="bmpPicStrikethrough" value="6" />
-    </GuidSymbol>
-  
   </Symbols>
 </CommandTable>
