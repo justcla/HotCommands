@@ -43,15 +43,31 @@ namespace HotCommands.Commands
                 var virtualBufferPosition = editorOperations.TextView.Caret.Position.VirtualBufferPosition;
                 trackingPoint = textView.TextSnapshot.CreateTrackingPoint(virtualBufferPosition.Position, PointTrackingMode.Negative);
 
-                // Select all the text on the current line
+                // Select all the text on the current line. Leaves caret at the start of the next line or end of line if last line.
                 editorOperations.SelectLine(textView.Caret.ContainingTextViewLine, false);
                 var text = editorOperations.SelectedText;
-
-                // Move to start of next line, then insert the text.
+                // Clear the selection so new inserts will not overwrite the selected line. Caret stays at start of next line.
                 editorOperations.ResetSelection();
+
+                // Hack for Last Line: If last line of file, introduce a new line character then delete it after duplicating the line.
+                var endOfFile = false;
+                if (!text.EndsWith("\n") && !text.EndsWith("\r"))
+                {
+                    // We are on the last line
+                    endOfFile = true;
+                    editorOperations.InsertNewLine();
+                }
+
+                // Now we are at the beginning of the line we can insert the duplicate text.
                 editorOperations.InsertText(text);
 
-                // Return the cursor
+                // Clean up any newline character introduced by earlier hack
+                if (endOfFile)
+                {
+                    editorOperations.Delete();
+                }
+
+                // Return the cursor to its original position, then move it down one line (unless doing reverse)
                 textView.Caret.MoveTo(new VirtualSnapshotPoint(trackingPoint.GetPoint(textView.TextSnapshot)).TranslateTo(textView.TextSnapshot));
                 if (!shiftPressed) editorOperations.MoveLineDown(false);
             }
