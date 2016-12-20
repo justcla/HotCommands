@@ -35,25 +35,39 @@ namespace HotCommands.Commands
         public static int HandleCommand(IWpfTextView textView, IClassifier classifier, IOleCommandTarget commandTarget, IEditorOperations editorOperations, bool shiftPressed = false)
         {
             //Guid cmdGroup = VSConstants.VSStd2K;
-            var isSingleLine = false;
             var selectedText = editorOperations.SelectedText;
             ITrackingPoint trackingPoint = null;
             if (selectedText.Length == 0)
-            // if nothing is selected, we can consider the current line as a selection
             {
+                // if nothing is selected, we can consider the current line as a selection
                 var virtualBufferPosition = editorOperations.TextView.Caret.Position.VirtualBufferPosition;
                 trackingPoint = textView.TextSnapshot.CreateTrackingPoint(virtualBufferPosition.Position, PointTrackingMode.Negative);
+
+                // Select all the text on the current line. Leaves caret at the start of the next line or end of line if last line.
                 editorOperations.SelectLine(textView.Caret.ContainingTextViewLine, false);
-                isSingleLine = true;
-            }
+                var text = editorOperations.SelectedText;
+                // Clear the selection so new inserts will not overwrite the selected line. Caret stays at start of next line.
+                editorOperations.ResetSelection();
 
-            if (isSingleLine)
-            {
-                editorOperations.CopySelection();
-                editorOperations.MoveToNextCharacter(false);
-                editorOperations.Paste();
-                editorOperations.MoveToPreviousCharacter(false);
+                // Hack for Last Line: If last line of file, introduce a new line character then delete it after duplicating the line.
+                var endOfFile = false;
+                if (!text.EndsWith("\n") && !text.EndsWith("\r"))
+                {
+                    // We are on the last line
+                    endOfFile = true;
+                    editorOperations.InsertNewLine();
+                }
 
+                // Now we are at the beginning of the line we can insert the duplicate text.
+                editorOperations.InsertText(text);
+
+                // Clean up any newline character introduced by earlier hack
+                if (endOfFile)
+                {
+                    editorOperations.Delete();
+                }
+
+                // Return the cursor to its original position, then move it down one line (unless doing reverse)
                 textView.Caret.MoveTo(new VirtualSnapshotPoint(trackingPoint.GetPoint(textView.TextSnapshot)).TranslateTo(textView.TextSnapshot));
                 if (!shiftPressed) editorOperations.MoveLineDown(false);
             }
