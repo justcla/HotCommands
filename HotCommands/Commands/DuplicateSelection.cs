@@ -50,11 +50,10 @@ namespace HotCommands.Commands
                 editorOperations.ResetSelection();
 
                 // Hack for Last Line: If last line of file, introduce a new line character then delete it after duplicating the line.
-                var endOfFile = false;
-                if (!text.EndsWith("\n") && !text.EndsWith("\r"))
+                var endOfFile = !EndsWithNewLine(text);
+                if (endOfFile)
                 {
-                    // We are on the last line
-                    endOfFile = true;
+                    // We are on the last line. Will need to insert a new line. Will be removed later.
                     editorOperations.InsertNewLine();
                 }
 
@@ -169,6 +168,13 @@ namespace HotCommands.Commands
             }
 
             return VSConstants.S_OK;
+        }
+
+        private static bool EndsWithNewLine(string text)
+        {
+            return text.Length > 0 
+                && text[text.Length - 1] != '\n'
+                && text[text.Length - 1] != '\r';
         }
     }
 }
