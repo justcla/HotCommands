@@ -48,7 +48,7 @@ namespace HotCommands.Commands
                 var text = editorOperations.SelectedText;
 
                 // Move to start of next line, then insert the text.
-                editorOperations.MoveToStartOfLine(false);
+                editorOperations.ResetSelection();
                 editorOperations.InsertText(text);
 
                 // Return the cursor
