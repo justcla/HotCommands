@@ -21,6 +21,11 @@ Project for creating new commands and shortcuts for Visual Studio.
 <td>Ctrl+D /<br /> Ctrl+Shift+D</td>
 </tr>
 <tr>
+<td>Edit.JoinLines</td>
+<td>Joins the current line with the next line and removes redundant whitespace.</td>
+<td>Ctrl+Shift+J</td>
+</tr>
+<tr>
 <td>Format Code</td>
 <td>Formats the selected text, or the whole document if no selection.</td>
 <td>Ctrl+Alt+F</td>
