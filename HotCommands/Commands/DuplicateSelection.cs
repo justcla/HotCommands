@@ -172,9 +172,8 @@ namespace HotCommands.Commands
 
         private static bool EndsWithNewLine(string text)
         {
-            return text.Length > 0 
-                && text[text.Length - 1] != '\n'
-                && text[text.Length - 1] != '\r';
+            return text.Length > 0 &&
+                (text[text.Length - 1] == '\n' || text[text.Length - 1] == '\r');
         }
     }
 }
