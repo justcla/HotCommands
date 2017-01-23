@@ -31,10 +31,17 @@ Project for creating new commands and shortcuts for Visual Studio.
 <td>Ctrl+Alt+F</td>
 </tr>
 <tr>
-<td>Increase Selection / Decrease Selection</td>
-<td>Expands/Shrinks the current text selection by one level (ie. next largest/smallest code block level)</td>
+<td>Increase Selection</td>
+<td>Expands the current text selection by one level (ie. next largest code block level)</td>
 <td>
-<p>Ctrl+W /<br /> Ctrl+Shift+W&nbsp;</p>
+<p>Ctrl+{, Ctrl+}<br />(Same as Ctrl+Shift+[, Ctrl+Shift+[)</p>
+</td>
+</tr>
+<tr>
+<td>Decrease Selection</td>
+<td>Shrinks the current text selection by one level (ie. next smallest code block level)</td>
+<td>
+<p>Ctrl+{, Ctrl+}<br />(Same as Ctrl+Shift+[, Ctrl+Shift+[)</p>
 </td>
 </tr>
 <tr>
