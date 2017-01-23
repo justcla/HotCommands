@@ -24,7 +24,7 @@ namespace HotCommands
         public new static void Initialize(Package package)
         {
             Command<ExpandSelection>.Initialize(package);
-            ForceKeyboardBindings(package);
+            //ForceKeyboardBindings(package);
         }
 
         private static void ForceKeyboardBindings(Package package)
