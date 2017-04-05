@@ -59,6 +59,8 @@ namespace HotCommands
                         return MoveCursorToAdjacentMember.MoveToPreviousMember(textView, editorOperations);
                     case Constants.GoToNextMemberCmdId:
                         return MoveCursorToAdjacentMember.MoveToNextMember(textView, editorOperations);
+                    case Constants.GoToCommitMessage:
+                        return GoToCommitMessage.Instance.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations);
                 }
             }
 

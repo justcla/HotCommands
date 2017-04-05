@@ -16,5 +16,6 @@ namespace HotCommands
         public const uint GoToPreviousMemberCmdId = 0x1033;
         public const uint GoToNextMemberCmdId = 0x1034;
         public const uint JoinLinesCmdId = 0x1040;
+        public const uint GoToCommitMessage = 0x1100;
     }
 }

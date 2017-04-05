@@ -68,6 +68,7 @@ namespace HotCommands
             DuplicateSelection.Initialize(this);
             MoveMemberUp.Initialize(this);
             MoveMemberDown.Initialize(this);
+            GoToCommitMessage.Initialize(this);
         }
 
         #endregion
