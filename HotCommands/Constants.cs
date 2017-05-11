@@ -16,5 +16,11 @@ namespace HotCommands
         public const uint GoToPreviousMemberCmdId = 0x1033;
         public const uint GoToNextMemberCmdId = 0x1034;
         public const uint JoinLinesCmdId = 0x1040;
+
+        public bool IsFruit(string item)
+        {
+            // TODO: Check apple banana chocolate duck 
+            return false;
+        }
     }
 }
