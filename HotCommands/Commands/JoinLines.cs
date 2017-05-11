@@ -13,10 +13,10 @@ namespace HotCommands
     {
         public static int HandleCommand(IWpfTextView textView, IClassifier classifier, OleInterop.IOleCommandTarget commandTarget, IEditorOperations editorOperations)
         {
-            // TODO: Handle UNDO management. This should occur as a single undo-able transaction in the Undo history
-            editorOperations.MoveToEndOfLine(false);
-            editorOperations.Delete();
-            editorOperations.DeleteHorizontalWhiteSpace();
+			// TODO: Handle UNDO management. This should occur as a single undo-able transaction in the Undo history
+			editorOperations.MoveToEndOfLine(false);
+			editorOperations.Delete();
+			editorOperations.DeleteHorizontalWhiteSpace();
 
             return VSConstants.S_OK;
         }

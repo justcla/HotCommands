@@ -200,7 +200,10 @@ namespace HotCommands
 
         private static bool IsContainerType(this SyntaxNode node)
         {
-            return node.IsKind(SyntaxKind.ClassDeclaration) || node.IsKind(SyntaxKind.StructDeclaration) || node.IsKind(SyntaxKind.InterfaceDeclaration) || node.IsKind(SyntaxKind.NamespaceDeclaration);
+            return node.IsKind(SyntaxKind.ClassDeclaration) ||
+                node.IsKind(SyntaxKind.StructDeclaration) ||
+                node.IsKind(SyntaxKind.InterfaceDeclaration) || 
+                node.IsKind(SyntaxKind.NamespaceDeclaration);
         }
 
         private enum MovePosition
