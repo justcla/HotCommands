@@ -35,7 +35,7 @@ namespace HotCommands
             if (node == null) return document;
 
             // if the context is not in a class, return the Document
-            ClassDeclarationSyntax nodeClassConceiler = node.AncestorsAndSelf().OfType<ClassDeclarationSyntax>().Single();
+            ClassDeclarationSyntax nodeClassConceiler = node.AncestorsAndSelf().OfType<ClassDeclarationSyntax>().SingleOrDefault();
             if (nodeClassConceiler == null) return document;
 
             // First, remove all but the first MainModifier
