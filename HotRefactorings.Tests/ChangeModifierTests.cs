@@ -1,23 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using HotCommands;
+﻿using HotCommands;
 using Xunit;
 using Microsoft.CodeAnalysis.CodeRefactorings;
+using TestHelper;
 
 namespace HotRefactorings.Tests
 {
-    public class ChangeModifierTests
+    public class ChangeModifierTests : CodeRefactoringVerifier
     {
         [Fact]
-        public async Task PublicToInternalTestsAsync()
+        public void PublicToInternalTests()
         {
-            var context = new CodeRefactoringContext();
-            var sut = new ChangeModifier();
+            var oldSource =
+@"public class Class1
+{
+}";
 
-            await sut.ComputeRefactoringsAsync(context);
+            var newSource =
+@"internal class Class1
+{
+}";
+            VerifyRefactoring(oldSource, newSource, 0, "To Internal");
+        }
+
+        protected override CodeRefactoringProvider GetCodeRefactoringProvider()
+        {
+            return new ChangeModifier();
         }
     }
 }
