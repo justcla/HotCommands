@@ -7,65 +7,26 @@ namespace HotRefactorings.Tests
 {
     public class ChangeModifierTests : CodeRefactoringVerifier
     {
-        [Fact]
-        public void PublicToProtectedTests()
+        [Theory]
+        [InlineData("public", "protected", "To Protected")]
+        [InlineData("public", "internal", "To Internal")]
+        [InlineData("public", "private", "To Private")]
+        [InlineData("public", "protected internal", "To Protected Internal")]
+        public void FromToModifierTheory(string fromModifier, string toModifier, string refactoringTitle)
         {
-            var oldSource =
-@"public class Class1
-{
-}";
+            var oldSource = CreateClassWithModifier(fromModifier);
+            var newSource = CreateClassWithModifier(toModifier);
 
-            var newSource =
-@"protected class Class1
-{
-}";
-            VerifyRefactoring(oldSource, newSource, 0, "To Protected");
+            VerifyRefactoring(oldSource, newSource, 0, refactoringTitle);
         }
 
-        [Fact]
-        public void PublicToInternalTests()
+        private static string CreateClassWithModifier(string modifier)
         {
-            var oldSource =
-@"public class Class1
-{
-}";
-
-            var newSource =
-@"internal class Class1
-{
-}";
-            VerifyRefactoring(oldSource, newSource, 0, "To Internal");
+            return $@"{modifier} class Class1
+{{
+}}";
         }
 
-        [Fact]
-        public void PublicToPrivateTests()
-        {
-            var oldSource =
-@"public class Class1
-{
-}";
-
-            var newSource =
-@"private class Class1
-{
-}";
-            VerifyRefactoring(oldSource, newSource, 0, "To Private");
-        }
-
-        [Fact]
-        public void PublicToProtectedInternalTests()
-        {
-            var oldSource =
-@"public class Class1
-{
-}";
-
-            var newSource =
-@"protected internal class Class1
-{
-}";
-            VerifyRefactoring(oldSource, newSource, 0, "To Protected Internal");
-        }
         protected override CodeRefactoringProvider GetCodeRefactoringProvider()
         {
             return new ChangeModifier();
