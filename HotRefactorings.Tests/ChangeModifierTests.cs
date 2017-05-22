@@ -20,6 +20,38 @@ namespace HotRefactorings.Tests
             VerifyRefactoring(oldSource, newSource, 0, refactoringTitle);
         }
 
+        [Fact]
+        public void ProtectedInternalToPublicTest()
+        {
+            var oldSource = CreateClassWithModifier("protected internal");
+            var newSource = CreateClassWithModifier("public");
+            VerifyRefactoring(oldSource, newSource, 0, "To Public");
+        }
+
+        [Fact]
+        public void ProtectedInternalToProtectedOnlyTest()
+        {
+            var oldSource = CreateClassWithModifier("protected internal");
+            var newSource = CreateClassWithModifier("protected");
+            VerifyRefactoring(oldSource, newSource, 0, "To Protected (only)");
+        }
+
+        [Fact]
+        public void ToPublicFromRedundantModifiersTest()
+        {
+            var oldSource = CreateClassWithModifier("public private");
+            var newSource = CreateClassWithModifier("public");
+            VerifyRefactoring(oldSource, newSource, 0, "To Public (Remove redundant modifiers)");
+        }
+
+        [Fact]
+        public void PublicStaticClassToInternalShouldKeepStatic()
+        {
+            var oldSource = CreateClassWithModifier("public static");
+            var newSource = CreateClassWithModifier("internal static");
+            VerifyRefactoring(oldSource, newSource, 0, "To Internal");
+        }
+
         private static string CreateClassWithModifier(string modifier)
         {
             return $@"{modifier} class Class1
