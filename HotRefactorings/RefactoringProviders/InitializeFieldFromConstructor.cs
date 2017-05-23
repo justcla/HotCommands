@@ -67,11 +67,11 @@ namespace HotCommands
 
             var constructors = classDeclaration.DescendantNodes().OfType<ConstructorDeclarationSyntax>();
 
-            var relevantConstructors = constructors.Where(x =>
-                x.Body
-                .DescendantNodes()
-                .OfType<IdentifierNameSyntax>()
-                .All(identifier => identifier.Identifier.Text != fieldVariable.Identifier.Text));
+            var relevantConstructors = constructors
+                .Where(x => x.Body != null && x.Body
+                    .DescendantNodes()
+                    .OfType<IdentifierNameSyntax>()
+                    .All(identifier => identifier.Identifier.Text != fieldVariable.Identifier.Text));
 
             return relevantConstructors;
         }
