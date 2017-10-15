@@ -24,7 +24,7 @@ namespace HotCommands
 
             // only offer a refactoring if the selected node is a field declaration.
             var variableDeclarator = node as VariableDeclaratorSyntax;
-            var fieldDeclaration = variableDeclarator?.Ancestors().OfType<FieldDeclarationSyntax>().SingleOrDefault();
+            var fieldDeclaration = variableDeclarator?.Ancestors().OfType<FieldDeclarationSyntax>().FirstOrDefault();
             var classDeclaration = fieldDeclaration?.Ancestors().OfType<ClassDeclarationSyntax>().FirstOrDefault();
             if (classDeclaration == null)
             {
