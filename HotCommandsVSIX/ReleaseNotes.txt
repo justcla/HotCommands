@@ -1,6 +1,0 @@
-14-Nov-2016: v1.1.2 Updated icons and licence.
-18-Dec-2016: v1.1.3 Added command: Join Lines
-19-Dec-2016: v1.1.4 Fixed Copy-Buffer issue with Duplicate Line
-19-Jan-2017: v1.1.5 No longer force-binding Ctrl+W shortcut
-14-May-2017: v1.1.6 Change class modifier now works with interfaces
-14-Oct-2017: v1.1.7 Fixed issue #69 - InitializeFieldFromConstructor bug

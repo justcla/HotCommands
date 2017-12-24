@@ -1,0 +1,9 @@
+Hot Commands for Visual Studio
+
+24-Dec-2017: v2.0.0 HotRefactorings removed and now available as a separate extension.
+14-Oct-2017: v1.1.7 Fixed issue #69 - InitializeFieldFromConstructor bug
+14-May-2017: v1.1.6 Change class modifier now works with interfaces
+19-Jan-2017: v1.1.5 No longer force-binding Ctrl+W shortcut
+19-Dec-2016: v1.1.4 Fixed Copy-Buffer issue with Duplicate Line
+18-Dec-2016: v1.1.3 Added command: Join Lines
+14-Nov-2016: v1.1.2 Updated icons and licence.
