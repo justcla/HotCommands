@@ -1,22 +1,27 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
-  <Metadata>
-    <Identity Id="1dc959ad-7a4e-4c78-b52f-c36531a57447" Version="1.0" Language="en-US" Publisher="Justin Clareburt" />
-    <DisplayName>Hot Commands</DisplayName>
-    <Description>Hot Commands for Visual Studio</Description>
-  </Metadata>
-  <Installation>
-    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0,15.0)" />
-  </Installation>
-  <Dependencies>
-    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
-    <Dependency Id="Microsoft.VisualStudio.MPF.14.0" DisplayName="Visual Studio MPF 14.0" d:Source="Installed" Version="[14.0]" />
-  </Dependencies>
-  <Assets>
-    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
-    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%|" />
-  </Assets>
-  <Prerequisites>
-    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0.25826.2,16.0)" DisplayName="Visual Studio core editor" />
-  </Prerequisites>
+    <Metadata>
+        <Identity Id="e8175b11-0e09-42b5-9c3c-ba7bfb53a311" Version="2.0.0" Language="en-US" Publisher="Justin Clareburt" />
+        <DisplayName>Hot Commands for Visual Studio</DisplayName>
+        <Description xml:space="preserve">A collection of commands, analyzers, and refactorings for enhanced productivity in Visual Studio IDE</Description>
+        <MoreInfo>https://marketplace.visualstudio.com/items?itemName=JustinClareburtMSFT.HotCommandsforVisualStudio</MoreInfo>
+        <License>License.rtf</License>
+        <ReleaseNotes>ReleaseNotes.txt</ReleaseNotes>
+        <Icon>HotCommandsIcon.png</Icon>
+        <PreviewImage>HotCommandsPreview.png</PreviewImage>
+        <Tags>HotCommands;Hot;Commands;Productivity;Keyboard;Shortcuts;Toggle comment;Duplicate code;Format code</Tags>
+    </Metadata>
+    <Installation>
+        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0,16.0)" />
+    </Installation>
+    <Dependencies>
+        <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
+    </Dependencies>
+    <Assets>
+        <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="HotCommands" Path="|HotCommands|" />
+        <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="HotCommands" Path="|HotCommands;PkgdefProjectOutputGroup|" />
+    </Assets>
+    <Prerequisites>
+        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0.25826.2,16.0)" DisplayName="Visual Studio core editor" />
+    </Prerequisites>
 </PackageManifest>
