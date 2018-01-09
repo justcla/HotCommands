@@ -47,6 +47,18 @@
       </Group>-->
     <!--</Groups>-->
 
+    <Menus>
+      <Menu guid="guidHotCommandsPackageCmdSet" id="HotCommandsMenuId" priority="0x1000" type="Menu">
+        <Parent guid="guidSHLMainMenu"
+                id="IDG_VS_MM_TOOLSADDINS" />
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <Strings>
+          <ButtonText>Hot Commands</ButtonText>
+          <MenuText>Hot Commands2</MenuText>
+        </Strings>
+      </Menu>
+    </Menus>
+    
     <!--Buttons section. -->
     <!--This section defines the elements the user can interact with, like a menu command or a button
         or combo box in a toolbar. -->
@@ -60,12 +72,15 @@
           If you do not want an image next to your command, remove the Icon node /> -->
 
       <Button guid="guidHotCommandsPackageCmdSet" id="cmdidToggleComment" priority="0x0000" type="Button">
+        <Parent guid="guidHotCommandsPackageCmdSet" id="HotCommandsMenuId"/>
         <CommandFlag>DynamicVisibility</CommandFlag>
         <CommandFlag>DefaultInvisible</CommandFlag>
         <Strings>
           <ButtonText>Toggle Comment</ButtonText>
           <MenuText>Toggle &amp;Comment</MenuText>
           <ToolTipText>Comment or Uncomment the selected lines.</ToolTipText>
+          <LocCanonicalName>HotCommands.ToggleComment</LocCanonicalName>
+          <CanonicalName>HotCommands.ToggleComment</CanonicalName>
         </Strings>
       </Button>
 
@@ -239,6 +254,7 @@
       <IDSymbol name="cmdidGoToPreviousMember" value="0x1033" />
       <IDSymbol name="cmdidGoToNextMember" value="0x1034" />
       <IDSymbol name="cmdidJoinLines" value="0x1040" />
+      <IDSymbol name="HotCommandsMenuId" value="0x1010"/>
     </GuidSymbol>
 
   </Symbols>
