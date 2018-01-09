@@ -78,7 +78,6 @@ namespace HotCommands
         /// <param name="e">Event args.</param>
         private void MenuItemCallback(object sender, EventArgs e)
         {
-            AlertCommandName();
             NavigateToLastEditPosition();
         }
 
@@ -91,20 +90,52 @@ namespace HotCommands
 
         private void NavigateToLastEditPosition()
         {
-            Type bfNavServiceType = typeof(BackForwardNavigationService);
-            PropertyInfo instanceInfo = bfNavServiceType.GetProperty("Instance", BindingFlags.NonPublic | BindingFlags.Static);
-            BackForwardNavigationService bfNavServiceInstance = (BackForwardNavigationService)instanceInfo.GetValue(null);
+            PropertyInfo instanceInfo = typeof(BackForwardNavigationService).GetProperty("Instance", BindingFlags.NonPublic | BindingFlags.Static);
+            BackForwardNavigationService backForwardNavigationService = (BackForwardNavigationService)instanceInfo.GetValue(null);
 
             // Get the Items property from the instance of BFNavService
-            ReadOnlyObservableCollection<NavigationItem> items = bfNavServiceInstance.Items;
-            
-            // Iterate through the navItems looking for one with CaretType property with 0x002 bit set.
-            foreach (NavigationItem navItem in items)
+            ReadOnlyObservableCollection<NavigationItem> items = backForwardNavigationService.Items;
+
+            // Find the last edit
+            int navIndexOfLastEditLocation = GetNavIndexOfLastEdit(items);
+            // If any edit found, navigate to it. Otherwise, no-op.
+            if (navIndexOfLastEditLocation >= 0)
             {
-                // Get the CaretType property via reflection
-                PropertyInfo caretTypePropInfo = typeof(NavigationItem).GetProperty("CaretType", BindingFlags.NonPublic);
-                var caretType = caretTypePropInfo.GetValue(navItem, null);
+                backForwardNavigationService.NavigateTo(navIndexOfLastEditLocation);
             }
+        }
+
+        /// <summary>
+        /// Returns the index in the Back-Forward Navigation Items of the last edit, or -1 if no edits found.
+        /// </summary>
+        private static int GetNavIndexOfLastEdit(ReadOnlyObservableCollection<NavigationItem> items)
+        {
+            // Iterate backward through the navItems looking for one with CaretType property of DestructiveCaretMove = 0x0002;
+            for (int navIndex = items.Count-1; navIndex >= 0; navIndex--)
+            {
+                NavigationItem navItem = items[navIndex];
+                object navigationContext = navItem.NavigationContext;
+                Type navContextType = navigationContext.GetType();
+                if (navContextType.Name.Contains("GoBackMarker"))
+                {
+                    object goBackMarker = navigationContext;        // renaming just for fun
+                    // Get the CaretType property via reflection
+                    PropertyInfo caretMoveTypeInfo = navContextType.GetProperty("CaretMoveType");
+                    object caretMoveType = caretMoveTypeInfo.GetValue(goBackMarker, null);
+                    //caretMoveType.ToString(); eg. "NonDestructiveCaretMove, ArbitraryLocation"
+                    string caretMoveTypes = caretMoveType.ToString();
+                    if (caretMoveTypes.Contains("DestructiveCaretMove") 
+                        && !caretMoveTypes.Contains("NonDestructiveCaretMove"))  // Hack: Make sure it's not found because of this flag.
+                    {
+                        // Found an edit location.
+                        return navIndex;
+                    }
+                    //string caretMoveTypeEnumName = caretMoveType.GetType().GetEnumName(caretMoveType);
+                }
+            }
+
+            // No edits found. Return -1
+            return -1;
         }
 
         private static void PrintFields(Type bfNavServiceType)
