@@ -32,7 +32,7 @@ namespace HotCommands
         {
             IWpfTextView textView = EditorAdaptersFactoryService.GetWpfTextView(textViewAdapter);
 
-            CommandFilter commandFilter = new CommandFilter(textView, _aggregatorFactory, _globalServiceProvider, _editorOperationsFactory);
+            HotCommandsCommandFilter commandFilter = new HotCommandsCommandFilter(textView, _aggregatorFactory, _globalServiceProvider, _editorOperationsFactory);
             IOleCommandTarget next;
             textViewAdapter.AddCommandFilter(commandFilter, out next);
 
