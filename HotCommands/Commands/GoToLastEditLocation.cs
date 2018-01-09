@@ -10,20 +10,10 @@ using Microsoft.VisualStudio.Shell.Interop;
 namespace HotCommands
 {
     /// <summary>
-    /// Command handler
+    /// Command handler for GoToLastEditLocation
     /// </summary>
     internal sealed class GoToLastEditLocation
     {
-        /// <summary>
-        /// Command ID.
-        /// </summary>
-        public const int CommandId = 0x0100;
-
-        /// <summary>
-        /// Command menu group (command set GUID).
-        /// </summary>
-        public static readonly Guid CommandSet = new Guid("2ce65dd2-2135-4a0b-a90a-468501fdfdc0");
-
         /// <summary>
         /// VS Package that provides this command, not null.
         /// </summary>
@@ -69,13 +59,6 @@ namespace HotCommands
             Instance = new GoToLastEditLocation(package);
         }
 
-        /// <summary>
-        /// This function is the callback used to execute the command when the menu item is clicked.
-        /// See the constructor to see how the menu item is associated with this function using
-        /// OleMenuCommandService service and MenuCommand class.
-        /// </summary>
-        /// <param name="sender">Event sender.</param>
-        /// <param name="e">Event args.</param>
         private void MenuItemCallback(object sender, EventArgs e)
         {
             NavigateToLastEditPosition();
@@ -130,7 +113,6 @@ namespace HotCommands
                         // Found an edit location.
                         return navIndex;
                     }
-                    //string caretMoveTypeEnumName = caretMoveType.GetType().GetEnumName(caretMoveType);
                 }
             }
 
@@ -138,23 +120,5 @@ namespace HotCommands
             return -1;
         }
 
-        private static void PrintFields(Type bfNavServiceType)
-        {
-            FieldInfo[] fieldInfos = bfNavServiceType.GetFields();
-            foreach (FieldInfo fieldInfo in fieldInfos)
-            {
-                string name = fieldInfo.Name;
-                System.Diagnostics.Debug.WriteLine($"Field: {name}");
-            }
-        }
-        private static void PrintProperties(Type objectType, BindingFlags bindingFlags)
-        {
-            var infos = objectType.GetProperties(bindingFlags);
-            foreach (var info in infos)
-            {
-                string name = info.Name;
-                System.Diagnostics.Debug.WriteLine($"Property: {name}");
-            }
-        }
     }
 }
