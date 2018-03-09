@@ -14,7 +14,7 @@ namespace HotCommands
     [Export(typeof(IVsTextViewCreationListener))]
     [ContentType("text")]
     [TextViewRole(PredefinedTextViewRoles.Editable)]
-    internal sealed class CommandFilterTextViewCreationListener : IVsTextViewCreationListener
+    internal sealed class HotCommandsTextViewCreationListener : IVsTextViewCreationListener
     {
         [Import]
         private IVsEditorAdaptersFactoryService EditorAdaptersFactoryService { get; set; }
