@@ -1,11 +1,13 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel.Design;
-using System.Globalization;
-using System.Reflection;
-using Microsoft.VisualStudio.Platform.WindowManagement.Navigation;
+﻿using Microsoft.VisualStudio;
+using Microsoft.VisualStudio.ComponentModelHost;
+using Microsoft.VisualStudio.Editor;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
+using Microsoft.VisualStudio.Text;
+using Microsoft.VisualStudio.Text.Editor;
+using Microsoft.VisualStudio.TextManager.Interop;
+using System;
+using System.ComponentModel.Design;
 
 namespace HotCommands
 {
@@ -64,60 +66,60 @@ namespace HotCommands
             NavigateToLastEditPosition();
         }
 
-        private void AlertCommandName()
-        {
-            string title = "GoToLastEditLocation";
-            string message = string.Format(CultureInfo.CurrentCulture, "Inside {0}.MenuItemCallback()", this.GetType().FullName);
-            VsShellUtilities.ShowMessageBox(this.ServiceProvider, message, title, OLEMSGICON.OLEMSGICON_INFO, OLEMSGBUTTON.OLEMSGBUTTON_OK, OLEMSGDEFBUTTON.OLEMSGDEFBUTTON_FIRST);
-        }
-
         private void NavigateToLastEditPosition()
         {
-            PropertyInfo instanceInfo = typeof(BackForwardNavigationService).GetProperty("Instance", BindingFlags.NonPublic | BindingFlags.Static);
-            BackForwardNavigationService backForwardNavigationService = (BackForwardNavigationService)instanceInfo.GetValue(null);
+            System.Diagnostics.Debug.WriteLine("Navigate to last edit position.");
 
-            // Get the Items property from the instance of BFNavService
-            ReadOnlyObservableCollection<NavigationItem> items = backForwardNavigationService.Items;
-
-            // Find the last edit
-            int navIndexOfLastEditLocation = GetNavIndexOfLastEdit(items);
-            // If any edit found, navigate to it. Otherwise, no-op.
-            if (navIndexOfLastEditLocation >= 0)
+            // Open the file last editted
+            string lastEditFilePath = LastEdit.LastEditFile;
+            IWpfTextView textView = OpenLastEdittedFile(lastEditFilePath);
+            if (textView == null)
             {
-                backForwardNavigationService.NavigateTo(navIndexOfLastEditLocation);
+                // Unable to open the file. Do No-Op.
+                System.Diagnostics.Debug.WriteLine($"Unable to open last editted file: {lastEditFilePath}");
+                return;
+            }
+
+            // Navigate to the last edit caret position
+            int lastEditPosn = LastEdit.LastEditPosn;
+            SetCaretAtGivenPosition(textView, lastEditPosn);
+        }
+
+        private IWpfTextView OpenLastEdittedFile(string lastEditFilePath)
+        {
+            try
+            {
+                VsShellUtilities.OpenDocument(this.ServiceProvider, lastEditFilePath, VSConstants.LOGVIEWID_TextView,
+                                      out IVsUIHierarchy hierarchy, out uint itemId, out IVsWindowFrame windowFrame,
+                                      out IVsTextView vsTextView);
+                return GetEditorAdaptorsFactoryService().GetWpfTextView(vsTextView);
+            }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception occurred trying to navigate set open file last editted.", e);
+                return null;
             }
         }
 
-        /// <summary>
-        /// Returns the index in the Back-Forward Navigation Items of the last edit, or -1 if no edits found.
-        /// </summary>
-        private static int GetNavIndexOfLastEdit(ReadOnlyObservableCollection<NavigationItem> items)
+        private static void SetCaretAtGivenPosition(IWpfTextView textView, int lastEditPosn)
         {
-            // Iterate backward through the navItems looking for one with CaretType property of DestructiveCaretMove = 0x0002;
-            for (int navIndex = items.Count-1; navIndex >= 0; navIndex--)
+            try
             {
-                NavigationItem navItem = items[navIndex];
-                object navigationContext = navItem.NavigationContext;
-                Type navContextType = navigationContext.GetType();
-                if (navContextType.Name.Contains("GoBackMarker"))
-                {
-                    object goBackMarker = navigationContext;        // renaming just for fun
-                    // Get the CaretType property via reflection
-                    PropertyInfo caretMoveTypeInfo = navContextType.GetProperty("CaretMoveType");
-                    object caretMoveType = caretMoveTypeInfo.GetValue(goBackMarker, null);
-                    //caretMoveType.ToString(); eg. "NonDestructiveCaretMove, ArbitraryLocation"
-                    string caretMoveTypes = caretMoveType.ToString();
-                    if (caretMoveTypes.Contains("DestructiveCaretMove") 
-                        && !caretMoveTypes.Contains("NonDestructiveCaretMove"))  // Hack: Make sure it's not found because of this flag.
-                    {
-                        // Found an edit location.
-                        return navIndex;
-                    }
-                }
+                // TODO: Check if position exists in file.
+                textView.Caret.MoveTo(new SnapshotPoint(textView.TextSnapshot, lastEditPosn));
+                textView.ViewScroller.EnsureSpanVisible(new SnapshotSpan(textView.TextSnapshot, lastEditPosn, 0), EnsureSpanVisibleOptions.None);
             }
+            catch (Exception e)
+            {
+                System.Diagnostics.Debug.WriteLine("Exception occurred trying to set caret poistion to last edit location.", e);
+            }
+        }
 
-            // No edits found. Return -1
-            return -1;
+        private static IVsEditorAdaptersFactoryService GetEditorAdaptorsFactoryService()
+        {
+            IComponentModel componentService = (IComponentModel)(Package.GetGlobalService(typeof(SComponentModel)));
+            IVsEditorAdaptersFactoryService editorAdaptersFactoryService = componentService.GetService<IVsEditorAdaptersFactoryService>();
+            return editorAdaptersFactoryService;
         }
 
     }
