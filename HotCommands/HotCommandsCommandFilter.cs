@@ -11,14 +11,14 @@ using Microsoft.VisualStudio.Text.Operations;
 
 namespace HotCommands
 {
-    internal sealed class CommandFilter : IOleCommandTarget
+    internal sealed class HotCommandsCommandFilter : IOleCommandTarget
     {
         private readonly IWpfTextView textView;
         private readonly IClassifier classifier;
         private readonly SVsServiceProvider globalServiceProvider;
         private IEditorOperations editorOperations;
 
-        public CommandFilter(IWpfTextView textView, IClassifierAggregatorService aggregatorFactory,
+        public HotCommandsCommandFilter(IWpfTextView textView, IClassifierAggregatorService aggregatorFactory,
             SVsServiceProvider globalServiceProvider, IEditorOperationsFactoryService editorOperationsFactory)
         {
             this.textView = textView;

@@ -14,7 +14,7 @@ namespace HotCommands
     [Export(typeof(IVsTextViewCreationListener))]
     [ContentType("text")]
     [TextViewRole(PredefinedTextViewRoles.Editable)]
-    internal sealed class CommandFilterTextViewCreationListener : IVsTextViewCreationListener
+    internal sealed class HotCommandsTextViewCreationListener : IVsTextViewCreationListener
     {
         [Import]
         private IVsEditorAdaptersFactoryService EditorAdaptersFactoryService { get; set; }
@@ -32,7 +32,7 @@ namespace HotCommands
         {
             IWpfTextView textView = EditorAdaptersFactoryService.GetWpfTextView(textViewAdapter);
 
-            CommandFilter commandFilter = new CommandFilter(textView, _aggregatorFactory, _globalServiceProvider, _editorOperationsFactory);
+            HotCommandsCommandFilter commandFilter = new HotCommandsCommandFilter(textView, _aggregatorFactory, _globalServiceProvider, _editorOperationsFactory);
             IOleCommandTarget next;
             textViewAdapter.AddCommandFilter(commandFilter, out next);
 

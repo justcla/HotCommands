@@ -153,6 +153,14 @@
         </Strings>
       </Button>
 
+      <Button guid="guidHotCommandsPackageCmdSet" id="cmdidGoToLastEditLocation" type="Button">
+        <CommandFlag>DynamicVisibility</CommandFlag>
+        <CommandFlag>DefaultInvisible</CommandFlag>
+        <Strings>
+        <ButtonText>Go To &amp;Last Edit Location</ButtonText>
+        </Strings>
+      </Button>
+
     </Buttons>
 
   </Commands>
@@ -209,6 +217,9 @@
   
   <KeyBindings>
     <!-- VK_OEM_2 = /? key. VK_OEM_4 = [{ key. VK_OEM_6 = ]} key. -->
+    <!-- Global commands -->
+    <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidGoToLastEditLocation" editor="guidVSStd97" mod1="Control Shift" key1="VK_BACK"/>
+    <!-- Text editor commands -->
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidToggleComment" editor="GUID_TextEditorFactory" mod1="Control" key1="VK_OEM_2"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidExpandSelection" editor="GUID_TextEditorFactory" mod1="Control Shift" key1="VK_OEM_4" mod2="Control Shift" key2="VK_OEM_6"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidShrinkSelection" editor="GUID_TextEditorFactory" mod1="Control Shift" key1="VK_OEM_4" mod2="Control Shift" key2="VK_OEM_4"/>
@@ -239,6 +250,7 @@
       <IDSymbol name="cmdidGoToPreviousMember" value="0x1033" />
       <IDSymbol name="cmdidGoToNextMember" value="0x1034" />
       <IDSymbol name="cmdidJoinLines" value="0x1040" />
+      <IDSymbol name="cmdidGoToLastEditLocation" value="0x1050" />
     </GuidSymbol>
 
   </Symbols>
