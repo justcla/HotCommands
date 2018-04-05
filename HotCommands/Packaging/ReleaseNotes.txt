@@ -1,5 +1,6 @@
 Hot Commands for Visual Studio
 
+13-Mar-2018: v2.1.0 Added feature: GoToLastEditLocation
 24-Dec-2017: v2.0.0 HotRefactorings removed and now available as a separate extension.
 14-Oct-2017: v1.1.7 Fixed issue #69 - InitializeFieldFromConstructor bug
 14-May-2017: v1.1.6 Change class modifier now works with interfaces
