@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="e8175b11-0e09-42b5-9c3c-ba7bfb53a311" Version="2.0.0" Language="en-US" Publisher="Justin Clareburt" />
-        <DisplayName>Hot Commands for Visual Studio</DisplayName>
-        <Description xml:space="preserve">A collection of commands, analyzers, and refactorings for enhanced productivity in Visual Studio IDE</Description>
+        <Identity Id="e8175b11-0e09-42b5-9c3c-ba7bfb53a311" Version="2.1.1" Language="en-US" Publisher="Justin Clareburt" />
+        <DisplayName>Hot Commands</DisplayName>
+        <Description xml:space="preserve">A collection of commands and shortcuts for enhanced productivity in Visual Studio IDE.</Description>
         <MoreInfo>https://marketplace.visualstudio.com/items?itemName=JustinClareburtMSFT.HotCommandsforVisualStudio</MoreInfo>
-        <License>License.rtf</License>
-        <ReleaseNotes>ReleaseNotes.txt</ReleaseNotes>
-        <Icon>HotCommandsIcon.png</Icon>
-        <PreviewImage>HotCommandsPreview.png</PreviewImage>
+        <License>Packaging\License.rtf</License>
+        <ReleaseNotes>Packaging\ReleaseNotes.txt</ReleaseNotes>
+        <Icon>Resources\HotCommandsIcon.png</Icon>
+        <PreviewImage>Resources\HotCommandsPreview.png</PreviewImage>
         <Tags>HotCommands;Hot;Commands;Productivity;Keyboard;Shortcuts;Toggle comment;Duplicate code;Format code</Tags>
     </Metadata>
     <Installation>
