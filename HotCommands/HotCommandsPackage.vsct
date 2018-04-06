@@ -192,11 +192,15 @@
     </CommandPlacement>
     <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidMoveMemberDown" priority="0x3010">
       <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_ADVANCED_CMDS"/>
-    </CommandPlacement>    
-    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidGoToPreviousMember" priority="0x8180">
+    </CommandPlacement>
+    <!-- Go To ... Commands -->
+    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidGoToLastEditLocation" priority="0x0100">
       <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_CMDS"/>
     </CommandPlacement>
-    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidGoToNextMember" priority="0x8190">
+    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidGoToPreviousMember" priority="0x0110">
+      <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_CMDS"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidHotCommandsPackageCmdSet" id="cmdidGoToNextMember" priority="0x0120">
       <Parent guid="guidStdEditor" id="IDG_VS_EDITOR_CMDS"/>
     </CommandPlacement>
   </CommandPlacements>
