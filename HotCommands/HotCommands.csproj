@@ -79,6 +79,10 @@
     <Compile Include="Commands\ToggleComment.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\HotCommandsIcon_v2_128x.png">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
@@ -375,7 +379,6 @@
   <ItemGroup>
     <Content Include="Resources\HotCommandsIcon.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Content Include="Resources\HotCommandsPreview.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

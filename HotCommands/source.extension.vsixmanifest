@@ -7,7 +7,7 @@
         <MoreInfo>https://marketplace.visualstudio.com/items?itemName=JustinClareburtMSFT.HotCommandsforVisualStudio</MoreInfo>
         <License>Packaging\License.rtf</License>
         <ReleaseNotes>Packaging\ReleaseNotes.txt</ReleaseNotes>
-        <Icon>Resources\HotCommandsIcon.png</Icon>
+        <Icon>Resources\HotCommandsIcon_v2_128x.png</Icon>
         <PreviewImage>Resources\HotCommandsPreview.png</PreviewImage>
         <Tags>HotCommands;Hot;Commands;Productivity;Keyboard;Shortcuts;Toggle comment;Duplicate code;Format code</Tags>
     </Metadata>
