@@ -178,11 +178,9 @@ namespace HotCommands
             if (node != null)
             {
                 // move the cursor to the previous member
-                textView.Caret.MoveTo(new SnapshotPoint(textView.TextSnapshot, GetCorrectPosition(node)));
-                if (!CursorInView(textView))
-                {
-                    editorOperations.ScrollLineCenter();
-                }
+                int newCaretPosn = GetCorrectPosition(node);
+                textView.Caret.MoveTo(new SnapshotPoint(textView.TextSnapshot, newCaretPosn));
+                EditorExtensions.MakeCaretVisible(textView, newCaretPosn);
             }
         }
 

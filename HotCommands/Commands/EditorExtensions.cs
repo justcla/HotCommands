@@ -53,8 +53,8 @@ namespace HotCommands
                 }
             }
 
-            textView.SwapMembers(currMember, prevMember, movePsoition, MoveDirection.Up, commandTarget, editorOperations);
-            editorOperations.ScrollLineCenter();
+            int newCaretPosn = textView.SwapMembers(currMember, prevMember, movePsoition, MoveDirection.Up, commandTarget, editorOperations);
+            MakeCaretVisible(textView, newCaretPosn);
             return VSConstants.S_OK;
         }
 
@@ -97,9 +97,16 @@ namespace HotCommands
                 }
             }
 
-            textView.SwapMembers(currMember, nextMember, movePsoition, MoveDirection.Down, commandTarget, editorOperations);
-            editorOperations.ScrollLineCenter();
+            int newCaretPosn = textView.SwapMembers(currMember, nextMember, movePsoition, MoveDirection.Down, commandTarget, editorOperations);
+            MakeCaretVisible(textView, newCaretPosn);
             return VSConstants.S_OK;
+        }
+
+        public static void MakeCaretVisible(IWpfTextView textView, int newCaretPosn)
+        {
+            if (newCaretPosn < 0) return;
+            SnapshotSpan spanToMakeVisible = new SnapshotSpan(textView.TextSnapshot, newCaretPosn, 1);
+            textView.ViewScroller.EnsureSpanVisible(spanToMakeVisible, EnsureSpanVisibleOptions.None);
         }
 
         private static void FormatDocument(IOleCommandTarget commandTarget)
@@ -109,9 +116,9 @@ namespace HotCommands
             int hr = commandTarget.Exec(ref cmdGroup, cmdID, (uint)OLECMDEXECOPT.OLECMDEXECOPT_DODEFAULT, IntPtr.Zero, IntPtr.Zero);
         }
 
-        private static void SwapMembers(this IWpfTextView textView, SyntaxNode member1, SyntaxNode member2, MovePosition position, MoveDirection direction, IOleCommandTarget commandTarget, IEditorOperations editorOperations)
+        private static int SwapMembers(this IWpfTextView textView, SyntaxNode member1, SyntaxNode member2, MovePosition position, MoveDirection direction, IOleCommandTarget commandTarget, IEditorOperations editorOperations)
         {
-            if (member1 == null || member2 == null) return;
+            if (member1 == null || member2 == null) return -1;
             int caretIndent = textView.Caret.Position.BufferPosition.Position - member1.FullSpan.Start;
             int movePosition = 0;
             string moveText = member1.GetText().ToString();
@@ -144,6 +151,8 @@ namespace HotCommands
             textView.Selection.Select(new SnapshotSpan(textView.TextSnapshot, (direction == MoveDirection.Up) ? movePosition : movePosition - moveText.Length, moveText.Length), false);
             FormatDocument(commandTarget);
             textView.Selection.Clear();
+
+            return newCaretPosition;
         }
 
         private static MemberDeclarationSyntax GetNextChildMember(this MemberDeclarationSyntax member, bool moveFromBottom)
