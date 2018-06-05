@@ -79,6 +79,10 @@
     <Compile Include="Commands\ToggleComment.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Hot Commands Shortcuts.vssettings">
+      <IncludeInVSIX>true</IncludeInVSIX>
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Resources\HotCommandsIcon_v2_128x.png">
       <IncludeInVSIX>true</IncludeInVSIX>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
