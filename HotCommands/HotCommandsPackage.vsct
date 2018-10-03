@@ -225,8 +225,8 @@
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidGoToLastEditLocation" editor="guidVSStd97" mod1="Control Shift" key1="VK_BACK"/>
     <!-- Text editor commands -->
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidToggleComment" editor="GUID_TextEditorFactory" mod1="Control" key1="VK_OEM_2"/>
-    <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidExpandSelection" editor="GUID_TextEditorFactory" mod1="Control Shift" key1="VK_OEM_4" mod2="Control Shift" key2="VK_OEM_6"/>
-    <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidShrinkSelection" editor="GUID_TextEditorFactory" mod1="Control Shift" key1="VK_OEM_4" mod2="Control Shift" key2="VK_OEM_4"/>
+    <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidExpandSelection" editor="GUID_TextEditorFactory" mod1="Control" key1="W"/>
+    <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidShrinkSelection" editor="GUID_TextEditorFactory" mod1="Control Shift" key1="W"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidFormatCode" editor="GUID_TextEditorFactory" mod1="Control Alt" key1="F"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelection" editor="GUID_TextEditorFactory" mod1="Control" key1="D"/>
     <KeyBinding guid="guidHotCommandsPackageCmdSet" id="cmdidDuplicateSelectionReverse" editor="GUID_TextEditorFactory" mod1="Control Shift" key1="D"/>
