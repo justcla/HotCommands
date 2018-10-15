@@ -53,6 +53,10 @@ namespace HotCommands
         private async Task<int> HandleCommandShrinkTask(IWpfTextView textView)
         {
             var syntaxRoot = await textView.TextSnapshot.GetOpenDocumentInCurrentContextWithChanges().GetSyntaxRootAsync();
+            if (syntaxRoot == null)
+            {
+                return VSConstants.S_FALSE;
+            }
 
             var caretPos = textView.Caret.Position.BufferPosition;
 
@@ -91,6 +95,11 @@ namespace HotCommands
         private async Task<int> HandleCommandExpandTask(IWpfTextView textView)
         {
             var syntaxRoot = await textView.TextSnapshot.GetOpenDocumentInCurrentContextWithChanges().GetSyntaxRootAsync();
+            if (syntaxRoot == null)
+            {
+                return VSConstants.S_FALSE;
+            }
+
             var startPosition = textView.Selection.Start.Position;
             var endPosition = textView.Selection.End.Position;
             var length = endPosition.Position - startPosition.Position;
