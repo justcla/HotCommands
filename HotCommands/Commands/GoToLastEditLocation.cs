@@ -19,21 +19,26 @@ namespace HotCommands
         /// <summary>
         /// VS Package that provides this command, not null.
         /// </summary>
-        private readonly Package package;
+        private readonly AsyncPackage package;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GoToLastEditLocation"/> class.
         /// Adds our command handlers for menu (commands must exist in the command table file)
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
-        private GoToLastEditLocation(Package package)
+        private GoToLastEditLocation(AsyncPackage package)
         {
             this.package = package ?? throw new ArgumentNullException("package");
+        }
 
-            if (this.ServiceProvider.GetService(typeof(IMenuCommandService)) is OleMenuCommandService globalCommandService)
+        public async System.Threading.Tasks.Task Initialize()
+        {
+            if (await this.AsyncServiceProvider.GetServiceAsync(typeof(IMenuCommandService)) is OleMenuCommandService globalCommandService)
             {
                 var menuCommandID = new CommandID(Constants.HotCommandsGuid, (int)Constants.GoToLastEditLocationCmdId);
                 var menuItem = new MenuCommand(this.MenuItemCallback, menuCommandID);
+                // Switch to main thread before calling AddCommand because it calls GetService
+                await ThreadHelper.JoinableTaskFactory.SwitchToMainThreadAsync();
                 globalCommandService.AddCommand(menuItem);
             }
         }
@@ -42,6 +47,14 @@ namespace HotCommands
         {
             get;
             private set;
+        }
+
+        private Microsoft.VisualStudio.Shell.IAsyncServiceProvider AsyncServiceProvider
+        {
+            get
+            {
+                return this.package;
+            }
         }
 
         private IServiceProvider ServiceProvider
@@ -56,9 +69,10 @@ namespace HotCommands
         /// Initializes the singleton instance of the command.
         /// </summary>
         /// <param name="package">Owner package, not null.</param>
-        public static void Initialize(Package package)
+        public static async System.Threading.Tasks.Task Initialize(AsyncPackage package)
         {
             Instance = new GoToLastEditLocation(package);
+            await Instance.Initialize();
         }
 
         private void MenuItemCallback(object sender, EventArgs e)
