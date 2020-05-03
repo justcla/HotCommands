@@ -9,6 +9,8 @@ using System.Runtime.InteropServices;
 using HotCommands.Commands;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio;
+using System;
+using System.Threading;
 
 namespace HotCommands
 {
@@ -29,13 +31,13 @@ namespace HotCommands
     /// To get loaded into VS, the package must be referred by &lt;Asset Type="Microsoft.VisualStudio.VsPackage" ...&gt; in .vsixmanifest file.
     /// </para>
     /// </remarks>
-    [PackageRegistration(UseManagedResourcesOnly = true)]
+    [PackageRegistration(UseManagedResourcesOnly = true, AllowsBackgroundLoading = true)]
     [InstalledProductRegistration("#1110", "#1112", "1.0", IconResourceID = 1400)] // Info on this package for Help/About
     [ProvideMenuResource("Menus.ctmenu", 1)]
     [Guid(HotCommandsPackage.PackageGuidString)]
     [SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
-    [ProvideAutoLoad(VSConstants.VsEditorFactoryGuid.TextEditor_string)]
-    public sealed class HotCommandsPackage : Package
+    [ProvideAutoLoad(VSConstants.VsEditorFactoryGuid.TextEditor_string, PackageAutoLoadFlags.BackgroundLoad)]
+    public sealed class HotCommandsPackage : AsyncPackage
     {
         /// <summary>
         /// HotCommandsPackage GUID string.
@@ -59,16 +61,16 @@ namespace HotCommands
         /// Initialization of the package; this method is called right after the package is sited, so this is the place
         /// where you can put all the initialization code that rely on services provided by VisualStudio.
         /// </summary>
-        protected override void Initialize()
+        protected override async System.Threading.Tasks.Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
-            base.Initialize();
+            await base.InitializeAsync(cancellationToken, progress);
             ToggleComment.Initialize(this);
             ExpandSelection.Initialize(this);
             FormatCode.Initialize(this);
             DuplicateSelection.Initialize(this);
             MoveMemberUp.Initialize(this);
             MoveMemberDown.Initialize(this);
-            GoToLastEditLocation.Initialize(this);
+            await GoToLastEditLocation.Initialize(this);
         }
 
         #endregion
