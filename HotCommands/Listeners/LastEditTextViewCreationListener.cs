@@ -50,7 +50,8 @@ namespace HotCommands
         private string GetCurrentFilePath()
         {
             ITextBuffer textBuffer = _textView.TextDataModel.DocumentBuffer;
-            _textDocumentFactoryService.TryGetTextDocument(textBuffer, out ITextDocument textDocument);
+            ITextDocument textDocument;
+            _textDocumentFactoryService.TryGetTextDocument(textBuffer, out textDocument);
             return textDocument.FilePath;
         }
 

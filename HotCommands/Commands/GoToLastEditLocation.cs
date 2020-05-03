@@ -28,9 +28,12 @@ namespace HotCommands
         /// <param name="package">Owner package, not null.</param>
         private GoToLastEditLocation(Package package)
         {
-            this.package = package ?? throw new ArgumentNullException("package");
+            if (package == null)
+                throw new ArgumentNullException(nameof(package));
+            this.package = package;
 
-            if (this.ServiceProvider.GetService(typeof(IMenuCommandService)) is OleMenuCommandService globalCommandService)
+            OleMenuCommandService globalCommandService = ServiceProvider.GetService(typeof(IMenuCommandService)) as OleMenuCommandService;
+            if (globalCommandService is OleMenuCommandService)
             {
                 var menuCommandID = new CommandID(Constants.HotCommandsGuid, (int)Constants.GoToLastEditLocationCmdId);
                 var menuItem = new MenuCommand(this.MenuItemCallback, menuCommandID);
@@ -89,9 +92,12 @@ namespace HotCommands
         {
             try
             {
+                IVsUIHierarchy hierarchy;
+                uint itemId;
+                IVsWindowFrame windowFrame;
+                IVsTextView vsTextView;
                 VsShellUtilities.OpenDocument(this.ServiceProvider, lastEditFilePath, VSConstants.LOGVIEWID_TextView,
-                                      out IVsUIHierarchy hierarchy, out uint itemId, out IVsWindowFrame windowFrame,
-                                      out IVsTextView vsTextView);
+                                      out hierarchy, out itemId, out windowFrame, out vsTextView);
                 return GetEditorAdaptorsFactoryService().GetWpfTextView(vsTextView);
             }
             catch (Exception e)
