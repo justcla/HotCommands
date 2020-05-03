@@ -17,6 +17,9 @@ namespace HotCommands
         private readonly IClassifier classifier;
         private readonly SVsServiceProvider globalServiceProvider;
         private IEditorOperations editorOperations;
+        private IVsStatusbar statusBarService;
+        internal IVsStatusbar StatusBarService => this.statusBarService
+            ?? (this.statusBarService = globalServiceProvider.GetService(typeof(SVsStatusbar)) as IVsStatusbar);
 
         public HotCommandsCommandFilter(IWpfTextView textView, IClassifierAggregatorService aggregatorFactory,
             SVsServiceProvider globalServiceProvider, IEditorOperationsFactoryService editorOperationsFactory)
@@ -34,31 +37,46 @@ namespace HotCommands
             // Command handling
             if (pguidCmdGroup == Constants.HotCommandsGuid)
             {
-                // Dispatch to the correct command handler
-                switch (nCmdID)
+                // Due to Async initialization, some Instances might be uninitialized and will return null.
+                // Safely catch the NullReferenceException and report a message to the status bar
+                try
                 {
-                    case Constants.ToggleCommentCmdId:
-                        return ToggleComment.Instance.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations);
-                    case Constants.ExpandSelectionCmdId:
-                        return ExpandSelection.Instance.HandleCommand(textView, true);
-                    case Constants.ShrinkSelectionCmdId:
-                        return ExpandSelection.Instance.HandleCommand(textView, false);
-                    case Constants.FormatCodeCmdId:
-                        return FormatCode.Instance.HandleCommand(textView, GetShellCommandDispatcher());
-                    case Constants.DuplicateSelectionCmdId:
-                        return DuplicateSelection.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations);
-                    case Constants.DuplicateSelectionReverseCmdId:
-                        return DuplicateSelection.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations, true);
-                    case Constants.JoinLinesCmdId:
-                        return JoinLines.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations);
-                    case Constants.MoveMemberUpCmdId:
-                        return MoveMemberUp.Instance.HandleCommand(textView,GetShellCommandDispatcher(), editorOperations);
-                    case Constants.MoveMemberDownCmdId:
-                        return MoveMemberDown.Instance.HandleCommand(textView,GetShellCommandDispatcher(), editorOperations);
-                    case Constants.GoToPreviousMemberCmdId:
-                        return MoveCursorToAdjacentMember.MoveToPreviousMember(textView, editorOperations);
-                    case Constants.GoToNextMemberCmdId:
-                        return MoveCursorToAdjacentMember.MoveToNextMember(textView, editorOperations);
+                    // Dispatch to the correct command handler
+                    switch (nCmdID)
+                    {
+                        case Constants.ToggleCommentCmdId:
+                            return ToggleComment.Instance.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations);
+                        case Constants.ExpandSelectionCmdId:
+                            return ExpandSelection.Instance.HandleCommand(textView, true);
+                        case Constants.ShrinkSelectionCmdId:
+                            return ExpandSelection.Instance.HandleCommand(textView, false);
+                        case Constants.FormatCodeCmdId:
+                            return FormatCode.Instance.HandleCommand(textView, GetShellCommandDispatcher());
+                        case Constants.DuplicateSelectionCmdId:
+                            return DuplicateSelection.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations);
+                        case Constants.DuplicateSelectionReverseCmdId:
+                            return DuplicateSelection.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations, true);
+                        case Constants.JoinLinesCmdId:
+                            return JoinLines.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations);
+                        case Constants.MoveMemberUpCmdId:
+                            return MoveMemberUp.Instance.HandleCommand(textView,GetShellCommandDispatcher(), editorOperations);
+                        case Constants.MoveMemberDownCmdId:
+                            return MoveMemberDown.Instance.HandleCommand(textView,GetShellCommandDispatcher(), editorOperations);
+                        case Constants.GoToPreviousMemberCmdId:
+                            return MoveCursorToAdjacentMember.MoveToPreviousMember(textView, editorOperations);
+                        case Constants.GoToNextMemberCmdId:
+                            return MoveCursorToAdjacentMember.MoveToNextMember(textView, editorOperations);
+                    }
+                    // Clear the Status Bar text
+                    StatusBarService.Clear();
+                }
+                catch (NullReferenceException)
+                {
+                    // Most likely exception: System.NullReferenceException: 'Object reference not set to an instance of an object.'
+                    // Resulting from the command being called before Async loading has taken place.
+                    // Swallow the exception and hope it works the next time the user tries it.
+                    // Print a message to the StatusBar
+                    StatusBarService.SetText("HotCommands is still loading. Please try again soon.");
                 }
             }
 

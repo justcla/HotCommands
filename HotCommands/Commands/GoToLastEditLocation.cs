@@ -103,12 +103,9 @@ namespace HotCommands
         {
             try
             {
-                IVsUIHierarchy hierarchy;
-                uint itemId;
-                IVsWindowFrame windowFrame;
-                IVsTextView vsTextView;
                 VsShellUtilities.OpenDocument(this.ServiceProvider, lastEditFilePath, VSConstants.LOGVIEWID_TextView,
-                                      out hierarchy, out itemId, out windowFrame, out vsTextView);
+                                      out IVsUIHierarchy hierarchy, out uint itemId,
+                                      out IVsWindowFrame windowFrame, out IVsTextView vsTextView);
                 return GetEditorAdaptorsFactoryService().GetWpfTextView(vsTextView);
             }
             catch (Exception e)
