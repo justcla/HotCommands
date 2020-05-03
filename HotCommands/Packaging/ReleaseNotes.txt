@@ -1,4 +1,5 @@
 Hot Commands for Visual Studio
+03-May-2020: v2.2.0 Separate version of the extension cut for VS2015 only. Uses new GUID.
 03-May-2020: v2.1.7 Updated build files so it builds in VS2015, VS2017 and VS2019
 14-Oct-2018: v2.1.6 Merged fix to ExpandSelection message on C++ (Issue #58)
 03-Oct-2018: v2.1.5 Reset ExpandSelection default shortcut to Ctrl+W
