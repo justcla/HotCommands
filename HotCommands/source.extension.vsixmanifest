@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="e8175b11-0e09-42b5-9c3c-ba7bfb53a311" Version="3.0.0" Language="en-US" Publisher="Justin Clareburt" />
+        <Identity Id="e8175b11-0e09-42b5-9c3c-ba7bfb53a311" Version="4.0.0" Language="en-US" Publisher="Justin Clareburt" />
         <DisplayName>Hot Commands</DisplayName>
-        <Description xml:space="preserve">A collection of commands and shortcuts for enhanced productivity in Visual Studio IDE.
-VS2017+</Description>
+        <Description xml:space="preserve">A collection of commands and shortcuts for enhanced productivity in Visual Studio IDE. VS2022+</Description>
         <MoreInfo>https://marketplace.visualstudio.com/items?itemName=JustinClareburtMSFT.HotCommandsforVisualStudio</MoreInfo>
         <License>Packaging\License.rtf</License>
         <GettingStartedGuide>https://github.com/justcla/HotCommands</GettingStartedGuide>
@@ -14,7 +13,9 @@ VS2017+</Description>
         <Tags>HotCommands;Hot;Commands;Productivity;Keyboard;Shortcuts;Toggle comment;Duplicate code;Format code</Tags>
     </Metadata>
     <Installation>
-        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[15.0,)" />
+        <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0,)">
+            <ProductArchitecture>amd64</ProductArchitecture>
+        </InstallationTarget>
     </Installation>
     <Dependencies>
         <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
