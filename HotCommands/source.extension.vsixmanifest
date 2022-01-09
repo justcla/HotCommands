@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="e8175b11-0e09-42b5-9c3c-ba7bfb53a311" Version="3.0.0" Language="en-US" Publisher="Justin Clareburt" />
-        <DisplayName>Hot Commands</DisplayName>
+        <Identity Id="HotCommands2017-0DDEE73D-A4D6-44A4-9F0D-6CDDEFD338B6" Version="3.1.0" Language="en-US" Publisher="Justin Clareburt" />
+        <DisplayName>Hot Commands VS2017-VS2019</DisplayName>
         <Description xml:space="preserve">A collection of commands and shortcuts for enhanced productivity in Visual Studio IDE.
 VS2017+</Description>
-        <MoreInfo>https://marketplace.visualstudio.com/items?itemName=JustinClareburtMSFT.HotCommandsforVisualStudio</MoreInfo>
+        <MoreInfo>https://marketplace.visualstudio.com/items?itemName=JustinClareburtMSFT.HotCommandsVS2017VS2019</MoreInfo>
         <License>Packaging\License.rtf</License>
         <GettingStartedGuide>https://github.com/justcla/HotCommands</GettingStartedGuide>
-        <ReleaseNotes>https://github.com/justcla/HotCommands/blob/master/HotCommands/Packaging/ReleaseNotes.txt</ReleaseNotes>
+        <ReleaseNotes>https://github.com/justcla/HotCommands/blob/VS2017-VS2019/HotCommands/Packaging/ReleaseNotes.txt</ReleaseNotes>
         <Icon>Resources\HotCommandsIcon_v2_128x.png</Icon>
         <PreviewImage>Resources\HotCommandsPreview.png</PreviewImage>
         <Tags>HotCommands;Hot;Commands;Productivity;Keyboard;Shortcuts;Toggle comment;Duplicate code;Format code</Tags>
