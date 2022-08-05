@@ -52,6 +52,8 @@ namespace HotCommands
                             return ExpandSelection.Instance.HandleCommand(textView, false);
                         case Constants.FormatCodeCmdId:
                             return FormatCode.Instance.HandleCommand(textView, GetShellCommandDispatcher());
+                        case Constants.DuplicateLineCmdId:
+                            return DuplicateSelection.HandleCommand_DuplicateLine(textView, classifier, GetShellCommandDispatcher(), editorOperations);
                         case Constants.DuplicateSelectionCmdId:
                             return DuplicateSelection.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations);
                         case Constants.DuplicateSelectionReverseCmdId:
@@ -98,6 +100,7 @@ namespace HotCommands
                     case Constants.ToggleCommentCmdId:
                     case Constants.ExpandSelectionCmdId:
                     case Constants.FormatCodeCmdId:
+                    case Constants.DuplicateLineCmdId:
                     case Constants.DuplicateSelectionCmdId:
                     case Constants.DuplicateSelectionReverseCmdId:
                     case Constants.MoveMemberUpCmdId:

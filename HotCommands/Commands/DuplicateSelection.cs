@@ -32,6 +32,11 @@ namespace HotCommands.Commands
             _package = package;
         }
         // Helped by source of Microsoft.VisualStudio.Text.Editor.DragDrop.DropHandlerBase.cs in assembly Microsoft.VisualStudio.Text.UI.Wpf, Version=14.0.0.0
+        public static int HandleCommand_DuplicateLine(IWpfTextView textView, IClassifier classifier, IOleCommandTarget commandTarget, IEditorOperations editorOperations, bool shiftPressed = false)
+        {
+            return VSConstants.S_OK;
+        }
+
         public static int HandleCommand(IWpfTextView textView, IClassifier classifier, IOleCommandTarget commandTarget, IEditorOperations editorOperations, bool shiftPressed = false)
         {
             //Guid cmdGroup = VSConstants.VSStd2K;
