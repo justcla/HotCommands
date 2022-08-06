@@ -40,7 +40,10 @@ namespace HotCommands.Commands
             // - Single-line selection
             // - Multi-line selection
 
-            foreach (SnapshotSpan span in textView.Selection.SelectedSpans)
+            NormalizedSnapshotSpanCollection selectedSpans = textView.Selection.SelectedSpans;
+            List<SnapshotSpan> spans = selectedSpans.ToList();
+            spans.Reverse();    // Hack: Work from the last selection upward, to avoid changing buffer positions with mutli-caret
+            foreach (SnapshotSpan span in spans)
             {
                 // Select all the text from the start of the first line to the end of the last line
                 // Find the start of the first line
@@ -66,7 +69,7 @@ namespace HotCommands.Commands
                 // Always end with a new line (CR/LF)
                 if (!endsAtLineStart)
                 {
-                    text += Environment.NewLine;
+                    text += Environment.NewLine;    // Note: This does not detect the line endings of the current file.
                 }
 
                 // Insert the text at the start of the first line
