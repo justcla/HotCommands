@@ -20,6 +20,9 @@ namespace HotCommands.Commands
 
         private IServiceProvider ServiceProvider => _package;
 
+        private ITextBufferUndoManagerProvider UndoProvider;
+
+
         public static void Initialize(Package package)
         {
             Instance = new DuplicateSelection(package);
@@ -31,6 +34,64 @@ namespace HotCommands.Commands
                 throw new ArgumentNullException(nameof(package));
             _package = package;
         }
+
+        public static int HandleCommand_DuplicateLine(IWpfTextView textView, IClassifier classifier,
+            IOleCommandTarget commandTarget, IEditorOperations editorOperations,
+            ITextBufferUndoManagerProvider undoManagerProvider)
+        {
+            // Use cases:
+            // Single or Multiple carets
+            // For each caret/selection (in SelectedSpans):
+            // - No-text selection
+            // - Single-line selection
+            // - Multi-line selection
+            // - Selection that ends on the first char of the line
+
+            // Create a single transaction so the user can Undo all operations in one go.
+            ITextBufferUndoManager undoManager = undoManagerProvider.GetTextBufferUndoManager(textView.TextBuffer);
+            ITextUndoTransaction transaction = undoManager.TextBufferUndoHistory.CreateTransaction("Duplicate Lines");
+
+            List<SnapshotSpan> spans = textView.Selection.SelectedSpans.ToList();
+            spans.Reverse();    // Hack: Work from the last selection upward, to avoid changing buffer positions with mutli-caret
+            foreach (SnapshotSpan span in spans)
+            {
+                // Select all the text from the start of the first line to the end of the last line
+                // Find the start of the first line
+                SnapshotPoint startPoint = new SnapshotPoint(span.Snapshot, span.Start);
+                SnapshotPoint startOfFirstLine = startPoint.GetContainingLine().Start;
+
+                // Find the end of the last line
+                SnapshotPoint endPoint = new SnapshotPoint(span.Snapshot, span.End);
+                SnapshotPoint endOfLastLine = endPoint.GetContainingLine().End;
+                // Don't include the last line if the end point is at the very beginning!
+                bool endsAtLineStart = span.Length > 0 && (endPoint.GetContainingLine().Start.Position == endPoint.Position);
+                if (endsAtLineStart)
+                {
+                    // Return the text up to the actual endpoint, not the end of its line.
+                    endOfLastLine = endPoint;
+                    // Note: This means that this text contains a CRLF. Account for that later.
+                }
+
+                // Fetch the text from the start of first to end of last
+                SnapshotSpan linesToCopy = new SnapshotSpan(startOfFirstLine, endOfLastLine);
+                string text = linesToCopy.GetText();
+
+                // Always end with a new line (CR/LF)
+                if (!endsAtLineStart)
+                {
+                    text += Environment.NewLine;    // Note: This does not detect the line endings of the current file.
+                }
+
+                // Insert the text at the start of the first line
+                textView.TextBuffer.Insert(startOfFirstLine.Position, text);
+            }
+
+            // Complete the transaction
+            transaction.Complete();
+
+            return VSConstants.S_OK;
+        }
+
         // Helped by source of Microsoft.VisualStudio.Text.Editor.DragDrop.DropHandlerBase.cs in assembly Microsoft.VisualStudio.Text.UI.Wpf, Version=14.0.0.0
         public static int HandleCommand(IWpfTextView textView, IClassifier classifier, IOleCommandTarget commandTarget, IEditorOperations editorOperations, bool shiftPressed = false)
         {
@@ -127,10 +188,10 @@ namespace HotCommands.Commands
                     if (isReversed) list.Reverse();
                     foreach (var trackingSpan in list)
                     {
-                        var span = trackingSpan.GetSpan(textSnapshot);
+                        SnapshotSpan span = trackingSpan.GetSpan(textSnapshot);
                         text = trackingSpan.GetText(textSnapshot);
-                        var offset = 0;
-                        var insertionPoint = !isReversed ? trackingSpan.GetEndPoint(span.Snapshot) : trackingSpan.GetStartPoint(span.Snapshot);
+                        int offset = 0;
+                        SnapshotPoint insertionPoint = !isReversed ? trackingSpan.GetEndPoint(span.Snapshot) : trackingSpan.GetStartPoint(span.Snapshot);
                         var virtualBufferPosition = new VirtualSnapshotPoint(insertionPoint);
                         virtualBufferPosition = isReversed && !shiftPressed ? new VirtualSnapshotPoint(insertionPoint.Add(text.Length))
                            : !isReversed && shiftPressed ? new VirtualSnapshotPoint(insertionPoint.Add(-text.Length)) : virtualBufferPosition;

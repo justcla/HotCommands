@@ -17,17 +17,20 @@ namespace HotCommands
         private readonly IClassifier classifier;
         private readonly SVsServiceProvider globalServiceProvider;
         private IEditorOperations editorOperations;
+        private readonly ITextBufferUndoManagerProvider undoManagerProvider;
         private IVsStatusbar statusBarService;
         internal IVsStatusbar StatusBarService => this.statusBarService
             ?? (this.statusBarService = globalServiceProvider.GetService(typeof(SVsStatusbar)) as IVsStatusbar);
 
         public HotCommandsCommandFilter(IWpfTextView textView, IClassifierAggregatorService aggregatorFactory,
-            SVsServiceProvider globalServiceProvider, IEditorOperationsFactoryService editorOperationsFactory)
+            SVsServiceProvider globalServiceProvider, IEditorOperationsFactoryService editorOperationsFactory,
+            ITextBufferUndoManagerProvider undoProvider)
         {
             this.textView = textView;
             classifier = aggregatorFactory.GetClassifier(textView.TextBuffer);
             this.globalServiceProvider = globalServiceProvider;
             editorOperations = editorOperationsFactory.GetEditorOperations(textView);
+            this.undoManagerProvider = undoProvider;
         }
 
         public IOleCommandTarget Next { get; internal set; }
@@ -52,6 +55,8 @@ namespace HotCommands
                             return ExpandSelection.Instance.HandleCommand(textView, false);
                         case Constants.FormatCodeCmdId:
                             return FormatCode.Instance.HandleCommand(textView, GetShellCommandDispatcher());
+                        case Constants.DuplicateLineCmdId:
+                            return DuplicateSelection.HandleCommand_DuplicateLine(textView, classifier, GetShellCommandDispatcher(), editorOperations, undoManagerProvider);
                         case Constants.DuplicateSelectionCmdId:
                             return DuplicateSelection.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations);
                         case Constants.DuplicateSelectionReverseCmdId:
@@ -98,6 +103,7 @@ namespace HotCommands
                     case Constants.ToggleCommentCmdId:
                     case Constants.ExpandSelectionCmdId:
                     case Constants.FormatCodeCmdId:
+                    case Constants.DuplicateLineCmdId:
                     case Constants.DuplicateSelectionCmdId:
                     case Constants.DuplicateSelectionReverseCmdId:
                     case Constants.MoveMemberUpCmdId:

@@ -28,11 +28,14 @@ namespace HotCommands
         [Import(typeof(IEditorOperationsFactoryService))]
         private IEditorOperationsFactoryService _editorOperationsFactory;
 
+        [Import]
+        private ITextBufferUndoManagerProvider _undoProvider;
+
         public void VsTextViewCreated(IVsTextView textViewAdapter)
         {
             IWpfTextView textView = EditorAdaptersFactoryService.GetWpfTextView(textViewAdapter);
 
-            HotCommandsCommandFilter commandFilter = new HotCommandsCommandFilter(textView, _aggregatorFactory, _globalServiceProvider, _editorOperationsFactory);
+            HotCommandsCommandFilter commandFilter = new HotCommandsCommandFilter(textView, _aggregatorFactory, _globalServiceProvider, _editorOperationsFactory, _undoProvider);
             IOleCommandTarget next;
             textViewAdapter.AddCommandFilter(commandFilter, out next);
 
