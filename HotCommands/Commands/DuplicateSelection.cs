@@ -20,6 +20,9 @@ namespace HotCommands.Commands
 
         private IServiceProvider ServiceProvider => _package;
 
+        private ITextBufferUndoManagerProvider UndoProvider;
+
+
         public static void Initialize(Package package)
         {
             Instance = new DuplicateSelection(package);
@@ -32,16 +35,23 @@ namespace HotCommands.Commands
             _package = package;
         }
 
-        public static int HandleCommand_DuplicateLine(IWpfTextView textView, IClassifier classifier, IOleCommandTarget commandTarget, IEditorOperations editorOperations, bool shiftPressed = false)
+        public static int HandleCommand_DuplicateLine(IWpfTextView textView, IClassifier classifier,
+            IOleCommandTarget commandTarget, IEditorOperations editorOperations,
+            ITextBufferUndoManagerProvider undoManagerProvider)
         {
             // Use cases:
-            // For each selection (in SelectedSpans):
+            // Single or Multiple carets
+            // For each caret/selection (in SelectedSpans):
             // - No-text selection
             // - Single-line selection
             // - Multi-line selection
+            // - Selection that ends on the first char of the line
 
-            NormalizedSnapshotSpanCollection selectedSpans = textView.Selection.SelectedSpans;
-            List<SnapshotSpan> spans = selectedSpans.ToList();
+            // Create a single transaction so the user can Undo all operations in one go.
+            ITextBufferUndoManager undoManager = undoManagerProvider.GetTextBufferUndoManager(textView.TextBuffer);
+            ITextUndoTransaction transaction = undoManager.TextBufferUndoHistory.CreateTransaction("Duplicate Lines");
+
+            List<SnapshotSpan> spans = textView.Selection.SelectedSpans.ToList();
             spans.Reverse();    // Hack: Work from the last selection upward, to avoid changing buffer positions with mutli-caret
             foreach (SnapshotSpan span in spans)
             {
@@ -75,6 +85,9 @@ namespace HotCommands.Commands
                 // Insert the text at the start of the first line
                 textView.TextBuffer.Insert(startOfFirstLine.Position, text);
             }
+
+            // Complete the transaction
+            transaction.Complete();
 
             return VSConstants.S_OK;
         }
