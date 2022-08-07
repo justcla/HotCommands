@@ -16,9 +16,14 @@ Project for creating new commands and shortcuts for Visual Studio.
 <td>Ctrl+/</td>
 </tr>
 <tr>
-<td>Duplicate Code /<br /> Duplicate Reversed</td>
-<td>Duplicates the currently selected text, or the current line if no selection. <br /> Reversed: Same as Duplicate Code, but places the new code before the current selection (or line).</td>
-<td>Ctrl+D /<br /> Ctrl+Shift+D</td>
+<td>Duplicate Selection</td>
+<td>Duplicates the currently selected text, or the current line if no selection.</td>
+<td>Ctrl+D</td>
+</tr>
+<tr>
+<td>Duplicate Lines</td>
+<td>Duplicates the entire line(s) of the current selection, or the current line if no selection.</td>
+<td>Ctrl+Shift+D</td>
 </tr>
 <tr>
 <td>Edit.JoinLines</td>

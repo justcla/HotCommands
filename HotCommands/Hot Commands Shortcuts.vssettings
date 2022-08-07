@@ -18,8 +18,9 @@
           <Shortcut Command="Edit.GoToLastEditLocation" Scope="Global">Ctrl+Shift+Bkspce</Shortcut>  <!-- In VS 15.8+ -->
           <!--Duplicate Code-->
           <Shortcut Command="Edit.Duplicate" Scope="Text Editor">Ctrl+D</Shortcut>  <!-- v15.8+ -->
+          <Shortcut Command="Edit.DuplicateLines" Scope="Text Editor">Ctrl+Shift+D</Shortcut>
           <Shortcut Command="Edit.DuplicateSelection" Scope="Text Editor">Ctrl+D</Shortcut>
-          <Shortcut Command="Edit.DuplicateSelectionReversed" Scope="Text Editor">Ctrl+Shift+D</Shortcut>
+          <!--<Shortcut Command="Edit.DuplicateSelectionReversed" Scope="Text Editor">Ctrl+Shift+D</Shortcut>-->
           <!--Expand Selection-->
           <Shortcut Command="Edit.IncreaseSelection" Scope="Text Editor">Ctrl+W</Shortcut>  <!-- ExpandSelection in v15.7+ -->
           <Shortcut Command="Edit.DecreaseSelection" Scope="Text Editor">Ctrl+Shift+W</Shortcut>
