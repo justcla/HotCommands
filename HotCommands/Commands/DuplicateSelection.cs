@@ -66,7 +66,6 @@ namespace HotCommands.Commands
                 SnapshotPoint endOfLastLine = endPoint.GetContainingLine().End;
                 // Don't include the last line if the end point is at the very beginning!
                 bool endsAtLineStart = span.Length > 0 && (endPoint.GetContainingLine().Start.Position == endPoint.Position);
-                bool startsAtLineEnd = span.Length > 0 && (startPoint.GetContainingLine().End.Position == startPoint.Position);
                 bool endsAtLineEnd = span.Length > 0 && (endPoint.GetContainingLine().End.Position == endPoint.Position);
                 if (endsAtLineStart)
                 {
@@ -96,20 +95,10 @@ namespace HotCommands.Commands
                     if (endsAtLineStart || endsAtLineEnd)
                     {
                         // Hack: Only works for single-selection. TODO: Fix for multi-selection.
-                        //if (spans.Count < 2)
-                        //{
+                        if (spans.Count < 2)
+                        {
                             editorOperations.ExtendSelection(endPoint);
-                        //}
-                        ////textView.Selection.Select(span.Start, )
-                        //// Ensure the selection is returned to its original state
-                        ////editorOperations.ExtendSelection(span.End);
-                        //var startTrackingPoint = textView.TextSnapshot.CreateTrackingPoint(span.Start, PointTrackingMode.Negative, TrackingFidelityMode.UndoRedo);
-                        //var endTrackingPoint = textView.TextSnapshot.CreateTrackingPoint(span.End, PointTrackingMode.Negative, TrackingFidelityMode.UndoRedo);
-                        ////textView.Selection.Select(new SnapshotSpan(startTrackingSpan, 100), isReversed);
-                        //// Grab a selection span that is based on the original 'span'
-                        //VirtualSnapshotPoint anchorPoint = new VirtualSnapshotPoint(textView.TextSnapshot, startTrackingPoint.GetPoint(textView.TextSnapshot));
-                        //VirtualSnapshotPoint activePoint = new VirtualSnapshotPoint(textView.TextSnapshot, endTrackingPoint.GetPoint(textView.TextSnapshot));
-                        ////SnapshotSpan selectionSpan = new SnapshotSpan(startPoint, endPoint);
+                        }
                     }
                 }
                 else  // ie. CopyLinesDown
