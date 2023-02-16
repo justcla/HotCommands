@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
@@ -35,9 +36,9 @@ namespace HotCommands.Commands
             _package = package;
         }
 
-        public static int HandleCommand_DuplicateLine(IWpfTextView textView, IClassifier classifier,
+        public static int HandleCommand_DuplicateLines(IWpfTextView textView, IClassifier classifier,
             IOleCommandTarget commandTarget, IEditorOperations editorOperations,
-            ITextBufferUndoManagerProvider undoManagerProvider)
+            ITextBufferUndoManagerProvider undoManagerProvider, bool isCopyUp)
         {
             // Use cases:
             // Single or Multiple carets
@@ -65,6 +66,7 @@ namespace HotCommands.Commands
                 SnapshotPoint endOfLastLine = endPoint.GetContainingLine().End;
                 // Don't include the last line if the end point is at the very beginning!
                 bool endsAtLineStart = span.Length > 0 && (endPoint.GetContainingLine().Start.Position == endPoint.Position);
+                bool endsAtLineEnd = span.Length > 0 && (endPoint.GetContainingLine().End.Position == endPoint.Position);
                 if (endsAtLineStart)
                 {
                     // Return the text up to the actual endpoint, not the end of its line.
@@ -76,14 +78,40 @@ namespace HotCommands.Commands
                 SnapshotSpan linesToCopy = new SnapshotSpan(startOfFirstLine, endOfLastLine);
                 string text = linesToCopy.GetText();
 
-                // Always end with a new line (CR/LF)
-                if (!endsAtLineStart)
+                // Copy Lines Up? or Copy Lines Down?
+                if (isCopyUp) // ie. CopyLinesUp
                 {
-                    text += Environment.NewLine;    // Note: This does not detect the line endings of the current file.
-                }
+                    // Always start with a new line (CR/LF)
+                    if (!endsAtLineStart)
+                    {
+                        text = Environment.NewLine + text;    // Note: This does not detect the line endings of the current file.
+                    }
 
-                // Insert the text at the start of the first line
-                textView.TextBuffer.Insert(startOfFirstLine.Position, text);
+                    // Insert the text on a new line after the last line - TODO (CopyLinesUp)
+                    int insertPosn = endOfLastLine.Position;
+                    textView.TextBuffer.Insert(insertPosn, text); // (CopyLinesUp)
+
+                    // Hack: Fix the selection, if the selection ended at the end of a line or start of new line.
+                    if (endsAtLineStart || endsAtLineEnd)
+                    {
+                        // Hack: Only works for single-selection. TODO: Fix for multi-selection.
+                        if (spans.Count < 2)
+                        {
+                            editorOperations.ExtendSelection(endPoint);
+                        }
+                    }
+                }
+                else  // ie. CopyLinesDown
+                {
+                    // Always end with a new line (CR/LF)
+                    if (!endsAtLineStart)
+                    {
+                        text += Environment.NewLine;    // Note: This does not detect the line endings of the current file.
+                    }
+
+                    // Insert the text at the start of the first line
+                    textView.TextBuffer.Insert(startOfFirstLine.Position, text); // (CopyLinesDown)
+                }
             }
 
             // Complete the transaction
@@ -96,7 +124,7 @@ namespace HotCommands.Commands
         public static int HandleCommand(IWpfTextView textView, IClassifier classifier, IOleCommandTarget commandTarget, IEditorOperations editorOperations, bool shiftPressed = false)
         {
             //Guid cmdGroup = VSConstants.VSStd2K;
-            var selectedText = editorOperations.SelectedText;
+            string selectedText = editorOperations.SelectedText;
             ITrackingPoint trackingPoint = null;
             if (selectedText.Length == 0)
             {
@@ -149,6 +177,7 @@ namespace HotCommands.Commands
                 }
 
 
+                // Case where there is just one selection:
                 if (list.Count < 2)
                 {
                     var offset = 0;
@@ -181,6 +210,7 @@ namespace HotCommands.Commands
                         editorOperations.SelectAndMoveCaret(virtualSnapshotPoint1, virtualSnapshotPoint2, TextSelectionMode.Stream);
                     }
                 }
+                // Handle Multi-selections:
                 else
                 {
                     var trackingPointOffsetList = new List<Tuple<ITrackingPoint, int, int>>();
