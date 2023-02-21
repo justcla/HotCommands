@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.OLE.Interop;
 using Microsoft.VisualStudio.Shell;
@@ -52,72 +51,119 @@ namespace HotCommands.Commands
             ITextBufferUndoManager undoManager = undoManagerProvider.GetTextBufferUndoManager(textView.TextBuffer);
             ITextUndoTransaction transaction = undoManager.TextBufferUndoHistory.CreateTransaction("Duplicate Lines");
 
-            List<SnapshotSpan> spans = textView.Selection.SelectedSpans.ToList();
-            spans.Reverse();    // Hack: Work from the last selection upward, to avoid changing buffer positions with mutli-caret
-            foreach (SnapshotSpan span in spans)
+            // This bool is to handle an annoying edge case where the selection would be expanded
+            // by the inserted text because the insertion happens at the end of the selection.
+            bool isEdgeCase_InsertExpandsSelection = false;
+
+            IMultiSelectionBroker broker = textView.GetMultiSelectionBroker();
+            IReadOnlyList<Selection> selections = broker.AllSelections;
+            Selection primarySelection = broker.PrimarySelection;
+            // Hack: Work from the last selection upward, to avoid changing buffer positions with mutli-caret
+            for (int i = selections.Count - 1; i >= 0; i--)
             {
-                // Select all the text from the start of the first line to the end of the last line
-                // Find the start of the first line
-                SnapshotPoint startPoint = new SnapshotPoint(span.Snapshot, span.Start);
-                SnapshotPoint startOfFirstLine = startPoint.GetContainingLine().Start;
+                Selection selection = selections[i];
 
-                // Find the end of the last line
-                SnapshotPoint endPoint = new SnapshotPoint(span.Snapshot, span.End);
-                SnapshotPoint endOfLastLine = endPoint.GetContainingLine().End;
-                // Don't include the last line if the end point is at the very beginning!
-                bool endsAtLineStart = span.Length > 0 && (endPoint.GetContainingLine().Start.Position == endPoint.Position);
-                bool endsAtLineEnd = span.Length > 0 && (endPoint.GetContainingLine().End.Position == endPoint.Position);
-                if (endsAtLineStart)
+                SnapshotSpan selectionSpan = selection.Extent.SnapshotSpan;
+                SnapshotSpan selectedLines = GetContainingLines(selectionSpan);
+                string textToInsert = selectedLines.GetText();
+
+                bool isEndOfFile = selectedLines.End == textView.TextSnapshot.Length;
+
+                SnapshotPoint insertPos;
+                if (isCopyUp)
                 {
-                    // Return the text up to the actual endpoint, not the end of its line.
-                    endOfLastLine = endPoint;
-                    // Note: This means that this text contains a CRLF. Account for that later.
+                    insertPos = selectedLines.End;
+
+                    isEdgeCase_InsertExpandsSelection |= selectionSpan.End == insertPos;
+
+                    // Case when there is no trailing new-line chars in the selected lines.
+                    if (isEndOfFile) textToInsert = Environment.NewLine + textToInsert;
+                }
+                else // (isCopyDown)
+                {
+                    insertPos = selectedLines.Start;
+
+                    // Case when there is no trailing new-line chars in the selected lines.
+                    if (isEndOfFile) textToInsert = textToInsert + Environment.NewLine;
                 }
 
-                // Fetch the text from the start of first to end of last
-                SnapshotSpan linesToCopy = new SnapshotSpan(startOfFirstLine, endOfLastLine);
-                string text = linesToCopy.GetText();
+                textView.TextBuffer.Insert(insertPos, textToInsert);
+            }
 
-                // Copy Lines Up? or Copy Lines Down?
-                if (isCopyUp) // ie. CopyLinesUp
+            if (isEdgeCase_InsertExpandsSelection)
+            {
+                // Translate selections to newest snapshot with negative tracking mode for the
+                // end point so that they are not expanded due to the recent insertions.
+                var targetSnapshot = textView.TextSnapshot;
+                var newSelections = new Selection[selections.Count];
+                int primarySelectionIndex = 0;
+                for (int i = 0; i < newSelections.Length; i++)
                 {
-                    // Always start with a new line (CR/LF)
-                    if (!endsAtLineStart)
-                    {
-                        text = Environment.NewLine + text;    // Note: This does not detect the line endings of the current file.
-                    }
+                    Selection selection = selections[i];
+                    if (primarySelection.Equals(selection)) primarySelectionIndex = i;
+                    newSelections[i] = TranslateTo(
+                        selection, targetSnapshot,
+                        GetPointTrackingMode(selection.InsertionPoint),
+                        GetPointTrackingMode(selection.AnchorPoint),
+                        GetPointTrackingMode(selection.ActivePoint)
+                    );
 
-                    // Insert the text on a new line after the last line - TODO (CopyLinesUp)
-                    int insertPosn = endOfLastLine.Position;
-                    textView.TextBuffer.Insert(insertPosn, text); // (CopyLinesUp)
-
-                    // Hack: Fix the selection, if the selection ended at the end of a line or start of new line.
-                    if (endsAtLineStart || endsAtLineEnd)
+                    PointTrackingMode GetPointTrackingMode(VirtualSnapshotPoint point)
                     {
-                        // Hack: Only works for single-selection. TODO: Fix for multi-selection.
-                        if (spans.Count < 2)
-                        {
-                            editorOperations.ExtendSelection(endPoint);
-                        }
+                        if (point.Position == point.Position.Snapshot.Length) return PointTrackingMode.Negative;
+                        return point <= selection.Extent.Start ? PointTrackingMode.Positive : PointTrackingMode.Negative;
                     }
                 }
-                else  // ie. CopyLinesDown
-                {
-                    // Always end with a new line (CR/LF)
-                    if (!endsAtLineStart)
-                    {
-                        text += Environment.NewLine;    // Note: This does not detect the line endings of the current file.
-                    }
 
-                    // Insert the text at the start of the first line
-                    textView.TextBuffer.Insert(startOfFirstLine.Position, text); // (CopyLinesDown)
-                }
+                broker.SetSelectionRange(newSelections, newSelections[primarySelectionIndex]);
             }
 
             // Complete the transaction
             transaction.Complete();
 
             return VSConstants.S_OK;
+        }
+
+        /// <summary>
+        /// Transforms a selection to a target snapshot using the provided tracking rules.
+        /// TODO: Move to utility class and make into extension?
+        /// </summary>
+        public static Selection TranslateTo(Selection selection, ITextSnapshot targetSnapshot, PointTrackingMode insertionPointTracking, PointTrackingMode anchorPointTracking, PointTrackingMode activePointTracking)
+        {
+            return new Selection
+            (
+                selection.InsertionPoint.TranslateTo(targetSnapshot, insertionPointTracking),
+                selection.AnchorPoint.TranslateTo(targetSnapshot, anchorPointTracking),
+                selection.ActivePoint.TranslateTo(targetSnapshot, activePointTracking),
+                selection.InsertionPointAffinity
+            );
+        }
+
+        /// <summary>
+        /// Expands span to include all lines it touches.
+        /// Spans ending on first char of a new line does not count as touching that line.
+        /// Includes any trailing new-line chars (CR/LF).
+        /// TODO: Move to utility class and make into extension?
+        /// </summary>
+        /// <returns> The lines that contains this span. </returns>
+        public static SnapshotSpan GetContainingLines(SnapshotSpan span)
+        {
+            var firstLine = span.Start.GetContainingLine();
+            SnapshotPoint linesStart = firstLine.Start;
+            SnapshotPoint linesEnd;
+            if (span.Length == 0)
+            {
+                linesEnd = firstLine.EndIncludingLineBreak;
+            }
+            else
+            {
+                var lastLine = span.End.GetContainingLine();
+                linesEnd = span.End == lastLine.Start ?
+                    lastLine.Start
+                    :
+                    lastLine.EndIncludingLineBreak;
+            }
+            return new SnapshotSpan(linesStart, linesEnd);
         }
 
         // Helped by source of Microsoft.VisualStudio.Text.Editor.DragDrop.DropHandlerBase.cs in assembly Microsoft.VisualStudio.Text.UI.Wpf, Version=14.0.0.0
