@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="e8175b11-0e09-42b5-9c3c-ba7bfb53a311" Version="4.3.0" Language="en-US" Publisher="Justin Clareburt" />
+        <Identity Id="e8175b11-0e09-42b5-9c3c-ba7bfb53a311" Version="4.3.1" Language="en-US" Publisher="Justin Clareburt" />
         <DisplayName>Hot Commands</DisplayName>
         <Description xml:space="preserve">A collection of commands and shortcuts for enhanced productivity in Visual Studio IDE. VS2022+</Description>
         <MoreInfo>https://marketplace.visualstudio.com/items?itemName=JustinClareburtMSFT.HotCommandsforVisualStudio</MoreInfo>
