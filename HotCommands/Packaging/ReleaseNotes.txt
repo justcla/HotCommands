@@ -1,5 +1,6 @@
 Hot Commands for Visual Studio
-16-Feb-2023: v4.2.0 Added command: DuplicateLinesUp (Issue #93 - Request from Carl Foghammar Nömtak)
+21-Feb-2023: v4.3.0 Perfected DuplicateLinesUp  (Issue #93 - Fix from from Carl Foghammar Nömtak)
+16-Feb-2023: v4.2.0 Added command: DuplicateLinesUp
 07-Aug-2022: v4.1.0 Added command: DuplicateLine (Issue #89 - Fabio Marmitt)
 10-Jan-2022: v4.0.0 Upgraded to VS2022. Now only targeting VS2022+.
 04-May-2020: v3.0.0 Now only targeting VS2017+. Handles Async loading (Issue #81/PR #82)
