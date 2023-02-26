@@ -55,14 +55,14 @@ namespace HotCommands
                             return ExpandSelection.Instance.HandleCommand(textView, false);
                         case Constants.FormatCodeCmdId:
                             return FormatCode.Instance.HandleCommand(textView, GetShellCommandDispatcher());
-                        case Constants.DuplicateLinesUpCmdId:
-                            return DuplicateSelection.HandleCommand_DuplicateLines(textView, classifier, GetShellCommandDispatcher(), editorOperations, undoManagerProvider, true);
-                        case Constants.DuplicateLinesDownCmdId:
-                            return DuplicateSelection.HandleCommand_DuplicateLines(textView, classifier, GetShellCommandDispatcher(), editorOperations, undoManagerProvider, false);
                         case Constants.DuplicateSelectionCmdId:
-                            return DuplicateSelection.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations);
+                            return DuplicateSelection.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations, undoManagerProvider, isDuplicateLines: false, isReversed: false);
                         case Constants.DuplicateSelectionReverseCmdId:
-                            return DuplicateSelection.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations, true);
+                            return DuplicateSelection.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations, undoManagerProvider, isDuplicateLines: false, isReversed: true);
+                        case Constants.DuplicateLinesDownCmdId:
+                            return DuplicateSelection.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations, undoManagerProvider, isDuplicateLines: true, isReversed: false);
+                        case Constants.DuplicateLinesUpCmdId:
+                            return DuplicateSelection.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations, undoManagerProvider, isDuplicateLines: true, isReversed: true);
                         case Constants.JoinLinesCmdId:
                             return JoinLines.HandleCommand(textView, classifier, GetShellCommandDispatcher(), editorOperations);
                         case Constants.MoveMemberUpCmdId:
