@@ -1,4 +1,5 @@
 Hot Commands for Visual Studio
+26-Feb-2023: v4.3.2 Fix warning about missing VS packages (Issue #97 - Fix Warning that appears at VS launch)
 21-Feb-2023: v4.3.1 Re-write of DuplicateSelection  (Issue #95 - Fix from from Carl Foghammar Nömtak)
 21-Feb-2023: v4.3.0 Perfected DuplicateLinesUp  (Issue #93 - Fix from from Carl Foghammar Nömtak)
 16-Feb-2023: v4.2.0 Added command: DuplicateLinesUp
