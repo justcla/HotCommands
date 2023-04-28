@@ -65,21 +65,14 @@ namespace HotCommands.Commands
                 {
                     SnapshotSpan selectionSpan = selection.Extent.SnapshotSpan;
                     bool isDuplicateLinesForThisSelection = isDuplicateLines || selectionSpan.Length == 0; // When selection length is zero we treat it as duplicate lines command (or should we not?).
-                    
-                    SnapshotSpan duplicationSpan;
-                    bool isMissingNewLine;
-                    if (isDuplicateLinesForThisSelection)
-                    {
-                        duplicationSpan = GetContainingLines(selectionSpan);
-                        isMissingNewLine = duplicationSpan.End == edit.Snapshot.Length;
-                    }
-                    else
-                    {
-                        duplicationSpan = selectionSpan;
-                        isMissingNewLine = false;
-                    }
+
+                    SnapshotSpan duplicationSpan = isDuplicateLinesForThisSelection ?
+                        GetContainingLines(selectionSpan) : selectionSpan;
 
                     string textToInsert = duplicationSpan.GetText();
+
+                    bool isMissingNewLine = isDuplicateLinesForThisSelection ?
+                        !textToInsert.EndsWith(Environment.NewLine) : false; // Should only be true if we want to duplicate the last line in the document (there is no trailing new-line there).
 
                     SnapshotPoint insertPos;
                     if (isReversed)
