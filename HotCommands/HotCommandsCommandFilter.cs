@@ -105,6 +105,7 @@ namespace HotCommands
                     case Constants.ToggleCommentCmdId:
                     case Constants.ExpandSelectionCmdId:
                     case Constants.FormatCodeCmdId:
+                    case Constants.DuplicateLinesUpCmdId:
                     case Constants.DuplicateLinesDownCmdId:
                     case Constants.DuplicateSelectionCmdId:
                     case Constants.DuplicateSelectionReverseCmdId:
@@ -112,7 +113,7 @@ namespace HotCommands
                     case Constants.MoveMemberDownCmdId:
                     case Constants.GoToPreviousMemberCmdId:
                     case Constants.GoToNextMemberCmdId:
-                        prgCmds[0].cmdf |= (uint)OLECMDF.OLECMDF_ENABLED;
+                        prgCmds[0].cmdf |= (uint)(OLECMDF.OLECMDF_ENABLED | OLECMDF.OLECMDF_SUPPORTED);
                         return VSConstants.S_OK;
                 }
             }
