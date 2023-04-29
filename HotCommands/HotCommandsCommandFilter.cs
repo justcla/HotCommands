@@ -102,12 +102,12 @@ namespace HotCommands
             {
                 const uint supportedAndEnabledStatus = (uint)(OLECMDF.OLECMDF_ENABLED | OLECMDF.OLECMDF_SUPPORTED);
 
-                string contentTypeName = textView.TextBuffer.ContentType.TypeName;
+                var contentType = textView.TextBuffer.ContentType;
 
                 uint commandStatus = default;
                 switch (prgCmds[0].cmdID)
                 {
-                    // Any content commands
+                    // 'Any' content commands
                     case Constants.DuplicateLinesUpCmdId:
                     case Constants.DuplicateLinesDownCmdId:
                     case Constants.DuplicateSelectionCmdId:
@@ -115,15 +115,19 @@ namespace HotCommands
                         commandStatus = supportedAndEnabledStatus;
                         break;
 
-                    // CSharp content commands
+                    // 'Code' content commands
                     case Constants.ToggleCommentCmdId:
+                        commandStatus = contentType.IsOfType("Code") ? supportedAndEnabledStatus : default;
+                        break;
+
+                    // 'CSharp' content commands
                     case Constants.ExpandSelectionCmdId:
                     case Constants.FormatCodeCmdId:
                     case Constants.MoveMemberUpCmdId:
                     case Constants.MoveMemberDownCmdId:
                     case Constants.GoToPreviousMemberCmdId:
                     case Constants.GoToNextMemberCmdId:
-                        commandStatus = contentTypeName == "CSharp" ? supportedAndEnabledStatus : default;
+                        commandStatus = contentType.IsOfType("CSharp") ? supportedAndEnabledStatus : default;
                         break;
                 }
 
