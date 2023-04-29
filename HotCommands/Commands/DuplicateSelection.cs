@@ -65,13 +65,14 @@ namespace HotCommands.Commands
                 {
                     SnapshotSpan selectionSpan = selection.Extent.SnapshotSpan;
                     bool isDuplicateLinesForThisSelection = isDuplicateLines || selectionSpan.Length == 0; // When selection length is zero we treat it as duplicate lines command (or should we not?).
-                    
+
                     SnapshotSpan duplicationSpan;
-                    bool isMissingNewLine;
+                    bool isMissingNewLine; // Should only be true when duplicating the last line in the document.
                     if (isDuplicateLinesForThisSelection)
                     {
                         duplicationSpan = GetContainingLines(selectionSpan);
-                        isMissingNewLine = duplicationSpan.End == edit.Snapshot.Length;
+                        isMissingNewLine = duplicationSpan.End == edit.Snapshot.Length
+                            && edit.Snapshot.GetLineFromLineNumber(edit.Snapshot.LineCount - 1).Length > 0;
                     }
                     else
                     {

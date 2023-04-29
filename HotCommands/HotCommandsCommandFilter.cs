@@ -100,21 +100,39 @@ namespace HotCommands
             // Command handling registration
             if (pguidCmdGroup == Constants.HotCommandsGuid && cCmds == 1)
             {
+                const uint supportedAndEnabledStatus = (uint)(OLECMDF.OLECMDF_ENABLED | OLECMDF.OLECMDF_SUPPORTED);
+
+                var contentType = textView.TextBuffer.ContentType;
+
+                uint commandStatus = default;
                 switch (prgCmds[0].cmdID)
                 {
-                    case Constants.ToggleCommentCmdId:
-                    case Constants.ExpandSelectionCmdId:
-                    case Constants.FormatCodeCmdId:
+                    // 'Any' content commands
+                    case Constants.DuplicateLinesUpCmdId:
                     case Constants.DuplicateLinesDownCmdId:
                     case Constants.DuplicateSelectionCmdId:
                     case Constants.DuplicateSelectionReverseCmdId:
+                        commandStatus = supportedAndEnabledStatus;
+                        break;
+
+                    // 'Code' content commands
+                    case Constants.ToggleCommentCmdId:
+                        commandStatus = contentType.IsOfType("Code") ? supportedAndEnabledStatus : default;
+                        break;
+
+                    // 'CSharp' content commands
+                    case Constants.ExpandSelectionCmdId:
+                    case Constants.FormatCodeCmdId:
                     case Constants.MoveMemberUpCmdId:
                     case Constants.MoveMemberDownCmdId:
                     case Constants.GoToPreviousMemberCmdId:
                     case Constants.GoToNextMemberCmdId:
-                        prgCmds[0].cmdf |= (uint)OLECMDF.OLECMDF_ENABLED;
-                        return VSConstants.S_OK;
+                        commandStatus = contentType.IsOfType("CSharp") ? supportedAndEnabledStatus : default;
+                        break;
                 }
+
+                prgCmds[0].cmdf |= commandStatus;
+                return VSConstants.S_OK;
             }
 
             if (Next != null)
