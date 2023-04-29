@@ -100,22 +100,35 @@ namespace HotCommands
             // Command handling registration
             if (pguidCmdGroup == Constants.HotCommandsGuid && cCmds == 1)
             {
+                const uint supportedAndEnabledStatus = (uint)(OLECMDF.OLECMDF_ENABLED | OLECMDF.OLECMDF_SUPPORTED);
+
+                string contentTypeName = textView.TextBuffer.ContentType.TypeName;
+
+                uint commandStatus = default;
                 switch (prgCmds[0].cmdID)
                 {
-                    case Constants.ToggleCommentCmdId:
-                    case Constants.ExpandSelectionCmdId:
-                    case Constants.FormatCodeCmdId:
+                    // Any content commands
                     case Constants.DuplicateLinesUpCmdId:
                     case Constants.DuplicateLinesDownCmdId:
                     case Constants.DuplicateSelectionCmdId:
                     case Constants.DuplicateSelectionReverseCmdId:
+                        commandStatus = supportedAndEnabledStatus;
+                        break;
+
+                    // CSharp content commands
+                    case Constants.ToggleCommentCmdId:
+                    case Constants.ExpandSelectionCmdId:
+                    case Constants.FormatCodeCmdId:
                     case Constants.MoveMemberUpCmdId:
                     case Constants.MoveMemberDownCmdId:
                     case Constants.GoToPreviousMemberCmdId:
                     case Constants.GoToNextMemberCmdId:
-                        prgCmds[0].cmdf |= (uint)(OLECMDF.OLECMDF_ENABLED | OLECMDF.OLECMDF_SUPPORTED);
-                        return VSConstants.S_OK;
+                        commandStatus = contentTypeName == "CSharp" ? supportedAndEnabledStatus : default;
+                        break;
                 }
+
+                prgCmds[0].cmdf |= commandStatus;
+                return VSConstants.S_OK;
             }
 
             if (Next != null)
