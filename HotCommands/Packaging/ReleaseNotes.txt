@@ -1,5 +1,6 @@
 Hot Commands for Visual Studio
 Compatible with VS2022 v17.4.3 and above
+30-Apr-2023: v4.3.3 Made Duplicate commands available in all editors. Also fixed bug with Duplicate on second last line (Fix from from Carl Foghammar Nömtak)
 30-Feb-2023: v4.3.2 Fix bug with reference to v17.5 of Microsoft.VisualStudio.Threading (Issue #97)
 21-Feb-2023: v4.3.1 Re-write of DuplicateSelection  (Issue #95 - Fix from from Carl Foghammar Nömtak)
 21-Feb-2023: v4.3.0 Perfected DuplicateLinesUp  (Issue #93 - Fix from from Carl Foghammar Nömtak)
