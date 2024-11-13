@@ -141,7 +141,7 @@
       <Version>17.4.255</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Editor">
-      <Version>17.4.255</Version>
+      <Version>17.12.215</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Imaging">
       <Version>17.4.33103.184</Version>
