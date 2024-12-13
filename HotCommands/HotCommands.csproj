@@ -150,7 +150,7 @@
       <Version>17.4.33103.184</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Language">
-      <Version>17.4.255</Version>
+      <Version>17.12.215</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.SDK" Version="17.4.33103.184" />
     <PackageReference Include="Microsoft.VisualStudio.Text.Data">
