@@ -147,7 +147,7 @@
       <Version>17.4.33103.184</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Interop">
-      <Version>17.4.33103.184</Version>
+      <Version>17.12.40391</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Language">
       <Version>17.4.255</Version>
