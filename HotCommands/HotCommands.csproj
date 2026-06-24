@@ -157,7 +157,7 @@
       <Version>17.4.255</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Text.Logic">
-      <Version>17.4.255</Version>
+      <Version>17.14.249</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Text.UI">
       <Version>17.4.255</Version>
